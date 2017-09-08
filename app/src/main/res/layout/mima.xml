@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:orientation="horizontal">
+
+
+    <LinearLayout
+        android:id="@+id/calculatorModul"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/centerBus"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="4dp">
+
+        <TextView
+            android:id="@+id/registerONELabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/registerONE" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/registerONE"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0x00000001" />
+
+            <View
+                android:id="@+id/arrowFromONEToBus"
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/registerACCLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/registerACC" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/registerACC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0x00000000" />
+
+            <View
+                android:id="@+id/arrowFromACCToBus"
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/registerXLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/registerX" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/registerX"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0x00000000" />
+
+            <View
+                android:id="@+id/arrowFromXToBus"
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+        </LinearLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/arrowFromYToBus"
+                android:layout_width="0dp"
+                android:layout_height="10dp"
+                android:layout_marginEnd="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/registerY"
+                app:layout_constraintTop_toTopOf="@+id/registerY"
+                android:layout_marginRight="0dp" />
+
+            <View
+                android:id="@+id/viewALU"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/registerY"
+                android:layout_marginLeft="8dp" />
+
+            <View
+                android:id="@+id/arrowFromYToAlu"
+                android:layout_width="10dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginStart="24dp"
+                app:layout_constraintBottom_toBottomOf="@+id/arrowFromXToAlu"
+                app:layout_constraintEnd_toEndOf="@+id/registerYLabel"
+                app:layout_constraintStart_toEndOf="@+id/arrowFromXToAlu"
+                app:layout_constraintTop_toBottomOf="@+id/registerY"
+                android:layout_marginRight="0dp"
+                android:layout_marginLeft="24dp" />
+
+            <View
+                android:id="@+id/arrowFromXToAlu"
+                android:layout_width="10dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="0dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/viewALU"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginLeft="8dp">
+
+            </View>
+
+            <View
+                android:id="@+id/arrowFromAluToZ"
+                android:layout_width="10dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/registerZ"
+                app:layout_constraintEnd_toEndOf="@+id/viewALU"
+                app:layout_constraintStart_toStartOf="@+id/viewALU"
+                app:layout_constraintTop_toBottomOf="@+id/viewALU" />
+
+            <View
+                android:id="@+id/arrowFromZToBus"
+                android:layout_width="0dp"
+                android:layout_height="10dp"
+                android:layout_marginEnd="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/registerZ"
+                app:layout_constraintTop_toTopOf="@+id/registerZ"
+                android:layout_marginRight="0dp">
+
+            </View>
+
+            <TextView
+                android:id="@+id/registerY"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="0dp"
+                android:text="0x00000000"
+                app:layout_constraintStart_toEndOf="@+id/arrowFromXToAlu"
+                app:layout_constraintTop_toBottomOf="@+id/registerYLabel"
+                android:layout_marginLeft="8dp" />
+
+            <TextView
+                android:id="@+id/registerYLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/registerY"
+                app:layout_constraintStart_toStartOf="@+id/registerY"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/registerZ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:text="0x00000000"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/viewALU"
+                android:layout_marginLeft="16dp" />
+
+            <TextView
+                android:id="@+id/registerZLabel"
+                android:layout_width="7dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="0dp"
+                android:text="@string/registerZ"
+                app:layout_constraintBottom_toTopOf="@+id/registerZ"
+                app:layout_constraintEnd_toStartOf="@+id/arrowFromAluToZ"
+                app:layout_constraintStart_toStartOf="@+id/registerZ"
+                tools:layout_editor_absoluteX="20dp" />
+
+
+        </android.support.constraint.ConstraintLayout>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/centerBus"
+        android:layout_width="10dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/ViewIOBus"
+        app:layout_constraintEnd_toStartOf="@id/controlModul"
+        app:layout_constraintStart_toEndOf="@+id/calculatorModul"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </View>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/controlModul"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/centerBus"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="4dp">
+
+        <TextView
+            android:id="@+id/registerCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:text="0000"
+            app:layout_constraintStart_toStartOf="@+id/registerCounterLabel"
+            app:layout_constraintTop_toBottomOf="@+id/registerCounterLabel" />
+
+        <TextView
+            android:id="@+id/registerCounterLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/registerCounter"
+            app:layout_constraintStart_toStartOf="@+id/registerIR"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/registerIR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0x00000000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registerIRLabel" />
+
+        <TextView
+            android:id="@+id/registerIRLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/registerIR"
+            app:layout_constraintStart_toStartOf="@+id/registerCounter"
+            app:layout_constraintTop_toBottomOf="@+id/registerCounter" />
+
+        <View
+            android:id="@+id/arrowFromIRToBus"
+            android:layout_width="0dp"
+            android:layout_height="10dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            app:layout_constraintEnd_toStartOf="@+id/registerIR"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/registerIR"
+            android:layout_marginLeft="0dp" />
+
+        <TextView
+            android:id="@+id/registerIAR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="0dp"
+            android:layout_marginTop="0dp"
+            android:text="0x00000000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registerIARLabel" />
+
+        <TextView
+            android:id="@+id/registerIARLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/registerIAR"
+            app:layout_constraintStart_toStartOf="@+id/registerIAR"
+            app:layout_constraintTop_toBottomOf="@+id/registerIR" />
+
+        <View
+            android:id="@+id/arrowFromIARToBus"
+            android:layout_width="0dp"
+            android:layout_height="10dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginStart="0dp"
+            app:layout_constraintEnd_toStartOf="@+id/registerIAR"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/registerIAR" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/memoryModul"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/centerBus"
+        app:layout_constraintTop_toBottomOf="@+id/controlModul"
+        android:layout_marginRight="4dp">
+
+        <TextView
+            android:id="@+id/viewMemory"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="8dp" />
+
+        <View
+            android:id="@+id/arrowFromSIRToMemory"
+            android:layout_width="10dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginStart="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/registerSIR"
+            app:layout_constraintEnd_toEndOf="@+id/registerSIR"
+            app:layout_constraintStart_toEndOf="@+id/registerSIRLabel"
+            app:layout_constraintTop_toBottomOf="@+id/viewMemory" />
+
+        <View
+            android:id="@+id/arrowFromSARToMemory"
+            android:layout_width="10dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/registerSAR"
+            app:layout_constraintEnd_toEndOf="@+id/registerSAR"
+            app:layout_constraintTop_toBottomOf="@+id/viewMemory" />
+
+        <TextView
+            android:id="@+id/registerSIR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="0x00000000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registerSIRLabel"
+            android:layout_marginLeft="16dp" />
+
+        <TextView
+            android:id="@+id/registerSIRLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="4dp"
+            android:text="@string/registerSIR"
+            app:layout_constraintStart_toStartOf="@+id/registerSIR"
+            app:layout_constraintTop_toBottomOf="@+id/viewMemory" />
+
+        <View
+            android:id="@+id/arrowFromSIRToCenterBus"
+            android:layout_width="0dp"
+            android:layout_height="10dp"
+            android:layout_marginTop="0dp"
+            app:layout_constraintEnd_toStartOf="@+id/registerSIR"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/registerSIR" />
+
+        <TextView
+            android:id="@+id/registerSAR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="0x00000000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/arrowFromSARToCenterBus"
+            app:layout_constraintTop_toBottomOf="@+id/registerSARLabel" />
+
+        <TextView
+            android:id="@+id/registerSARLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/registerSAR"
+            app:layout_constraintStart_toStartOf="@+id/registerSAR"
+            app:layout_constraintTop_toBottomOf="@+id/registerSIR" />
+
+        <View
+            android:id="@+id/arrowFromSARToCenterBus"
+            android:layout_width="0dp"
+            android:layout_height="10dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginStart="0dp"
+            app:layout_constraintEnd_toStartOf="@+id/registerSAR"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/registerSAR" />
+
+        <View
+            android:id="@+id/arrowFromSARToIOBus"
+            android:layout_width="10dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/registerSAR"
+            app:layout_constraintTop_toBottomOf="@+id/registerSAR" />
+
+        <View
+            android:id="@+id/arrowFromSIRToIOBus"
+            android:layout_width="10dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/registerSIR"
+            app:layout_constraintTop_toBottomOf="@+id/registerSIR" />
+
+        <TextView
+            android:id="@+id/IOControler"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/IOControl"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registerSAR" />
+
+        <View
+            android:id="@+id/arrowFromSARToIOControler"
+            android:layout_width="10dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/IOControler"
+            app:layout_constraintEnd_toEndOf="@+id/registerSAR"
+            app:layout_constraintStart_toStartOf="@+id/IOControler"
+            app:layout_constraintTop_toBottomOf="@+id/registerSAR"
+            android:layout_marginRight="8dp" />
+    </android.support.constraint.ConstraintLayout>
+
+
+    <View
+        android:id="@+id/ViewIOBus"
+        android:layout_width="wrap_content"
+        android:layout_height="10dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/memoryModul" />
+
+    <LinearLayout
+        android:id="@+id/StepControl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/viewSpeed"
+        tools:layout_editor_absoluteX="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Start" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Single Step" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Stop" />
+    </LinearLayout>
+
+    <SeekBar
+        android:id="@+id/viewSpeed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
+
+</android.support.constraint.ConstraintLayout>

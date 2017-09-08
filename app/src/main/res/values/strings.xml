@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">MiMaSim</string>
+
+    <string name="registerONE">ONE</string>
+    <string name="registerONEDescription">Has the constant Value 1</string>
+    <string name="registerY">Y</string>
+    <string name="registerYDescription">Y</string>
+    <string name="registerX">X</string>
+    <string name="registerXDescription">X</string>
+    <string name="registerZ">Z</string>
+    <string name="registerZDescription">Z</string>
+    <string name="registerACC">ACC</string>
+    <string name="registerACCDescription">ACC</string>
+    <string name="registerCounter">Counter</string>
+    <string name="registerCounterDescription">Counter</string>
+    <string name="registerSIR">SIR</string>
+    <string name="registerSIRDescription">SIR</string>
+    <string name="registerSAR">SAR</string>
+    <string name="registerSARDescription">SAR</string>
+    <string name="registerIR">IR</string>
+    <string name="registerIRDescription">IR</string>
+    <string name="registerIAR">IAR</string>
+    <string name="registerIARDescription">IAR</string>
+
+    <string name="centerBus">Prozessorbus</string>
+    <string name="centerBusDescription">Prozessorbus</string>
+
+    <string name="IOBus">I/O-Bus</string>
+    <string name="IOBusDescription">I/O-Bus</string>
+
+    <string name="memoryModul">Speicherwerk</string>
+    <string name="memoryModulDescription">Speicherwerk</string>
+    <string name="controlModul">Steuerwerk</string>
+    <string name="controlModulDescription">Steuerwerk</string>
+    <string name="calculatorModul">Rechenwerk</string>
+    <string name="calculatorModulDescription">Rechenwerk</string>
+
+    <string name="IOControl">I/O-Control</string>
+    <string name="IOControlDescription">I/O-Control</string>
+
+    <string name="ALU">ALU</string>
+    <string name="ALUDescription">ALU</string>
+
+    <string name="Memory">Memory</string>
+    <string name="MemoryDescription">Memory</string>
+
+    <string name="MimaModul">Mima</string>
+    <string name="MimaModulDescription">This is the Mima</string>
+
+
+
+    <string name="Placehodler">Placeholder</string>
+
+</resources>
