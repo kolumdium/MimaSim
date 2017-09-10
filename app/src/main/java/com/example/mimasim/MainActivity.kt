@@ -9,9 +9,10 @@ import android.view.View
 import android.widget.LinearLayout
 import com.example.mimasim.GUI.*
 import com.example.mimasim.Simulator.Element
+import com.example.mimasim.Simulator.Instruction
 import com.example.mimasim.Simulator.MimaModul
 
-class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener  {
+class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, InstructionFragment.SaveButtonPushedListener {
 
     var mimaFragment = MimaFragment()
     var optionsFragment = OptionFragment()
@@ -24,12 +25,13 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener  
     var rightView : View? = null
     var centerView : View? = null
 
+    var mcurrentInstructions = ArrayList<Instruction>()
+
     enum class Extended{
         NORMAL, RIGHT, LEFT , RIGHTFULL, LEFTFULL
     }
 
     var extended = Extended.NORMAL
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +41,7 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener  
         MimaModul = MimaModul(resources.getString(R.string.MimaModul), resources.getString(R.string.MimaModulDescription), applicationContext)
 
         init()
+        loadDefaultInstructions()
     }
 
     override fun onStart() {
@@ -63,6 +66,10 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener  
         transaction.hide(instructionFragment)
         transaction.commit()
 
+    }
+
+    fun loadDefaultInstructions(){
+        mcurrentInstructions.add(Instruction())
     }
 
     fun setListener(){
@@ -130,6 +137,8 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener  
         transaction.hide(instructionPreviewFragment)
         transaction.commit()
         extended = Extended.LEFT;
+
+        instructionFragment.makeSmallLayout()
     }
 
     /*TODO HOLD MIMA when either of these gets triggered*/
@@ -151,6 +160,7 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener  
         transaction.commit()
 
         extended = Extended.LEFTFULL
+        instructionFragment.makeBigLayout()
     }
 
     fun resize(leftSize : Float, centerSize : Float, rightSize : Float){
@@ -185,6 +195,16 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener  
         /* Let Options know which Element there is to Edit*/
         optionsFragment.updateView(currentlyLoadedElement, hasContent)
 
+    }
+
+    override fun saveInstructions(currentInstructions : ArrayList<Instruction>){
+        mcurrentInstructions = currentInstructions
+        extendNormal()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        instructionFragment.setInstructions(mcurrentInstructions)
     }
 
 }

@@ -23,12 +23,13 @@ class OptionFragment : Fragment() {
     var _currentlyLoadedElement = Element("", "")
     var _hasContent = false
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.options, container , false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        view?.setBackgroundColor(Color.GREEN)
+        view?.setBackgroundColor(resources.getColor(R.color.grey))
 
         view?.findViewById(R.id.optionsAbort)?.setOnClickListener{
             /*  When Abort Button was Clicked Restore the View to it's original State*/

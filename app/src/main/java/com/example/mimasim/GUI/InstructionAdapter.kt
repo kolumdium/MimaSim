@@ -14,9 +14,11 @@ import com.example.mimasim.Simulator.Instruction
 /**
  * Created by Martin on 09.09.2017.
  */
-class InstructionAdapter(context: Context, var instructions : ArrayList<Instruction>) : ArrayAdapter<Instruction> (context, instructions.size) {
+class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>) : ArrayAdapter<Instruction> (context, 0, instructions) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+
+        //super.getView(position, convertView, parent)
 
         val holder : ListItemHolder
         var row = convertView
@@ -32,7 +34,7 @@ class InstructionAdapter(context: Context, var instructions : ArrayList<Instruct
             row = inflater.inflate(R.layout.instruction_list_item, parent, false)
 
             holder = ListItemHolder()
-            holder.spinner = row.findViewById(R.id.instructionItemSpinner) as Spinner
+            holder.spinner = row?.findViewById(R.id.instructionItemSpinner) as Spinner
             holder.editText = row.findViewById(R.id.instructionItemText) as EditText
 
             row.setTag(holder)
@@ -68,7 +70,8 @@ class InstructionAdapter(context: Context, var instructions : ArrayList<Instruct
         }
 
         /*TODO see if POSITION is right or starts 1 instead of 0*/
-        holder.editText?.setText(instructions[position].adress.toString())
+        //holder.editText?.setText(instructions[position].adress.toString())
+        //holder.spinner?.setSelection()
 
         return row!!
     }
