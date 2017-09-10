@@ -1,4 +1,4 @@
-package com.example.mimasim
+package com.example.mimasim.GUI
 
 import android.app.Fragment
 import android.graphics.Color
@@ -8,6 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import com.example.mimasim.MainActivity
+import com.example.mimasim.R
+import com.example.mimasim.Simulator.Element
+import com.example.mimasim.Simulator.Register
 
 
 /**
@@ -15,7 +19,6 @@ import android.widget.TextView
  */
 
 class OptionFragment : Fragment() {
-
 
     var _currentlyLoadedElement = Element("", "")
     var _hasContent = false

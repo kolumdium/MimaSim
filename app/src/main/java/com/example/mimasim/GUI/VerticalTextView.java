@@ -1,4 +1,4 @@
-package com.example.mimasim;
+package com.example.mimasim.GUI;
 
 import android.content.Context;
 import android.graphics.Canvas;

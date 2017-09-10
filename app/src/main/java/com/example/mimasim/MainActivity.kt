@@ -1,14 +1,15 @@
 package com.example.mimasim
 
-import android.content.Context
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.EditText
 
 import android.widget.LinearLayout
-import android.widget.TextView
+import com.example.mimasim.GUI.*
+import com.example.mimasim.Simulator.Element
+import com.example.mimasim.Simulator.MimaModul
 
 class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener  {
 
@@ -22,21 +23,22 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener  
     var leftView : View? = null
     var rightView : View? = null
     var centerView : View? = null
-    /* a variable to keep track of what is extended
-    * 0 = normal
-    * 1 = right extended
-    * 2 = left extended*/
-    var extended = 0
+
+    enum class Extended{
+        NORMAL, RIGHT, LEFT , RIGHTFULL, LEFTFULL
+    }
+
+    var extended = Extended.NORMAL
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         MimaModul = MimaModul(resources.getString(R.string.MimaModul), resources.getString(R.string.MimaModulDescription), applicationContext)
 
         init()
-
-        //drawArrows()
     }
 
     override fun onStart() {
@@ -53,10 +55,10 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener  
         /* Add all Fragments show/hide to default*/
         val transaction = fragmentManager.beginTransaction()
         transaction.add(R.id.leftView, instructionPreviewFragment , "FragmentTagInstructionPreview")
+        transaction.add(R.id.leftView, instructionFragment, "FragmentTagInstruction")
         transaction.add(R.id.centerView, mimaFragment, "FragmentTagMima")
         transaction.add(R.id.rightView, optionPreviewFragment, "FragmentTagOptionsPreview")
         transaction.add(R.id.rightView, optionsFragment , "FragmentTagOptions")
-        transaction.add(R.id.leftView, instructionFragment, "FragmentTagInstruction")
         transaction.hide(optionsFragment)
         transaction.hide(instructionFragment)
         transaction.commit()
@@ -64,71 +66,112 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener  
     }
 
     fun setListener(){
-        /*Swipe Listener to extend/close the right and left View*/
+        /*
+        * Swipe Listener to extend/close the right and left View
+        * */
         findViewById(R.id.baseLayout)?.setOnTouchListener(object : OnSwipeTouchListener(applicationContext){
             override fun onSwipeRight() {
-                if (extended == 0) {
-                    extendLeft()
-                } else if (extended == 1) {
-                    extendNormal()
+                when(extended) {
+                    MainActivity.Extended.NORMAL -> extendLeft()
+                    MainActivity.Extended.RIGHT -> extendNormal()
+                    MainActivity.Extended.LEFT -> extendLeftFullscreen()
+                    MainActivity.Extended.RIGHTFULL -> extendRight()
+                    MainActivity.Extended.LEFTFULL -> Log.d("SWIPETAG", "I am Full extended")
                 }
             }
             override fun onSwipeLeft() {
-                if (extended == 0) {
-                    extendRight()
-                } else if (extended == 2) {
-                    extendNormal()
+                when(extended) {
+                    MainActivity.Extended.NORMAL -> extendRight()
+                    MainActivity.Extended.RIGHT -> extendRightFullscreen()
+                    MainActivity.Extended.LEFT -> extendNormal()
+                    MainActivity.Extended.RIGHTFULL -> Log.d("SWIPETAG", "I am Full extended")
+                    MainActivity.Extended.LEFTFULL -> extendLeft()
                 }
             }
         })
     }
 
     fun extendNormal(){
-        resize(1f, 1f)
+        resize(1f, 10f ,1f)
         val transaction = fragmentManager.beginTransaction()
+
         transaction.hide(optionsFragment)
         transaction.hide(instructionFragment)
         transaction.show(instructionPreviewFragment)
         transaction.show(optionPreviewFragment)
+        transaction.show(mimaFragment)
         transaction.commit()
-        extended = 0;
+
+        extended = Extended.NORMAL;
     }
 
     fun extendRight() {
-        resize(0f, 5f)
+        resize(0f, 10f ,5f)
+
         val transaction = fragmentManager.beginTransaction()
         transaction.show(optionsFragment)
-        transaction.hide(optionPreviewFragment)
+        transaction.show(mimaFragment)
         transaction.show(instructionPreviewFragment)
+
+        transaction.hide(optionPreviewFragment)
         transaction.commit()
-        extended = 1;
+        extended = Extended.RIGHT;
 
     }
 
     fun extendLeft(){
-        resize(5f,  0f)
+        resize(5f, 10f ,0f)
+
         val transaction = fragmentManager.beginTransaction()
         transaction.show(instructionFragment)
+        transaction.show(mimaFragment)
+        transaction.show(optionPreviewFragment)
+
         transaction.hide(instructionPreviewFragment)
         transaction.commit()
-        extended = 2;
+        extended = Extended.LEFT;
     }
 
-    fun resize(leftSize : Float, rightSize : Float){
-        val lparamsE= rightView?.layoutParams as LinearLayout.LayoutParams
-        lparamsE.weight = rightSize
-        rightView?.layoutParams = lparamsE;
+    /*TODO HOLD MIMA when either of these gets triggered*/
+    fun extendRightFullscreen(){
+        resize(0f, 0f ,1f)
 
-        val lparamsC= leftView?.layoutParams as LinearLayout.LayoutParams
-        lparamsC.weight = leftSize
-        leftView?.layoutParams = lparamsC;
+        val transaction = fragmentManager.beginTransaction()
+        transaction.hide(mimaFragment)
+        transaction.commit()
+
+        extended = Extended.RIGHTFULL
+    }
+
+    fun extendLeftFullscreen(){
+        resize(1f, 0f ,0f)
+
+        val transaction = fragmentManager.beginTransaction()
+        transaction.hide(mimaFragment)
+        transaction.commit()
+
+        extended = Extended.LEFTFULL
+    }
+
+    fun resize(leftSize : Float, centerSize : Float, rightSize : Float){
+        val lparamsR= rightView?.layoutParams as LinearLayout.LayoutParams
+        lparamsR.weight = rightSize
+        rightView?.layoutParams = lparamsR;
+
+        val lparamsC= centerView?.layoutParams as LinearLayout.LayoutParams
+        lparamsC.weight = centerSize
+        centerView?.layoutParams = lparamsC;
+
+        val lparamsL= leftView?.layoutParams as LinearLayout.LayoutParams
+        lparamsL.weight = leftSize
+        leftView?.layoutParams = lparamsL;
     }
 
     fun openOptions() :Boolean {
         /* Opens the Option Menu when triggered*/
-        if (extended == 0) {
+        if (extended == Extended.NORMAL) {
             extendRight()
-        } else if (extended == 2) {
+        } else if (extended == Extended.RIGHT) {
             extendNormal()
             extendRight()
         }
@@ -143,41 +186,5 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener  
         optionsFragment.updateView(currentlyLoadedElement, hasContent)
 
     }
-
-    fun drawArrows(){
-        /*drawLeftToRightArrows()
-        drawRightToLeftArrows()
-        drawRightAndLeftArrows()
-        drawBottomUpArrows()
-        drawTopDownArrows()*/
-        drawUpAndDownArrows()
-    }
-
-    private fun drawTopDownArrows() {
-
-    }
-
-    private fun drawBottomUpArrows() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    private fun drawRightAndLeftArrows() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    private fun drawRightToLeftArrows() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    private fun drawLeftToRightArrows() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    private fun drawUpAndDownArrows() {
-        val view = findViewById(R.id.arrowFromSIRToIOBus)
-        view?.setBackgroundColor(Color.BLACK)
-        view?.invalidate()
-    }
-
 
 }

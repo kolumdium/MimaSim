@@ -47,8 +47,20 @@
     <string name="MimaModul">Mima</string>
     <string name="MimaModulDescription">This is the Mima</string>
 
-
-
     <string name="Placehodler">Placeholder</string>
+
+    <string-array name="OPCodeArray">
+        <item>ADD</item>
+        <item>AND</item>
+        <item>OR</item>
+        <item>XOR</item>
+        <item>LDV</item>
+        <item>STV</item>
+        <item>LDC</item>
+        <item>JMP</item>
+        <item>JMN</item>
+        <item>EQL</item>
+        <item>RRN</item>
+    </string-array>
 
 </resources>

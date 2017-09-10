@@ -1,4 +1,4 @@
-package com.example.mimasim
+package com.example.mimasim.Simulator
 
 import kotlin.experimental.and
 

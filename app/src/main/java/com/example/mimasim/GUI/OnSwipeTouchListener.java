@@ -1,4 +1,4 @@
-package com.example.mimasim;
+package com.example.mimasim.GUI;
 
 /**
  * Created by Martin on 07.09.2017.

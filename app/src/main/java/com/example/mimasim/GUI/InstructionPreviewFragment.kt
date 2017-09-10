@@ -1,10 +1,11 @@
-package com.example.mimasim
+package com.example.mimasim.GUI
 
 import android.app.Fragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.mimasim.R
 
 /**
  * Created by Martin on 07.09.2017.

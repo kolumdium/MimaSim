@@ -22,24 +22,25 @@
 
     <Button
         android:id="@+id/instructionSaveButton"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:text="Speichern"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/instructionAbortButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/instructionAbortButton"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="Abbrechen"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,26 +50,40 @@
 
         <Button
             android:id="@+id/instructionAddButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Add Instruction" />
+            android:text="Add Instruction"
+            android:textSize="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/button3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/instructionSaveToFile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Save to File" />
+            android:text="Save to File"
+            android:textSize="10dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/instructionLoadFromFile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/button4"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/instructionLoadFromFile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Load From File" />
+            android:text="Load From File"
+            android:textSize="10dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/instructionSaveToFile"
+            app:layout_constraintStart_toEndOf="@+id/instructionAddButton"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
     <ScrollView
         android:layout_width="0dp"
@@ -83,6 +98,7 @@
         app:layout_constraintTop_toBottomOf="@+id/InstructionLabel">
 
         <ListView
+            android:id="@+id/instructionListView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </ScrollView>

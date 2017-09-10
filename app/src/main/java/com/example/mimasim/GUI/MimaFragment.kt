@@ -1,18 +1,22 @@
-package com.example.mimasim
+package com.example.mimasim.GUI
 
 import android.app.Fragment
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.mimasim.MainActivity
+import com.example.mimasim.R
+import com.example.mimasim.Simulator.Element
 
 /**
  * Created by Martin on 04.09.2017.
  */
 class MimaFragment : Fragment() {
 
-    var currentlyLoadedElement = Element(" ","Long Click an Element to see the Options for it")
+    var currentlyLoadedElement = Element(" ", "Long Click an Element to see the Options for it")
     var mCallback : elementSelectedListener? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -68,4 +72,41 @@ class MimaFragment : Fragment() {
             }
         }
     }
+
+
+    fun drawArrows(){
+        /*drawLeftToRightArrows()
+        drawRightToLeftArrows()
+        drawRightAndLeftArrows()
+        drawBottomUpArrows()
+        drawTopDownArrows()
+        drawUpAndDownArrows()*/
+    }
+
+    private fun drawTopDownArrows() {
+
+    }
+
+    private fun drawBottomUpArrows() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun drawRightAndLeftArrows() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun drawRightToLeftArrows() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun drawLeftToRightArrows() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+   /* private fun drawUpAndDownArrows() {
+        val view = findViewById(R.id.arrowFromSIRToIOBus)
+        view?.setBackgroundColor(Color.BLACK)
+        view?.invalidate()
+    }*/
+
 }
