@@ -5,18 +5,16 @@ import kotlin.experimental.and
 /**
  * Created by Martin on 08.09.2017.
  */
-class Register(name: String, description : String) : Element(name, description) {
+class Register(name: String, description : String, var Content : Int = 0x00000000) : Element(name, description) {
 
-    var Content = ByteArray(4)
+    // private val hexArray = "0123456789ABCDEF".toCharArray()
 
-    private val hexArray = "0123456789ABCDEF".toCharArray()
-
-    public fun getContentAsHex() : String{
-        return getContentAsHex(this.Content)
-    }
+    /*public fun getContentAsHexString() : String{
+        return getContentAsHexString(this.Content)
+    }*/
 
     // Idea From https://www.programiz.com/kotlin-programming/examples/convert-byte-array-hexadecimal
-    fun getContentAsHex(bytes : ByteArray) : String{
+    /*fun getContentAsHexString(bytes : ByteArray) : String{
         val hexChars = CharArray(bytes.size * 2)
         for (i in bytes.indices){
             val v = (bytes[i] and 0xFF.toByte()).toInt()
@@ -25,5 +23,5 @@ class Register(name: String, description : String) : Element(name, description) 
             hexChars[i * 2 + 1] = hexArray[v and 0x0F]
         }
         return String(hexChars)
-    }
+    }*/
 }

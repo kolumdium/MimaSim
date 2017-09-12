@@ -29,10 +29,13 @@
     <string name="IOBusDescription">I/O-Bus</string>
 
     <string name="memoryModul">Speicherwerk</string>
+    <string name="memoryModulShort">SPW</string>
     <string name="memoryModulDescription">Speicherwerk</string>
     <string name="controlModul">Steuerwerk</string>
+    <string name="controlModulShort">STW</string>
     <string name="controlModulDescription">Steuerwerk</string>
     <string name="calculatorModul">Rechenwerk</string>
+    <string name="calculatorModulShort">RW</string>
     <string name="calculatorModulDescription">Rechenwerk</string>
 
     <string name="IOControl">I/O-Control</string>

@@ -71,42 +71,78 @@ class MimaFragment : Fragment() {
                 }
             }
         }
+
+        drawArrows()
+        drawAlu()
     }
 
+    fun drawAlu(){
+        //TODO Draw ALU
+        this.view.findViewById(R.id.viewALU).setBackgroundColor(Color.YELLOW)
+    }
 
     fun drawArrows(){
-        /*drawLeftToRightArrows()
+        drawLeftToRightArrows()
         drawRightToLeftArrows()
         drawRightAndLeftArrows()
         drawBottomUpArrows()
         drawTopDownArrows()
-        drawUpAndDownArrows()*/
+        drawUpAndDownArrows()
     }
 
     private fun drawTopDownArrows() {
+        /*SAR -> IOBus
+        * X -> Alu
+        * Y - > Alu
+        * Alu -> Z*/
+        this.view.findViewById(R.id.arrowFromSARToIOBus).setBackgroundResource(R.drawable.icon_arrow_down_a)
+        this.view.findViewById(R.id.arrowFromXToAlu).setBackgroundResource(R.drawable.icon_arrow_down_a)
+        this.view.findViewById(R.id.arrowFromYToAlu).setBackgroundResource(R.drawable.icon_arrow_down_a)
+        this.view.findViewById(R.id.arrowFromAluToZ).setBackgroundResource(R.drawable.icon_arrow_down_a)
+        this.view.findViewById(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.icon_arrow_down_a)
 
     }
 
     private fun drawBottomUpArrows() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        /*SAR --> Memory*/
+        this.view.findViewById(R.id.arrowFromSARToMemory).setBackgroundResource(R.drawable.icon_arrow_up_a)
     }
 
     private fun drawRightAndLeftArrows() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        /* ACC,IR,IAR,SIR -> cBus
+        * IOBus*/
+        this.view.findViewById(R.id.arrowFromACCToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+        this.view.findViewById(R.id.arrowFromIRToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+        this.view.findViewById(R.id.arrowFromIARToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+        this.view.findViewById(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+        this.view.findViewById(R.id.ViewIOBus).setBackgroundResource(R.drawable.left_and_right_arrow)
     }
 
     private fun drawRightToLeftArrows() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        /*cBus-> x,y*/
+        this.view.findViewById(R.id.arrowFromXToBus).setBackgroundResource(R.drawable.icon_arrow_left_a)
+        this.view.findViewById(R.id.arrowFromYToBus).setBackgroundResource(R.drawable.icon_arrow_left_a)
     }
 
     private fun drawLeftToRightArrows() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        /*ONE -> cBus
+        * cBus ->SAR
+        * SAR -> IO/Control*/
+
+        this.view.findViewById(R.id.arrowFromONEToBus).setBackgroundResource(R.drawable.icon_arrow_right_a)
+        this.view.findViewById(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.icon_arrow_right_a)
+        this.view.findViewById(R.id.arrowFromZToBus).setBackgroundResource(R.drawable.icon_arrow_right_a)
     }
 
-   /* private fun drawUpAndDownArrows() {
-        val view = findViewById(R.id.arrowFromSIRToIOBus)
-        view?.setBackgroundColor(Color.BLACK)
-        view?.invalidate()
-    }*/
+    private fun drawUpAndDownArrows() {
+        /* SIR->MEMORY
+        * SIR -> IOBUS
+        * cBus
+        * */
+        this.view.findViewById(R.id.arrowFromSIRToMemory).setBackgroundResource(R.drawable.icon_arrow_updown)
+        this.view.findViewById(R.id.arrowFromSIRToIOBus).setBackgroundResource(R.drawable.icon_arrow_updown)
+        this.view.findViewById(R.id.centerBus).setBackgroundResource(R.drawable.icon_arrow_updown)
+        //view?.invalidate()
+    }
 
 }

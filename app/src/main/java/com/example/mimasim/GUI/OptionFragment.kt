@@ -35,7 +35,7 @@ class OptionFragment : Fragment() {
             /*  When Abort Button was Clicked Restore the View to it's original State*/
             val contentView = view?.findViewById(R.id.optionsElementContent) as EditText
             if (_hasContent)
-                contentView.setText((_currentlyLoadedElement as Register).getContentAsHex(), TextView.BufferType.EDITABLE)
+                contentView.setText((_currentlyLoadedElement as Register).Content, TextView.BufferType.EDITABLE)
             else
                 contentView.text.clear()
             val main = activity as MainActivity
@@ -57,10 +57,11 @@ class OptionFragment : Fragment() {
 
         if (hasContent) {
             /*TODO check why this saves or loads trash*/
-            contentView.setText((currentlyLoadedElement as Register).getContentAsHex(), TextView.BufferType.EDITABLE)
+            contentView.setText((currentlyLoadedElement as Register).Content, TextView.BufferType.EDITABLE)
 
             view?.findViewById(R.id.optionsSave)?.setOnClickListener{
-                currentlyLoadedElement.Content = (view.findViewById(R.id.optionsElementContent) as EditText).text.toString().toByteArray()
+                //saves wrong
+                //TODO make save properly
             }
         }
     }

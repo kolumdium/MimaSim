@@ -14,6 +14,6 @@ class CaculatorModul(name: String, description : String, context: Context) : Ele
     val Z = Register(context.resources.getString(R.string.registerZ), context.resources.getString(R.string.registerZDescription))
 
     init {
-        ONE.Content.set(ONE.Content.lastIndex, 1)
+        ONE.Content += 1
     }
 }
