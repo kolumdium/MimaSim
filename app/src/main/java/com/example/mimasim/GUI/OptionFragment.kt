@@ -1,8 +1,11 @@
 package com.example.mimasim.GUI
 
 import android.app.Fragment
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.text.InputFilter
+import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +26,11 @@ class OptionFragment : Fragment() {
     var _currentlyLoadedElement = Element("", "")
     var _hasContent = false
 
+    var optionCallback : optionSaveButtonClickedCallback? = null
+
+    interface optionSaveButtonClickedCallback{
+        fun updateMima()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.options, container , false)
@@ -34,8 +42,23 @@ class OptionFragment : Fragment() {
         view?.findViewById(R.id.optionsAbort)?.setOnClickListener{
             /*  When Abort Button was Clicked Restore the View to it's original State*/
             val contentView = view?.findViewById(R.id.optionsElementContent) as EditText
+
+            /*val inputFilter = InputFilter { charSequence, start, end, dest, dstart, dend ->
+                val hexArray = "0123456789abcdefABCDEF".toCharArray()
+                for ( i in charSequence!!.indices) {
+                    for (hex in hexArray) {
+                        if (charSequence[i] == hex) continue
+                    }
+                    //There is an unallowed char!!
+                    return@InputFilter null
+                }
+                charSequence
+            }
+
+            contentView.filters = inputFilter*/
+
             if (_hasContent)
-                contentView.setText((_currentlyLoadedElement as Register).Content, TextView.BufferType.EDITABLE)
+                contentView.setText((_currentlyLoadedElement as Register).Content.toString(), TextView.BufferType.EDITABLE)
             else
                 contentView.text.clear()
             val main = activity as MainActivity
@@ -57,12 +80,23 @@ class OptionFragment : Fragment() {
 
         if (hasContent) {
             /*TODO check why this saves or loads trash*/
-            contentView.setText((currentlyLoadedElement as Register).Content, TextView.BufferType.EDITABLE)
+            contentView.setText( String.format(Integer.toHexString((currentlyLoadedElement as Register).Content)) , TextView.BufferType.EDITABLE)
 
             view?.findViewById(R.id.optionsSave)?.setOnClickListener{
-                //saves wrong
+                val inputString = contentView.text.toString()
+                    currentlyLoadedElement.Content = Integer.decode( "0x" + inputString )
+                    optionCallback?.updateMima()
                 //TODO make save properly
             }
+        }
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        try {
+            optionCallback = context as optionSaveButtonClickedCallback
+        } catch (e : ClassCastException){
+            throw ClassCastException(activity.toString() + " must implementoptionSaveButtonClickedCallback")
         }
     }
 

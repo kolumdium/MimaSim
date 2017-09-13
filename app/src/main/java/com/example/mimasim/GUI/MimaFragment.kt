@@ -7,9 +7,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.example.mimasim.MainActivity
 import com.example.mimasim.R
 import com.example.mimasim.Simulator.Element
+import com.example.mimasim.Simulator.Register
 
 /**
  * Created by Martin on 04.09.2017.
@@ -18,15 +20,16 @@ class MimaFragment : Fragment() {
 
     var currentlyLoadedElement = Element(" ", "Long Click an Element to see the Options for it")
     var mCallback : elementSelectedListener? = null
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.mima, container , false)
-    }
+    val map = mutableMapOf<Int, Element>()
 
     interface elementSelectedListener{
         fun sendElement(currentlyLoadedElement : Element, hasContent : Boolean)
     }
 
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.mima, container , false)
+    }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -43,7 +46,6 @@ class MimaFragment : Fragment() {
         val main = activity as MainActivity
 
         /*A map of all Clickable Items*/
-        val map = mutableMapOf<Int, Element>()
         map.put(R.id.registerONE, main.MimaModul!!.calculatorModul.ONE)
         map.put(R.id.registerACC, main.MimaModul!!.calculatorModul.ACC)
         map.put(R.id.registerX, main.MimaModul!!.calculatorModul.X)
@@ -74,6 +76,22 @@ class MimaFragment : Fragment() {
 
         drawArrows()
         drawAlu()
+        updateView()
+    }
+
+    fun updateView(){
+        for ((key,value) in map) {
+            if (key == R.id.ViewIOBus || key == R.id.centerBus || key == R.id.IOControler){
+
+            } else {
+                val someTextView = (view?.findViewById(key) as TextView)
+                var fillZeros = ""
+                for ( i in 0.. (7 - (value as Register).Content.toString().length)){
+                    fillZeros += "0"
+                }
+                someTextView.text = String.format("0x" + fillZeros + Integer.toHexString(value.Content))
+            }
+        }
     }
 
     fun drawAlu(){

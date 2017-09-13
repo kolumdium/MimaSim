@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">MiMaSim</string>
 
+    <string name="allowedHexSymbols">0123456789abcdefABCDEF</string>
+
     <string name="registerONE">ONE</string>
     <string name="registerONEDescription">Has the constant Value 1</string>
     <string name="registerY">Y</string>

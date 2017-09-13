@@ -19,7 +19,7 @@ class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapte
 
     /*TODO The SWipeListner does not work when we swipe in the List View!!! Find out why not and fix it*/
 
-    var mCallback : SaveButtonPushedListener? = null
+    var mCallback : instructionSaveButtonClickedCallback? = null
     var mInstructions = ArrayList<Instruction>()
     var mInstructionAdapter : InstructionAdapter? = null
 
@@ -30,9 +30,12 @@ class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapte
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         view?.setBackgroundColor( resources.getColor(R.color.lighterGrey))
 
-        /* TODO When the save Button is Clicked save Instructions undependent from the Fragment*/
+        /* TODO When the save Button is Clicked save Instructions undependent from the Fragment
+        * also TODO when the same button is clicked iterate all instructions and save. or make a editText onfocuschangedlistener saveInstructions*/
         view?.findViewById(R.id.instructionSaveButton)?.setOnClickListener{
+            //  mInstructionAdapter?.saveInstructions()
             mCallback?.saveInstructions(mInstructions)
+
         }
 
 
@@ -67,7 +70,7 @@ class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapte
         mInstructionAdapter?.notifyDataSetChanged()
     }
 
-    interface SaveButtonPushedListener{
+    interface instructionSaveButtonClickedCallback{
         fun saveInstructions(currentInstructions : ArrayList<Instruction>)
     }
 
@@ -80,9 +83,9 @@ class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapte
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         try {
-            mCallback = context as SaveButtonPushedListener
+            mCallback = context as instructionSaveButtonClickedCallback
         } catch (e : ClassCastException){
-            throw ClassCastException(activity.toString() + " must implement SaveButtonPushedListener")
+            throw ClassCastException(activity.toString() + " must implement instructionSaveButtonClickedCallback")
         }
     }
 }

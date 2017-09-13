@@ -12,7 +12,7 @@ import com.example.mimasim.Simulator.Element
 import com.example.mimasim.Simulator.Instruction
 import com.example.mimasim.Simulator.MimaModul
 
-class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, InstructionFragment.SaveButtonPushedListener {
+class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, InstructionFragment.instructionSaveButtonClickedCallback , OptionFragment.optionSaveButtonClickedCallback{
 
     var mimaFragment = MimaFragment()
     var optionsFragment = OptionFragment()
@@ -194,12 +194,15 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
 
         /* Let Options know which Element there is to Edit*/
         optionsFragment.updateView(currentlyLoadedElement, hasContent)
-
     }
 
     override fun saveInstructions(currentInstructions : ArrayList<Instruction>){
         mcurrentInstructions = currentInstructions
         extendNormal()
+    }
+
+    override fun updateMima() {
+        mimaFragment.updateView()
     }
 
     override fun onResume() {
