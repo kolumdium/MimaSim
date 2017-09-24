@@ -66,6 +66,9 @@
         <item>JMN</item>
         <item>EQL</item>
         <item>RRN</item>
+        <item>HLT</item>
+        <item>NOT</item>
+        <item>RAR</item>
     </string-array>
 
 </resources>
