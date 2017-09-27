@@ -113,17 +113,17 @@ class MimaFragment : Fragment() {
         * X -> Alu
         * Y - > Alu
         * Alu -> Z*/
-        this.view.findViewById(R.id.arrowFromSARToIOBus).setBackgroundResource(R.drawable.icon_arrow_down_a)
-        this.view.findViewById(R.id.arrowFromXToAlu).setBackgroundResource(R.drawable.icon_arrow_down_a)
-        this.view.findViewById(R.id.arrowFromYToAlu).setBackgroundResource(R.drawable.icon_arrow_down_a)
-        this.view.findViewById(R.id.arrowFromAluToZ).setBackgroundResource(R.drawable.icon_arrow_down_a)
-        this.view.findViewById(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.icon_arrow_down_a)
+        this.view.findViewById(R.id.arrowFromSARToIOBus).setBackgroundResource(R.drawable.arrow_down)
+        this.view.findViewById(R.id.arrowFromXToAlu).setBackgroundResource(R.drawable.arrow_down)
+        this.view.findViewById(R.id.arrowFromYToAlu).setBackgroundResource(R.drawable.arrow_down)
+        this.view.findViewById(R.id.arrowFromAluToZ).setBackgroundResource(R.drawable.arrow_down)
+        this.view.findViewById(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down)
 
     }
 
     private fun drawBottomUpArrows() {
         /*SAR --> Memory*/
-        this.view.findViewById(R.id.arrowFromSARToMemory).setBackgroundResource(R.drawable.icon_arrow_up_a)
+        this.view.findViewById(R.id.arrowFromSARToMemory).setBackgroundResource(R.drawable.arrow_up)
     }
 
     private fun drawRightAndLeftArrows() {
@@ -138,8 +138,8 @@ class MimaFragment : Fragment() {
 
     private fun drawRightToLeftArrows() {
         /*cBus-> x,y*/
-        this.view.findViewById(R.id.arrowFromXToBus).setBackgroundResource(R.drawable.icon_arrow_left_a)
-        this.view.findViewById(R.id.arrowFromYToBus).setBackgroundResource(R.drawable.icon_arrow_left_a)
+        this.view.findViewById(R.id.arrowFromXToBus).setBackgroundResource(R.drawable.arrow_left)
+        this.view.findViewById(R.id.arrowFromYToBus).setBackgroundResource(R.drawable.arrow_left)
     }
 
     private fun drawLeftToRightArrows() {
@@ -147,9 +147,9 @@ class MimaFragment : Fragment() {
         * cBus ->SAR
         * SAR -> IO/Control*/
 
-        this.view.findViewById(R.id.arrowFromONEToBus).setBackgroundResource(R.drawable.icon_arrow_right_a)
-        this.view.findViewById(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.icon_arrow_right_a)
-        this.view.findViewById(R.id.arrowFromZToBus).setBackgroundResource(R.drawable.icon_arrow_right_a)
+        this.view.findViewById(R.id.arrowFromONEToBus).setBackgroundResource(R.drawable.arrow_right)
+        this.view.findViewById(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.arrow_right)
+        this.view.findViewById(R.id.arrowFromZToBus).setBackgroundResource(R.drawable.arrow_right)
     }
 
     private fun drawUpAndDownArrows() {
@@ -157,9 +157,9 @@ class MimaFragment : Fragment() {
         * SIR -> IOBUS
         * cBus
         * */
-        this.view.findViewById(R.id.arrowFromSIRToMemory).setBackgroundResource(R.drawable.icon_arrow_updown)
-        this.view.findViewById(R.id.arrowFromSIRToIOBus).setBackgroundResource(R.drawable.icon_arrow_updown)
-        this.view.findViewById(R.id.centerBus).setBackgroundResource(R.drawable.icon_arrow_updown)
+        this.view.findViewById(R.id.arrowFromSIRToMemory).setBackgroundResource(R.drawable.arrow_up_down)
+        this.view.findViewById(R.id.arrowFromSIRToIOBus).setBackgroundResource(R.drawable.arrow_up_down)
+        this.view.findViewById(R.id.centerBus).setBackgroundResource(R.drawable.arrow_up_down)
         //view?.invalidate()
     }
 

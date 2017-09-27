@@ -11,9 +11,7 @@ import kotlin.collections.ArrayList
 class MimaModul(name: String, description : String, var context: Context) : Element(name, description){
 
     var running = false
-    var speed : Int = 1
     var currentInstruction = Instruction()
-
 
     val calculatorModul = CaculatorModul(context.resources.getString(R.string.calculatorModul), context.resources.getString(R.string.calculatorModulDescription), context)
     val controlModul = ControlModul(context.resources.getString(R.string.controlModul), context.resources.getString(R.string.controlModulDescription), context)
@@ -82,7 +80,7 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
     }
 
     fun stepInstruction(cInstr : Instruction){
-        val adress = cInstr.opCode.shl(28) xor controlModul.IR.Content
+        //val adress = cInstr.opCode.shl(28) xor controlModul.IR.Content
         when (cInstr.opCodeString){
             "ADD" -> ADD()
             "AND" -> AND()
@@ -102,8 +100,7 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
     }
 
 
-    /*TODO Now for each operation we load the right things into the right Registers, trigger the ALU and then Registers again
-    * Here is also where we should manage the triggers for the UI updates!! Highlighting stuff and so on also here is where the speed should matter!!!*/
+    /*TODO Here is also where we should manage the triggers for the UI updates!*/
 
     fun ADD() {
         /* ADD
@@ -541,6 +538,24 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
             }
         }
 
+    }
+
+    interface UITrigger{
+        fun centerBus()
+        fun zReady()
+        fun ir(activate : Boolean)
+        fun iar(activate : Boolean)
+        fun acc(activate : Boolean)
+        fun one(activate : Boolean)
+        fun x(activate : Boolean)
+        fun y(activate : Boolean)
+        fun z(activate : Boolean)
+        fun sir(activate : Boolean)
+        fun sar(activate : Boolean)
+        fun alu()
+        fun mem(In : Boolean)
+        fun ioBus()
+        fun ioControl()
     }
 
 }

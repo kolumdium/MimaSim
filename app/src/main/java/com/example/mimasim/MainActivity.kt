@@ -11,8 +11,12 @@ import com.example.mimasim.GUI.*
 import com.example.mimasim.Simulator.Element
 import com.example.mimasim.Simulator.Instruction
 import com.example.mimasim.Simulator.MimaModul
+import com.example.mimasim.Simulator.Register
 
-class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, InstructionFragment.instructionSaveButtonClickedCallback , OptionFragment.optionSaveButtonClickedCallback{
+/*TODO: Credits for the Images:
+* left-and-right-arrow -> <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>*/
+
+class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, InstructionFragment.instructionSaveButtonClickedCallback , OptionFragment.optionSaveButtonClickedCallback , MimaModul.UITrigger{
 
     var mimaFragment = MimaFragment()
     var optionsFragment = OptionFragment()
@@ -38,6 +42,7 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        /*Get an instance of the simulator*/
         MimaModul = MimaModul(resources.getString(R.string.MimaModul), resources.getString(R.string.MimaModulDescription), applicationContext)
 
         init()
@@ -208,6 +213,90 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
     override fun onResume() {
         super.onResume()
         instructionFragment.setInstructions(mcurrentInstructions)
+
+        val decorView = window.decorView
+        // Hide the status bar.
+        decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                or View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                or View.SYSTEM_UI_FLAG_IMMERSIVE)
+
+        // Remember that you should never show the action bar if the
+        // status bar is hidden, so hide that too if necessary.
+        /*val actionBar = actionBar
+        actionBar!!.hide()*/
     }
+
+    /* UI Trigger*/
+
+    override fun centerBus() {
+
+    }
+
+    override fun zReady() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun alu() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun mem(In: Boolean) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun ioBus() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun ioControl() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun ir(activate: Boolean) {
+        if (activate) findViewById(R.id.arrowFromIRToBus).setBackgroundResource(R.drawable.left_and_right_arrow_active)
+        else findViewById(R.id.arrowFromIRToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+    }
+
+    override fun iar(activate: Boolean) {
+        if (activate) findViewById(R.id.arrowFromIARToBus).setBackgroundResource(R.drawable.left_and_right_arrow_active)
+        else findViewById(R.id.arrowFromIARToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+    }
+
+    override fun acc(activate: Boolean) {
+        if (activate) findViewById(R.id.arrowFromACCToBus).setBackgroundResource(R.drawable.left_and_right_arrow_active)
+        else findViewById(R.id.arrowFromACCToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+    }
+
+    override fun one(activate: Boolean) {
+        if (activate) findViewById(R.id.arrowFromONEToBus).setBackgroundResource(R.drawable.arrow_right_active)
+        else findViewById(R.id.arrowFromONEToBus).setBackgroundResource(R.drawable.arrow_right)
+    }
+
+    override fun x(activate: Boolean) {
+        if (activate) findViewById(R.id.arrowFromXToBus).setBackgroundResource(R.drawable.arrow_left_active)
+        else findViewById(R.id.arrowFromXToBus).setBackgroundResource(R.drawable.arrow_left)
+    }
+
+    override fun y(activate: Boolean) {
+        if (activate) findViewById(R.id.arrowFromYToBus).setBackgroundResource(R.drawable.arrow_left_active)
+        else findViewById(R.id.arrowFromYToBus).setBackgroundResource(R.drawable.arrow_left)
+    }
+
+    override fun z(activate: Boolean) {
+        if (activate) findViewById(R.id.arrowFromZToBus).setBackgroundResource(R.drawable.arrow_right_active)
+        else findViewById(R.id.arrowFromZToBus).setBackgroundResource(R.drawable.arrow_right)
+    }
+
+    override fun sir(activate: Boolean) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun sar(activate: Boolean) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
 
 }

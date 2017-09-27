@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:orientation="horizontal">
+
 
 
     <LinearLayout
@@ -220,6 +221,16 @@
                 app:layout_constraintStart_toStartOf="@+id/registerZ"
                 tools:layout_editor_absoluteX="20dp" />
 
+            <TextView
+                android:id="@+id/aluText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="ADD"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toTopOf="@+id/arrowFromAluToZ"
+                app:layout_constraintEnd_toEndOf="@+id/viewALU"
+                app:layout_constraintStart_toStartOf="@+id/viewALU" />
+
 
         </android.support.constraint.ConstraintLayout>
 
@@ -231,9 +242,9 @@
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/ViewIOBus"
+        app:layout_constraintEnd_toStartOf="@+id/controlModul"
         app:layout_constraintStart_toEndOf="@+id/calculatorModul"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/controlModul">
+        app:layout_constraintTop_toTopOf="parent">
 
     </View>
 
