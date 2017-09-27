@@ -61,6 +61,8 @@ class MimaFragment : Fragment() {
 
         for ((key,value) in map) {
             val someView = view?.findViewById(key)
+            //someView?.setBackgroundResource(R.drawable.kasten)
+            someView?.setBackgroundResource(R.drawable.kasten_2)
             currentlyLoadedElement = value
             someView?.isLongClickable = true
             someView?.setOnLongClickListener {
@@ -77,6 +79,7 @@ class MimaFragment : Fragment() {
         drawArrows()
         drawAlu()
         updateView()
+        setRandomstuff()
     }
 
     fun updateView(){
@@ -94,9 +97,15 @@ class MimaFragment : Fragment() {
         }
     }
 
+    fun setRandomstuff(){
+        this.view.findViewById(R.id.calculatorModul).setBackgroundResource(R.drawable.kasten)
+        this.view.findViewById(R.id.controlModul).setBackgroundResource(R.drawable.kasten)
+        this.view.findViewById(R.id.memoryModul).setBackgroundResource(R.drawable.kasten)
+        this.view.findViewById(R.id.viewMemory).setBackgroundResource(R.drawable.kasten)
+    }
+
     fun drawAlu(){
         //TODO Draw ALU
-        this.view.findViewById(R.id.viewALU).setBackgroundColor(Color.YELLOW)
     }
 
     fun drawArrows(){
