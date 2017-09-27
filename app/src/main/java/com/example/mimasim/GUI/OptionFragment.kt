@@ -30,6 +30,7 @@ class OptionFragment : Fragment() {
 
     interface optionSaveButtonClickedCallback{
         fun updateMima()
+        fun abortOptions()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -38,37 +39,21 @@ class OptionFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         view?.setBackgroundColor(resources.getColor(R.color.grey))
-
         view?.findViewById(R.id.optionsAbort)?.setOnClickListener{
             /*  When Abort Button was Clicked Restore the View to it's original State*/
+
             val contentView = view?.findViewById(R.id.optionsElementContent) as EditText
-
-            /*val inputFilter = InputFilter { charSequence, start, end, dest, dstart, dend ->
-                val hexArray = "0123456789abcdefABCDEF".toCharArray()
-                for ( i in charSequence!!.indices) {
-                    for (hex in hexArray) {
-                        if (charSequence[i] == hex) continue
-                    }
-                    //There is an unallowed char!!
-                    return@InputFilter null
-                }
-                charSequence
-            }
-
-            contentView.filters = inputFilter*/
-
+            contentView.visibility = View.VISIBLE
             if (_hasContent)
                 contentView.setText((_currentlyLoadedElement as Register).Content.toString(), TextView.BufferType.EDITABLE)
             else
                 contentView.text.clear()
-            val main = activity as MainActivity
-            main.extendNormal()
+            optionCallback?.abortOptions()
         }
     }
 
-    fun updateView(currentlyLoadedElement: Element, hasContent : Boolean){
+    fun updateView(currentlyLoadedElement: Element){
         _currentlyLoadedElement = currentlyLoadedElement
-        _hasContent = hasContent
 
         val nameView = view?.findViewById(R.id.optionsElementName) as TextView
         nameView.text = currentlyLoadedElement.name
@@ -78,15 +63,31 @@ class OptionFragment : Fragment() {
 
         val contentView = view?.findViewById(R.id.optionsElementContent) as EditText
 
-        if (hasContent) {
-            /*TODO check why this saves or loads trash*/
-            contentView.setText( String.format(Integer.toHexString((currentlyLoadedElement as Register).Content)) , TextView.BufferType.EDITABLE)
+        when (currentlyLoadedElement.name){
+            "ALU" , "I/O-Bus", "I/O-Control" , "Prozessorbus", "Mima", "Speicherwerk" , "Steuerwerk" , "Rechenwerk" -> {
+                contentView.visibility = View.GONE
+                view?.findViewById(R.id.optionsSave)?.setOnClickListener{
+                    optionCallback?.abortOptions()
+                }
+            }
+            "Memory" -> {//TODO some fancy stuff
+            }
+            else -> {
+                contentView.visibility = View.VISIBLE
+                //should be a Register when you get here.
+                contentView.setText( String.format(Integer.toHexString((currentlyLoadedElement as Register).Content)) , TextView.BufferType.EDITABLE)
+                _hasContent = true
 
-            view?.findViewById(R.id.optionsSave)?.setOnClickListener{
-                val inputString = contentView.text.toString()
+                view?.findViewById(R.id.optionsSave)?.setOnClickListener{
+                    val inputString = contentView.text.toString()
+
+                    //TODO this should also go into an callback and then get passed to the modul.
                     currentlyLoadedElement.Content = Integer.decode( "0x" + inputString )
                     optionCallback?.updateMima()
-                //TODO make save properly
+                    //TODO make save properly
+
+                    contentView.visibility = View.VISIBLE
+                }
             }
         }
     }

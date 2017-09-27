@@ -23,7 +23,7 @@ class MimaFragment : Fragment() {
     val map = mutableMapOf<Int, Element>()
 
     interface elementSelectedListener{
-        fun sendElement(currentlyLoadedElement : Element, hasContent : Boolean)
+        fun sendElement(currentlyLoadedElement : Element)
     }
 
 
@@ -58,54 +58,50 @@ class MimaFragment : Fragment() {
         map.put(R.id.IOControler, main.MimaModul!!.memoryModul.IOControl)
         map.put(R.id.centerBus, main.MimaModul!!.centerBus)
         map.put(R.id.ViewIOBus, main.MimaModul!!.IOBus)
+        map.put(R.id.viewALU, main.MimaModul!!.calculatorModul.Alu)
+        map.put(R.id.viewMemory, main.MimaModul!!.memoryModul.Memory)
+        map.put(R.id.memoryModul, main.MimaModul!!.memoryModul)
+        map.put(R.id.calculatorModul, main.MimaModul!!.calculatorModul)
+        map.put(R.id.controlModul, main.MimaModul!!.controlModul)
 
         for ((key,value) in map) {
             val someView = view?.findViewById(key)
-            //someView?.setBackgroundResource(R.drawable.kasten)
-            someView?.setBackgroundResource(R.drawable.kasten_2)
+            someView?.setBackgroundResource(R.drawable.kasten)
             currentlyLoadedElement = value
             someView?.isLongClickable = true
             someView?.setOnLongClickListener {
-                if (key == R.id.ViewIOBus || key == R.id.centerBus || key == R.id.IOControler){
-                    mCallback?.sendElement(value, false)
-                    main.openOptions()
-                } else {
-                    mCallback?.sendElement(value, true)
-                    main.openOptions()
-                }
+                mCallback?.sendElement(value)
+                true
             }
         }
 
         drawArrows()
-        drawAlu()
         updateView()
-        setRandomstuff()
+        setBackgrounds()
     }
 
     fun updateView(){
         for ((key,value) in map) {
-            if (key == R.id.ViewIOBus || key == R.id.centerBus || key == R.id.IOControler){
-
-            } else {
-                val someTextView = (view?.findViewById(key) as TextView)
-                var fillZeros = ""
-                for ( i in 0.. (7 - (value as Register).Content.toString().length)){
-                    fillZeros += "0"
-                }
-                someTextView.text = String.format("0x" + fillZeros + Integer.toHexString(value.Content))
+            when (value.name){
+                "ALU" , "I/O-Bus", "I/O-Control" , "Prozessorbus", "Mima", "Speicherwerk" , "Steuerwerk" , "Rechenwerk" -> {}
+                "Memory" -> {//TODO some fancy stuff
+                    }
+                else -> {
+                    //should be a Register when you get here.
+                    val someTextView = (view?.findViewById(key) as TextView)
+                    var fillZeros = ""
+                    for ( i in 0.. (7 - (value as Register).Content.toString().length)){
+                        fillZeros += "0"
+                    }
+                    someTextView.text = String.format("0x" + fillZeros + Integer.toHexString(value.Content))
+               }
             }
         }
     }
 
-    fun setRandomstuff(){
-        this.view.findViewById(R.id.calculatorModul).setBackgroundResource(R.drawable.kasten)
-        this.view.findViewById(R.id.controlModul).setBackgroundResource(R.drawable.kasten)
-        this.view.findViewById(R.id.memoryModul).setBackgroundResource(R.drawable.kasten)
-        this.view.findViewById(R.id.viewMemory).setBackgroundResource(R.drawable.kasten)
-    }
+    fun setBackgrounds(){
+        this.view.findViewById(R.id.viewALU).setBackgroundResource(R.drawable.alu)
 
-    fun drawAlu(){
-        //TODO Draw ALU
     }
 
     fun drawArrows(){

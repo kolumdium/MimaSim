@@ -182,7 +182,7 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
         leftView?.layoutParams = lparamsL;
     }
 
-    fun openOptions() :Boolean {
+    fun openOptions(){
         /* Opens the Option Menu when triggered*/
         if (extended == Extended.NORMAL) {
             extendRight()
@@ -190,19 +190,22 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
             extendNormal()
             extendRight()
         }
-        return true
     }
 
-    override fun sendElement(currentlyLoadedElement: Element, hasContent: Boolean) {
+    override fun sendElement(currentlyLoadedElement: Element) {
         /*When an Element is Long hold (wants to be edited) this gets Called*/
         openOptions()
 
         /* Let Options know which Element there is to Edit*/
-        optionsFragment.updateView(currentlyLoadedElement, hasContent)
+        optionsFragment.updateView(currentlyLoadedElement)
     }
 
     override fun saveInstructions(currentInstructions : ArrayList<Instruction>){
         mcurrentInstructions = currentInstructions
+        extendNormal()
+    }
+
+    override fun abortOptions() {
         extendNormal()
     }
 
@@ -236,7 +239,7 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
     }
 
     override fun zReady() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        findViewById(R.id.registerZ).setBackgroundResource(R.drawable.kasten_active)
     }
 
     override fun alu() {

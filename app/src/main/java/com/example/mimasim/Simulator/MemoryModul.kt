@@ -12,7 +12,7 @@ class MemoryModul(name: String, description : String, context: Context) : Elemen
     val IOControl = Element(context.resources.getString(R.string.IOControl), context.resources.getString(R.string.IOControlDescription))
     //TODO I/O Control
 
-    private val Memory = Memory(context.resources.getString(R.string.Memory), context.resources.getString(R.string.MemoryDescription))
+    val Memory = Memory(context.resources.getString(R.string.Memory), context.resources.getString(R.string.MemoryDescription))
 
     fun loadMapToMemory(content : Map<Int,Int>){
         for ((key, value) in content) {
