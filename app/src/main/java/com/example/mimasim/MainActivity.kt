@@ -1,6 +1,5 @@
 package com.example.mimasim
 
-import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,12 +10,12 @@ import com.example.mimasim.GUI.*
 import com.example.mimasim.Simulator.Element
 import com.example.mimasim.Simulator.Instruction
 import com.example.mimasim.Simulator.MimaModul
-import com.example.mimasim.Simulator.Register
+
 
 /*TODO: Credits for the Images:
 * left-and-right-arrow -> <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>*/
 
-class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, InstructionFragment.instructionSaveButtonClickedCallback , OptionFragment.optionSaveButtonClickedCallback , MimaModul.UITrigger{
+class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, InstructionFragment.instructionSaveButtonClickedCallback , OptionFragment.optionSaveButtonClickedCallback{
 
     var mimaFragment = MimaFragment()
     var optionsFragment = OptionFragment()
@@ -230,75 +229,6 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
         // status bar is hidden, so hide that too if necessary.
         /*val actionBar = actionBar
         actionBar!!.hide()*/
-    }
-
-    /* UI Trigger*/
-
-    override fun centerBus() {
-
-    }
-
-    override fun zReady() {
-        findViewById(R.id.registerZ).setBackgroundResource(R.drawable.kasten_active)
-    }
-
-    override fun alu() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun mem(In: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun ioBus() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun ioControl() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun ir(activate: Boolean) {
-        if (activate) findViewById(R.id.arrowFromIRToBus).setBackgroundResource(R.drawable.left_and_right_arrow_active)
-        else findViewById(R.id.arrowFromIRToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
-    }
-
-    override fun iar(activate: Boolean) {
-        if (activate) findViewById(R.id.arrowFromIARToBus).setBackgroundResource(R.drawable.left_and_right_arrow_active)
-        else findViewById(R.id.arrowFromIARToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
-    }
-
-    override fun acc(activate: Boolean) {
-        if (activate) findViewById(R.id.arrowFromACCToBus).setBackgroundResource(R.drawable.left_and_right_arrow_active)
-        else findViewById(R.id.arrowFromACCToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
-    }
-
-    override fun one(activate: Boolean) {
-        if (activate) findViewById(R.id.arrowFromONEToBus).setBackgroundResource(R.drawable.arrow_right_active)
-        else findViewById(R.id.arrowFromONEToBus).setBackgroundResource(R.drawable.arrow_right)
-    }
-
-    override fun x(activate: Boolean) {
-        if (activate) findViewById(R.id.arrowFromXToBus).setBackgroundResource(R.drawable.arrow_left_active)
-        else findViewById(R.id.arrowFromXToBus).setBackgroundResource(R.drawable.arrow_left)
-    }
-
-    override fun y(activate: Boolean) {
-        if (activate) findViewById(R.id.arrowFromYToBus).setBackgroundResource(R.drawable.arrow_left_active)
-        else findViewById(R.id.arrowFromYToBus).setBackgroundResource(R.drawable.arrow_left)
-    }
-
-    override fun z(activate: Boolean) {
-        if (activate) findViewById(R.id.arrowFromZToBus).setBackgroundResource(R.drawable.arrow_right_active)
-        else findViewById(R.id.arrowFromZToBus).setBackgroundResource(R.drawable.arrow_right)
-    }
-
-    override fun sir(activate: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun sar(activate: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 

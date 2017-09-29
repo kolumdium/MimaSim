@@ -8,8 +8,7 @@
     android:orientation="horizontal">
 
 
-
-    <LinearLayout
+        <LinearLayout
         android:id="@+id/calculatorModul"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -18,10 +17,10 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/ViewIOBus"
+            app:layout_constraintBottom_toTopOf="@+id/ViewIOBus"
         app:layout_constraintEnd_toStartOf="@+id/centerBus"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -33,7 +32,7 @@
                 android:id="@+id/calculatorModulLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/calculatorModulShort"
+                android:text="@string/calculatorModul"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -265,7 +264,7 @@
             android:id="@+id/controlModulLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/controlModulShort"
+            android:text="@string/controlModul"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -285,7 +284,7 @@
             android:layout_weight="1"
             android:text="@string/registerCounter"
             app:layout_constraintStart_toStartOf="@+id/registerIRLabel"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/controlModulLabel" />
 
         <TextView
             android:id="@+id/registerIR"
@@ -361,21 +360,22 @@
             android:id="@+id/memoryModulLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
-            android:text="@string/memoryModulShort"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/memoryModul"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/viewMemory"
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:text="READ DONE"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/viewMemoryLabel"
-            tools:layout_editor_absoluteX="4dp" />
+            app:layout_constraintTop_toBottomOf="@+id/viewMemoryLabel" />
 
         <TextView
             android:id="@+id/viewMemoryLabel"
@@ -384,14 +384,14 @@
             android:layout_marginTop="8dp"
             android:text="@string/Memory"
             app:layout_constraintStart_toStartOf="@+id/viewMemory"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/memoryModulLabel" />
 
         <View
             android:id="@+id/arrowFromSIRToMemory"
             android:layout_width="10dp"
             android:layout_height="0dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginStart="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             app:layout_constraintBottom_toTopOf="@+id/registerSIR"
             app:layout_constraintEnd_toEndOf="@+id/registerSIR"
             app:layout_constraintStart_toEndOf="@+id/registerSIRLabel"
@@ -401,8 +401,7 @@
             android:id="@+id/arrowFromSARToMemory"
             android:layout_width="10dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="0dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toTopOf="@+id/registerSAR"
             app:layout_constraintEnd_toEndOf="@+id/registerSAR"
             app:layout_constraintTop_toBottomOf="@+id/viewMemory" />
@@ -441,8 +440,10 @@
             android:id="@+id/registerSAR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
             android:layout_marginEnd="8dp"
             android:text="0x00000000"
+            app:layout_constraintBottom_toTopOf="@+id/IOControler"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/arrowFromSARToCenterBus"
             app:layout_constraintTop_toBottomOf="@+id/registerSARLabel" />
@@ -453,6 +454,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/registerSAR"
+            app:layout_constraintBottom_toTopOf="@+id/registerSAR"
             app:layout_constraintStart_toStartOf="@+id/registerSAR"
             app:layout_constraintTop_toBottomOf="@+id/registerSIR" />
 
@@ -487,14 +489,9 @@
             android:id="@+id/IOControler"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginTop="16dp"
             android:text="@string/IOControl"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerSAR" />
+            app:layout_constraintBottom_toTopOf="@+id/IOState"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <View
             android:id="@+id/arrowFromSARToIOControler"
@@ -506,6 +503,16 @@
             app:layout_constraintEnd_toEndOf="@+id/registerSAR"
             app:layout_constraintStart_toStartOf="@+id/IOControler"
             app:layout_constraintTop_toBottomOf="@+id/registerSAR" />
+
+        <TextView
+            android:id="@+id/IOState"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/IOControler"
+            app:layout_constraintStart_toStartOf="@+id/IOControler" />
     </android.support.constraint.ConstraintLayout>
 
 

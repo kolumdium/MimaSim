@@ -1,6 +1,8 @@
 package com.example.mimasim.Simulator
 
 import android.content.Context
+import android.util.Log
+import com.example.mimasim.GUI.OptionFragment
 import com.example.mimasim.R
 import java.util.*
 import kotlin.collections.ArrayList
@@ -20,6 +22,8 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
     val centerBus = CenterBus(context.resources.getString(R.string.centerBus), context.resources.getString(R.string.centerBusDescription), allRegisters)
     val IOBus = IOBus(context.resources.getString(R.string.IOBus), context.resources.getString(R.string.IOBusDescription))
 
+    var uiTrigger: UITrigger? = null
+
     init {
         allRegisters.add(calculatorModul.ACC)
         allRegisters.add(calculatorModul.ONE)
@@ -31,6 +35,11 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
         allRegisters.add(controlModul.IAR)
         allRegisters.add(controlModul.IR)
         centerBus.allRegsiters.addAll(allRegisters)
+        try {
+            uiTrigger = context as UITrigger
+        } catch (e : ClassCastException){
+           Log.d("ClassCastException","Didn't implement uiTrigger")
+        }
     }
 
     fun step(){
@@ -42,27 +51,68 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
         * SIR -> IR*/
         when (controlModul.Counter.Content){
             0 -> {
+                uiTrigger?.normal()
                 centerBus.transfer(controlModul.IAR, memoryModul.SAR, calculatorModul.X)
                 memoryModul.loadFromMemory()
                 controlModul.Counter.Content++
                 //trigger UI Bus, IAR,SAR,X, memory,counter
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowIar(true, false)
+                uiTrigger?.arrowX(true)
+                uiTrigger?.arrowsSarMem(true)
             }
             1 -> {
+                uiTrigger?.centerBus(false)
+                uiTrigger?.arrowIar(false, false)
+                uiTrigger?.arrowX(false)
+                uiTrigger?.arrowsSarMem(false)
+
                 centerBus.transfer(calculatorModul.ONE, calculatorModul.Y)
                 calculatorModul.Alu.ADD()
                 controlModul.Counter.Content++
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowOne(true)
+                uiTrigger?.arrowY(true)
+                uiTrigger?.alu("ADD")
             }
             2 ->{
-                //trigger UI Z
+                uiTrigger?.centerBus(false)
+                uiTrigger?.arrowOne(false)
+                uiTrigger?.arrowY(false)
+
                 controlModul.Counter.Content++
+
+                uiTrigger?.highlightRegister(true,"Z")
             }
             3-> {
+                uiTrigger?.highlightRegister(false, "Z")
+
                 centerBus.transfer(calculatorModul.Z, controlModul.IAR)
                 controlModul.Counter.Content++
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowZ(true)
+                uiTrigger?.arrowIar(true, true)
             }
             4 -> {
+                uiTrigger?.centerBus(false)
+                uiTrigger?.arrowZ(false)
+                uiTrigger?.arrowIar(false, true)
+
                 centerBus.transfer(memoryModul.SIR, controlModul.IR)
                 currentInstruction = controlModul.decodeInstruction()
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowSirToMemory(true)
+                uiTrigger?.arrowIr(true, true)
+            }
+            5 -> {
+                uiTrigger?.centerBus(false)
+                uiTrigger?.arrowSirToMemory(false)
+                uiTrigger?.arrowIr(false, true)
+
+                stepInstruction(currentInstruction)
             }
             else -> {
                 stepInstruction(currentInstruction)}
@@ -82,16 +132,16 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
     fun stepInstruction(cInstr : Instruction){
         //val adress = cInstr.opCode.shl(28) xor controlModul.IR.Content
         when (cInstr.opCodeString){
-            "ADD" -> ADD()
-            "AND" -> AND()
-            "OR" -> OR()
-            "XOR" -> XOR()
+            "ADD" -> common("ADD")
+            "AND" -> common("AND")
+            "OR" -> common("OR")
+            "XOR" -> common("XOR")
             "LDV" -> LDV()
             "STV" -> STV()
             "LDC" -> LDC()
             "JMP" -> JMP()
             "JMN" -> JMN()
-            "EQL" -> EQL()
+            "EQL" -> common("EQL")
             "RRN" -> RRN()
             "HLT" -> HLT()
             "NOT" -> NOT()
@@ -99,171 +149,102 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
         }
     }
 
-
-    /*TODO Here is also where we should manage the triggers for the UI updates!*/
-
-    fun ADD() {
-        /* ADD
-        * IR -> SAR; IO-Read
-        * ACC->X
-        * empty
-        * empty
-        * SIR-> Y; ALU->ADD
-        * empty
-        * Z->ACC*/
-
-        when (controlModul.Counter.Content){
+    fun common(aluInstrs: String) {
+        /* common
+       * IR -> SAR; IO-Read
+       * ACC->X
+       * empty
+       * empty
+       * SIR-> Y; ALU->instr
+       * empty
+       * Z->ACC*/
+        when (controlModul.Counter.Content) {
             5 -> {
                 centerBus.transfer(controlModul.IR, memoryModul.SAR)
                 memoryModul.loadFromMemory()
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowsSarMem(true)
+                uiTrigger?.arrowIr(true, false)
+
             }
             6 -> {
+                uiTrigger?.centerBus(false)
+                uiTrigger?.arrowsSarMem(false)
+                uiTrigger?.arrowIr(false, false)
+
                 centerBus.transfer(calculatorModul.ACC, calculatorModul.X)
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowAcc(true, false)
+                uiTrigger?.arrowX(true)
             }
             7 -> {
+                uiTrigger?.centerBus(false)
+                uiTrigger?.arrowAcc(false, false)
+                uiTrigger?.arrowX(false)
                 controlModul.Counter.Content++
             }
             8 -> {
                 controlModul.Counter.Content++
-                //trigger UI SIR
+
+                uiTrigger?.arrowSirToMemory(true)
             }
 
             9 -> {
+                uiTrigger?.arrowSirToMemory(false)
+
                 centerBus.transfer(memoryModul.SIR, calculatorModul.Y)
-                calculatorModul.Alu.ADD()
+
+                when (aluInstrs) {
+                    "ADD" -> {
+                        calculatorModul.Alu.ADD()
+                        uiTrigger?.alu("ADD")
+                    }
+                    "AND" -> {
+                        calculatorModul.Alu.AND()
+                        uiTrigger?.alu("AND")
+                    }
+                    "OR" -> {
+                        calculatorModul.Alu.OR()
+                        uiTrigger?.alu("OR")
+                    }
+                    "XOR" -> {
+                        calculatorModul.Alu.XOR()
+                        uiTrigger?.alu("XOR")
+                    }
+                    "EQL" -> {
+                        calculatorModul.Alu.eql()
+                        uiTrigger?.alu("EQL")
+                    }
+                }
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowSirToBus(true, false)
+                uiTrigger?.arrowY(true)
             }
             10 -> {
+                uiTrigger?.centerBus(false)
+                uiTrigger?.arrowSirToBus(false, false)
+                uiTrigger?.arrowY(false)
+
                 controlModul.Counter.Content++
-                //trigger UI Z
+
+                uiTrigger?.highlightRegister(true, "Z")
             }
-            11 ->{
+            11 -> {
+                uiTrigger?.highlightRegister(false, "Z")
+
                 centerBus.transfer(calculatorModul.Z, calculatorModul.ACC)
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowZ(true)
+                uiTrigger?.arrowAcc(true, true)
+
                 controlModul.Counter.Content = 0
             }
         }
     }
-    fun AND() {
-        /* AND
-        * IR -> SAR; IO-Read
-        * ACC->X
-        * empty
-        * empty
-        * SIR-> Y; ALU->AND
-        * empty
-        * Z->ACC*/
-
-        when (controlModul.Counter.Content){
-            5 -> {
-                centerBus.transfer(controlModul.IR, memoryModul.SAR)
-                memoryModul.loadFromMemory()
-            }
-            6 -> {
-                centerBus.transfer(calculatorModul.ACC, calculatorModul.X)
-            }
-            7 -> {
-                controlModul.Counter.Content++
-                //trigger UI Z
-            }
-            8 -> {
-                controlModul.Counter.Content++
-                //trigger UI SIR
-            }
-
-            9 -> {
-                centerBus.transfer(memoryModul.SIR, calculatorModul.Y)
-                calculatorModul.Alu.AND()
-            }
-            10 -> {
-                controlModul.Counter.Content++
-                //trigger UI Z
-            }
-            11 ->{
-                centerBus.transfer(calculatorModul.Z, calculatorModul.ACC)
-                controlModul.Counter.Content = 0
-            }
-        }    }
-
-    fun OR() {
-        /* OR
-        * IR -> SAR; IO-Read
-        * ACC->X
-        * empty
-        * empty
-        * SIR-> Y; ALU->OR
-        * empty
-        * Z->ACC*/
-
-        when (controlModul.Counter.Content){
-            5 -> {
-                centerBus.transfer(controlModul.IR, memoryModul.SAR)
-                memoryModul.loadFromMemory()
-            }
-            6 -> {
-                centerBus.transfer(calculatorModul.ACC, calculatorModul.X)
-            }
-            7 -> {
-                controlModul.Counter.Content++
-                //trigger UI Z
-            }
-            8 -> {
-                controlModul.Counter.Content++
-                //trigger UI SIR
-            }
-
-            9 -> {
-                centerBus.transfer(memoryModul.SIR, calculatorModul.Y)
-                calculatorModul.Alu.OR()
-            }
-            10 -> {
-                controlModul.Counter.Content++
-                //trigger UI Z
-            }
-            11 ->{
-                centerBus.transfer(calculatorModul.Z, calculatorModul.ACC)
-                controlModul.Counter.Content = 0
-            }
-        }   }
-
-    fun XOR() {
-        /* XOR
-         * IR -> SAR; IO-Read
-         * ACC->X
-         * empty
-         * empty
-         * SIR-> Y; ALU->XOR
-         * empty
-         * Z->ACC*/
-
-        when (controlModul.Counter.Content){
-            5 -> {
-                centerBus.transfer(controlModul.IR, memoryModul.SAR)
-                memoryModul.loadFromMemory()
-            }
-            6 -> {
-                centerBus.transfer(calculatorModul.ACC, calculatorModul.X)
-            }
-            7 -> {
-                controlModul.Counter.Content++
-                //trigger UI Z
-            }
-            8 -> {
-                controlModul.Counter.Content++
-                //trigger UI SIR
-            }
-
-            9 -> {
-                centerBus.transfer(memoryModul.SIR, calculatorModul.Y)
-                calculatorModul.Alu.XOR()
-            }
-            10 -> {
-                controlModul.Counter.Content++
-                //trigger UI Z
-            }
-            11 ->{
-                centerBus.transfer(calculatorModul.Z, calculatorModul.ACC)
-                controlModul.Counter.Content = 0
-            }
-        }   }
 
     fun LDV() {
         /* LDV
@@ -279,22 +260,48 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
             5 -> {
                 centerBus.transfer(controlModul.IR, memoryModul.SAR)
                 memoryModul.loadFromMemory()
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowsSarMem(true)
+                uiTrigger?.arrowIr(true, false)
+
             }
             6 -> {
+                uiTrigger?.centerBus(false)
+                uiTrigger?.arrowsSarMem(false)
+                uiTrigger?.arrowIr(false,false)
+
                 centerBus.transfer(calculatorModul.ACC, calculatorModul.X)
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowAcc(true, false)
+                uiTrigger?.arrowX(true)
             }
             7 -> {
+                uiTrigger?.centerBus(false)
+                uiTrigger?.arrowAcc(false, false)
+                uiTrigger?.arrowX(false)
                 controlModul.Counter.Content++
             }
             8 -> {
                 controlModul.Counter.Content++
-                //trigger UI SIR
+
+                uiTrigger?.arrowSirToMemory(true)
             }
 
             9 -> {
+                uiTrigger?.arrowSirToMemory(false)
+
                 centerBus.transfer(memoryModul.SIR, calculatorModul.ACC)
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowSirToBus(true, false)
+                uiTrigger?.arrowAcc(true, true)
             }
             10 -> {
+                uiTrigger?.centerBus(false)
+                uiTrigger?.arrowSirToBus(false, false)
+                uiTrigger?.arrowAcc(false, true)
                 controlModul.Counter.Content++
             }
             11 ->{
@@ -315,14 +322,36 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
         when (controlModul.Counter.Content) {
             5 -> {
                 centerBus.transfer(calculatorModul.ACC, memoryModul.SIR)
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowSirToBus(true, true)
+                uiTrigger?.arrowAcc(true, false)
             }
             6 -> {
+                uiTrigger?.centerBus(false)
+                uiTrigger?.arrowSirToBus(false, true)
+                uiTrigger?.arrowAcc(false, false)
+
                 centerBus.transfer(controlModul.IR, memoryModul.SAR)
                 memoryModul.saveToMemory()
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowIr(true, false)
+                uiTrigger?.arrowsSarMem(true)
+            }
+            7-> {
+                uiTrigger?.centerBus(false)
+                uiTrigger?.arrowIr(false, false)
+                uiTrigger?.arrowsSarMem(false)
+                controlModul.Counter.Content++
             }
             11 -> {
                 centerBus.transfer(calculatorModul.Z, calculatorModul.ACC)
                 controlModul.Counter.Content = 0
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowZ(true)
+                uiTrigger?.arrowAcc(true, true)
             }
             else -> {
                 controlModul.Counter.Content++
@@ -343,9 +372,18 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
         when (controlModul.Counter.Content) {
             5->{
                 centerBus.transfer(controlModul.IR, calculatorModul.ACC)
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowIr(true, false)
+                uiTrigger?.arrowAcc(true, true)
+            }
+
+            6->{
+                uiTrigger?.centerBus(false)
+                uiTrigger?.arrowIr(false, false)
+                uiTrigger?.arrowAcc(false, true)
             }
             11 -> {
-                centerBus.transfer(calculatorModul.Z, calculatorModul.ACC)
                 controlModul.Counter.Content = 0
             }
             else -> {
@@ -378,46 +416,6 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
         * empty*/
     }
 
-    fun EQL() {
-        /* EQL
-        * IR -> SAR; IO-Read
-        * ACC->X
-        * empty
-        * empty
-        * SIR-> Y; ALU->EQL
-        * empty
-        * Z->ACC*/
-        when (controlModul.Counter.Content) {
-            5 -> {
-                centerBus.transfer(controlModul.IR, memoryModul.SAR)
-                memoryModul.loadFromMemory()
-            }
-            6 -> {
-                centerBus.transfer(calculatorModul.ACC, calculatorModul.X)
-            }
-            7 -> {
-                controlModul.Counter.Content++
-            }
-            8 -> {
-                controlModul.Counter.Content++
-                //trigger UI SIR
-            }
-
-            9 -> {
-                centerBus.transfer(memoryModul.SIR, calculatorModul.Y)
-                calculatorModul.Alu.eql()
-            }
-            10 -> {
-                controlModul.Counter.Content++
-                //trigger UI Z
-            }
-            11 -> {
-                centerBus.transfer(calculatorModul.Z, calculatorModul.ACC)
-                controlModul.Counter.Content = 0
-            }
-        }
-    }
-
     fun RRN() {
         /* RRN
         * empty
@@ -434,8 +432,15 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
             }
             6 -> {
                 centerBus.transfer(calculatorModul.ACC, calculatorModul.X)
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowAcc(true, false)
+                uiTrigger?.arrowX(true)
             }
             7 -> {
+                uiTrigger?.centerBus(false)
+                uiTrigger?.arrowAcc(false, false)
+                uiTrigger?.arrowX(false)
                 controlModul.Counter.Content++
             }
             8 -> {
@@ -445,14 +450,30 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
             9 -> {
                 centerBus.transfer(controlModul.IR, calculatorModul.Y)
                 calculatorModul.Alu.shift()
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowIr(true, false)
+                uiTrigger?.arrowY(true)
+                uiTrigger?.alu("SHIFT")
             }
             10 -> {
+                uiTrigger?.centerBus(false)
+                uiTrigger?.arrowIr(false, false)
+                uiTrigger?.arrowY(false)
+
                 controlModul.Counter.Content++
-                //trigger UI Z
+
+                uiTrigger?.highlightRegister( true,"Z")
             }
             11 -> {
+                uiTrigger?.highlightRegister( false,"Z")
+
                 centerBus.transfer(calculatorModul.Z, calculatorModul.ACC)
                 controlModul.Counter.Content = 0
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowZ(true)
+                uiTrigger?.arrowAcc(true, true)
             }
         }
     }
@@ -477,17 +498,28 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
             }
             6 -> {
                 centerBus.transfer(calculatorModul.ACC, calculatorModul.X)
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowAcc(true, false)
+                uiTrigger?.arrowX(true)
             }
             7 -> {
+                uiTrigger?.centerBus(false)
+                uiTrigger?.arrowAcc(false, false)
+                uiTrigger?.arrowX(false)
                 controlModul.Counter.Content++
             }
             8 -> {
                 controlModul.Counter.Content++
-                //trigger UI SIR
+                uiTrigger?.arrowSirToMemory(true)
             }
 
             9 -> {
+                uiTrigger?.arrowSirToMemory(false)
+
                 calculatorModul.Alu.negate()
+
+                uiTrigger?.alu("NOT")
             }
             10 -> {
                 controlModul.Counter.Content++
@@ -496,6 +528,10 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
             11 -> {
                 centerBus.transfer(calculatorModul.Z, calculatorModul.ACC)
                 controlModul.Counter.Content = 0
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowZ(true)
+                uiTrigger?.arrowAcc(true, true)
             }
         }
     }
@@ -516,8 +552,15 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
             }
             6 -> {
                 centerBus.transfer(calculatorModul.ACC, calculatorModul.X)
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowAcc(true, false)
+                uiTrigger?.arrowX(true)
             }
             7 -> {
+                uiTrigger?.centerBus(false)
+                uiTrigger?.arrowAcc(false, false)
+                uiTrigger?.arrowX(false)
                 controlModul.Counter.Content++
             }
             8 -> {
@@ -527,35 +570,54 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
             9 -> {
                 centerBus.transfer(calculatorModul.ONE, calculatorModul.Y)
                 calculatorModul.Alu.shift()
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowOne(true)
+                uiTrigger?.arrowY(true)
+                uiTrigger?.alu("SHIFT")
             }
             10 -> {
+                uiTrigger?.centerBus(false)
+                uiTrigger?.arrowOne(false)
+                uiTrigger?.arrowY(false)
+
                 controlModul.Counter.Content++
-                //trigger UI Z
+
+                uiTrigger?.highlightRegister(true, "Z")
             }
             11 -> {
+                uiTrigger?.highlightRegister(false, "Z")
+
                 centerBus.transfer(calculatorModul.Z, calculatorModul.ACC)
                 controlModul.Counter.Content = 0
+
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowZ(true)
+                uiTrigger?.arrowAcc(true, true)
             }
         }
 
     }
 
     interface UITrigger{
-        fun centerBus()
-        fun zReady()
-        fun ir(activate : Boolean)
-        fun iar(activate : Boolean)
-        fun acc(activate : Boolean)
-        fun one(activate : Boolean)
-        fun x(activate : Boolean)
-        fun y(activate : Boolean)
-        fun z(activate : Boolean)
-        fun sir(activate : Boolean)
-        fun sar(activate : Boolean)
-        fun alu()
-        fun mem(In : Boolean)
-        fun ioBus()
-        fun ioControl()
+        fun centerBus(activate: Boolean)
+        fun highlightRegister(activate: Boolean, register: String)
+        fun arrowIr(activate : Boolean, ingoing: Boolean)
+        fun arrowIar(activate : Boolean, ingoing: Boolean)
+        fun arrowAcc(activate : Boolean, ingoing: Boolean)
+        fun arrowOne(activate : Boolean)
+        fun arrowX(activate : Boolean)
+        fun arrowY(activate : Boolean)
+        fun arrowZ(activate : Boolean)
+        fun arrowSirToMemory(activate: Boolean)
+        fun arrowSirToBus(activate: Boolean, ingoing: Boolean)
+        fun arrowsSarIO(activate: Boolean)
+        fun arrowsSarMem(activate: Boolean)
+        fun alu(instruction: String)
+        fun mem(instruction: String)
+        fun ioBus(activate: Boolean)
+        fun ioControl(state : String)
+        fun normal()
     }
 
 }
