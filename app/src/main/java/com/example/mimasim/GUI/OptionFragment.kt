@@ -64,17 +64,15 @@ class OptionFragment : Fragment() {
         val contentView = view?.findViewById(R.id.optionsElementContent) as EditText
 
         when (currentlyLoadedElement.name){
-            "ALU" , "I/O-Bus", "I/O-Control" , "Prozessorbus", "Mima", "Speicherwerk" , "Steuerwerk" , "Rechenwerk" -> {
+            "ALU" , "I/O-Bus", "I/O-Control" , "Prozessorbus", "Mima", "Speicherwerk" , "Steuerwerk" , "Rechenwerk", "Counter", "Memory" -> {
                 contentView.visibility = View.GONE
                 view?.findViewById(R.id.optionsSave)?.setOnClickListener{
                     optionCallback?.abortOptions()
                 }
             }
-            "Memory" -> {//TODO some fancy stuff
-            }
             else -> {
-                contentView.visibility = View.VISIBLE
                 //should be a Register when you get here.
+                contentView.visibility = View.VISIBLE
                 contentView.setText( String.format(Integer.toHexString((currentlyLoadedElement as Register).Content)) , TextView.BufferType.EDITABLE)
                 _hasContent = true
 
@@ -84,8 +82,6 @@ class OptionFragment : Fragment() {
                     //TODO this should also go into an callback and then get passed to the modul.
                     currentlyLoadedElement.Content = Integer.decode( "0x" + inputString )
                     optionCallback?.updateMima()
-                    //TODO make save properly
-
                     contentView.visibility = View.VISIBLE
                 }
             }

@@ -22,7 +22,7 @@ class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapte
 
     /*TODO The SWipeListner does not work when we swipe in the List View!!! Find out why not and fix it*/
 
-    var mCallback : instructionSaveButtonClickedCallback? = null
+    var mCallback : InstructionButtonClickedCallback? = null
     var instructionManager = InstructionManager()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -33,15 +33,13 @@ class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapte
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         view?.setBackgroundColor( resources.getColor(R.color.lighterGrey))
 
-        /* TODO When the save Button is Clicked save Instructions undependent from the Fragment
-        * also TODO when the same button is clicked iterate all instructions and save. or make a editText onfocuschangedlistener saveInstructions*/
         view?.findViewById(R.id.instructionSaveButton)?.setOnClickListener{
             //  pass to Memory now
             mCallback?.saveInstructions(instructionManager.instructions)
         }
 
-        view?.findViewById(R.id.instructionAbortButton)?.setOnClickListener{
-            mCallback?.abortInstructions()
+        view?.findViewById(R.id.instructionClearButton)?.setOnClickListener{
+            mCallback?.clearInstructions()
         }
 
 
@@ -82,18 +80,18 @@ class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapte
         instructionManager.instructions.set(position, instruction)
     }
 
-    interface instructionSaveButtonClickedCallback{
+    interface InstructionButtonClickedCallback{
         fun saveInstructions(currentInstructions : ArrayList<Instruction>)
-        fun abortInstructions()
-        fun addedInstruction()
+        fun closeInstructions()
+        fun clearInstructions()
     }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         try {
-            mCallback = context as instructionSaveButtonClickedCallback
+            mCallback = context as InstructionButtonClickedCallback
         } catch (e : ClassCastException){
-            throw ClassCastException(activity.toString() + " must implement instructionSaveButtonClickedCallback")
+            throw ClassCastException(activity.toString() + " must implement instructionButtonClickedCallback")
         }
     }
 }

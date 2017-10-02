@@ -12,7 +12,7 @@ import kotlin.collections.ArrayList
 /**
  * Created by Martin on 08.09.2017.
  */
-class MimaModul(name: String, description : String, var context: Context, mimaFragment: MimaFragment) : Element(name, description){
+class MimaModul(name: String, description : String, var context: Context, val mimaFragment: MimaFragment) : Element(name, description){
 
     var running = false
     var currentInstruction = Instruction()
@@ -28,7 +28,6 @@ class MimaModul(name: String, description : String, var context: Context, mimaFr
 
     init {
         allRegisters.add(calculatorModul.ACC)
-        allRegisters.add(calculatorModul.ONE)
         allRegisters.add(calculatorModul.X)
         allRegisters.add(calculatorModul.Y)
         allRegisters.add(calculatorModul.Z)
@@ -36,12 +35,35 @@ class MimaModul(name: String, description : String, var context: Context, mimaFr
         allRegisters.add(memoryModul.SAR)
         allRegisters.add(controlModul.IAR)
         allRegisters.add(controlModul.IR)
+        allRegisters.add(controlModul.Counter)
         centerBus.allRegsiters.addAll(allRegisters)
+
         try {
             uiTrigger = mimaFragment
         } catch (e : ClassCastException){
            Log.d("ClassCastException","Didn't implement uiTrigger")
         }
+    }
+
+    fun speedChanged(speed : Long ){
+        if (speed < 100){
+            uiTrigger?.normal()
+            uiTrigger = null
+        }
+        else{
+            try {
+                uiTrigger = mimaFragment
+            } catch (e : ClassCastException){
+                Log.d("ClassCastException","Didn't implement uiTrigger")
+            }
+        }
+    }
+
+    fun reset(){
+        /*TODO all Registers to 0
+        **/
+        for (register in allRegisters)
+            register.Content = 0
     }
 
     fun step(){
@@ -109,16 +131,19 @@ class MimaModul(name: String, description : String, var context: Context, mimaFr
 
                 centerBus.transfer(memoryModul.SIR, controlModul.IR)
                 currentInstruction = controlModul.decodeInstruction()
+                controlModul.Counter.Content++
 
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowSirToMemory(true)
                 uiTrigger?.arrowIr(true, true)
                 uiTrigger?.mem("")
+                uiTrigger?.arrowSirToBus(true, false)
             }
             5 -> {
                 uiTrigger?.centerBus(false)
                 uiTrigger?.arrowSirToMemory(false)
                 uiTrigger?.arrowIr(false, true)
+                uiTrigger?.arrowSirToBus(false, false)
 
                 stepInstruction(currentInstruction)
             }
@@ -129,12 +154,6 @@ class MimaModul(name: String, description : String, var context: Context, mimaFr
 
     fun stop(){
         running = false
-    }
-
-    fun run(){
-        running = true
-        while (running)
-            step()
     }
 
     fun stepInstruction(cInstr : Instruction){
@@ -171,6 +190,8 @@ class MimaModul(name: String, description : String, var context: Context, mimaFr
                 centerBus.transfer(controlModul.IR, memoryModul.SAR)
                 memoryModul.loadFromMemory()
 
+                controlModul.Counter.Content++
+
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowsSarMem(true)
                 uiTrigger?.arrowIr(true, false)
@@ -183,6 +204,7 @@ class MimaModul(name: String, description : String, var context: Context, mimaFr
                 uiTrigger?.arrowIr(false, false)
 
                 centerBus.transfer(calculatorModul.ACC, calculatorModul.X)
+                controlModul.Counter.Content++
 
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowAcc(true, false)
@@ -231,6 +253,8 @@ class MimaModul(name: String, description : String, var context: Context, mimaFr
                     }
                 }
 
+                controlModul.Counter.Content++
+
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowSirToBus(true, false)
                 uiTrigger?.arrowY(true)
@@ -274,6 +298,8 @@ class MimaModul(name: String, description : String, var context: Context, mimaFr
                 centerBus.transfer(controlModul.IR, memoryModul.SAR)
                 memoryModul.loadFromMemory()
 
+                controlModul.Counter.Content++
+
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowsSarMem(true)
                 uiTrigger?.arrowIr(true, false)
@@ -286,6 +312,7 @@ class MimaModul(name: String, description : String, var context: Context, mimaFr
                 uiTrigger?.arrowIr(false,false)
 
                 centerBus.transfer(calculatorModul.ACC, calculatorModul.X)
+                controlModul.Counter.Content++
 
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowAcc(true, false)
@@ -310,6 +337,7 @@ class MimaModul(name: String, description : String, var context: Context, mimaFr
                 uiTrigger?.arrowSirToMemory(false)
 
                 centerBus.transfer(memoryModul.SIR, calculatorModul.ACC)
+                controlModul.Counter.Content++
 
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowSirToBus(true, false)
@@ -340,6 +368,7 @@ class MimaModul(name: String, description : String, var context: Context, mimaFr
         when (controlModul.Counter.Content) {
             5 -> {
                 centerBus.transfer(calculatorModul.ACC, memoryModul.SIR)
+                controlModul.Counter.Content++
 
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowSirToBus(true, true)
@@ -352,6 +381,7 @@ class MimaModul(name: String, description : String, var context: Context, mimaFr
 
                 centerBus.transfer(controlModul.IR, memoryModul.SAR)
                 memoryModul.saveToMemory()
+                controlModul.Counter.Content++
 
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowIr(true, false)
@@ -458,6 +488,7 @@ class MimaModul(name: String, description : String, var context: Context, mimaFr
             }
             6 -> {
                 centerBus.transfer(calculatorModul.ACC, calculatorModul.X)
+                controlModul.Counter.Content++
 
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowAcc(true, false)
@@ -476,6 +507,7 @@ class MimaModul(name: String, description : String, var context: Context, mimaFr
             9 -> {
                 centerBus.transfer(controlModul.IR, calculatorModul.Y)
                 calculatorModul.Alu.shift()
+                controlModul.Counter.Content++
 
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowIr(true, false)
@@ -524,6 +556,7 @@ class MimaModul(name: String, description : String, var context: Context, mimaFr
             }
             6 -> {
                 centerBus.transfer(calculatorModul.ACC, calculatorModul.X)
+                controlModul.Counter.Content++
 
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowAcc(true, false)
@@ -544,6 +577,7 @@ class MimaModul(name: String, description : String, var context: Context, mimaFr
                 uiTrigger?.arrowSirToMemory(false)
 
                 calculatorModul.Alu.negate()
+                controlModul.Counter.Content++
 
                 uiTrigger?.alu("NOT")
             }
@@ -578,6 +612,7 @@ class MimaModul(name: String, description : String, var context: Context, mimaFr
             }
             6 -> {
                 centerBus.transfer(calculatorModul.ACC, calculatorModul.X)
+                controlModul.Counter.Content++
 
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowAcc(true, false)
@@ -596,6 +631,7 @@ class MimaModul(name: String, description : String, var context: Context, mimaFr
             9 -> {
                 centerBus.transfer(calculatorModul.ONE, calculatorModul.Y)
                 calculatorModul.Alu.shift()
+                controlModul.Counter.Content++
 
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowOne(true)

@@ -2,6 +2,7 @@ package com.example.mimasim
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.Window
@@ -19,7 +20,7 @@ import java.util.*
 /*TODO: Credits for the Images:
 * left-and-right-arrow -> <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>*/
 
-class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, InstructionFragment.instructionSaveButtonClickedCallback , OptionFragment.optionSaveButtonClickedCallback{
+class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, InstructionFragment.InstructionButtonClickedCallback , OptionFragment.optionSaveButtonClickedCallback{
 
     var mimaFragment = MimaFragment()
     var optionsFragment = OptionFragment()
@@ -32,8 +33,15 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
     var rightView : View? = null
     var centerView : View? = null
 
-    val timer = Timer()
     var speed : Long = 0
+    var timerHandler : Handler? = null
+    var timerRunnable = object : Runnable{
+        override fun run() {
+            mimaModul?.step()
+            updateMima()
+            timerHandler?.postDelayed(this, speed);
+        }
+    }
 
     enum class Extended{
         NORMAL, RIGHT, LEFT , RIGHTFULL, LEFTFULL
@@ -44,15 +52,23 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main)
 
-        //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        timerHandler = Handler()
 
         /*Get an instance of the simulator*/
         mimaModul = MimaModul(resources.getString(R.string.MimaModul), resources.getString(R.string.MimaModulDescription), this, mimaFragment)
-
         init()
+    }
+
+    override fun onBackPressed() {
+        //super.onBackPressed()
+        when (extended){
+            MainActivity.Extended.LEFTFULL ->{extendLeft()}
+            MainActivity.Extended.NORMAL -> {}
+            MainActivity.Extended.RIGHT, MainActivity.Extended.LEFT -> extendNormal()
+            MainActivity.Extended.RIGHTFULL -> {extendRight()}
+        }
     }
 
     override fun onStart() {
@@ -194,6 +210,51 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
         }
     }
 
+
+    /*
+    * StepControl
+    * */
+    override fun startButtonPressed() {
+        mimaModul?.speedChanged(speed)
+        timerHandler?.postDelayed(timerRunnable, 0)
+    }
+
+    override fun stopButtonPressed() {
+        timerHandler?.removeCallbacks(timerRunnable)
+    }
+
+    override fun stepButtonPressed() {
+        mimaModul?.speedChanged(1000)
+        mimaModul?.step()
+        updateMima()
+    }
+
+    override fun speedChanged(speed: Long) {
+        this.speed = speed
+        mimaModul?.speedChanged(speed)
+    }
+
+    /*
+    * InstructionCallbacks
+    * */
+
+    override fun saveInstructions(currentInstructions : ArrayList<Instruction>){
+        this.mimaModul?.memoryModul?.saveToMemory(currentInstructions)
+        extendNormal()
+    }
+
+    override fun clearInstructions() {
+        mimaModul?.reset()
+    }
+
+    override fun closeInstructions() {
+        extendNormal()
+    }
+
+    /*
+    * OptionsCallbacks
+    * */
+
     override fun sendElement(currentlyLoadedElement: Element) {
         /*When an Element is Long hold (wants to be edited) this gets Called*/
         openOptions()
@@ -202,51 +263,11 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
         optionsFragment.updateView(currentlyLoadedElement)
     }
 
-    override fun saveInstructions(currentInstructions : ArrayList<Instruction>){
-        this.mimaModul?.memoryModul?.saveToMemory(currentInstructions)
-        extendNormal()
-    }
-
-    override fun abortInstructions() {
-        extendNormal()
-    }
-
-    override fun addedInstruction() {
-
-    }
-
     override fun abortOptions() {
         extendNormal()
     }
 
     override fun updateMima() {
         mimaFragment.updateView()
-    }
-
-    override fun startButtonPressed() {
-
-    }
-
-    override fun stopButtonPressed() {
-        timer.cancel()
-    }
-
-    override fun stepButtonPressed() {
-        mimaModul?.step()
-        updateMima()
-    }
-
-    override fun speedChanged(speed: Long) {
-       this.speed = speed
-    }
-
-    override fun onBackPressed() {
-        //super.onBackPressed()
-        when (extended){
-            MainActivity.Extended.LEFTFULL ->{extendLeft()}
-            MainActivity.Extended.NORMAL -> {}
-            MainActivity.Extended.RIGHT, MainActivity.Extended.LEFT -> extendNormal()
-            MainActivity.Extended.RIGHTFULL -> {extendRight()}
-        }
     }
 }

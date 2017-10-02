@@ -62,6 +62,7 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
         map.put(R.id.registerIAR, main.mimaModul!!.controlModul.IAR)
         map.put(R.id.registerIR, main.mimaModul!!.controlModul.IR)
         map.put(R.id.registerSIR, main.mimaModul!!.memoryModul.SIR)
+        map.put(R.id.registerCounter, main.mimaModul!!.controlModul.Counter)
         map.put(R.id.registerSAR, main.mimaModul!!.memoryModul.SAR)
         map.put(R.id.IOControler, main.mimaModul!!.memoryModul.IOControl)
         map.put(R.id.centerBus, main.mimaModul!!.centerBus)
@@ -83,13 +84,19 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
             }
         }
 
-        view?.findViewById(R.id.stepControlStartButton)?.setOnClickListener{
+        val startButton = view?.findViewById(R.id.stepControlStartButton)
+        val stopButton = view?.findViewById(R.id.stepControlStopButton)
+        val stepButton = view?.findViewById(R.id.stepControlStepButton)
+
+        startButton?.setOnClickListener{
             mCallback?.startButtonPressed()
+            stepButton?.isClickable = false
         }
-        view?.findViewById(R.id.stepControlStepButton)?.setOnClickListener{
+        stepButton?.setOnClickListener{
             mCallback?.stepButtonPressed()
         }
-        view?.findViewById(R.id.stepControlStopButton)?.setOnClickListener{
+        stopButton?.setOnClickListener{
+            stepButton?.isClickable = true
             mCallback?.stopButtonPressed()
         }
 
@@ -122,11 +129,20 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
                 "ALU" , "I/O-Bus", "I/O-Control" , "Prozessorbus", "Mima", "Speicherwerk" , "Steuerwerk" , "Rechenwerk" -> {}
                 "Memory" -> {//TODO some fancy stuff
                     }
+                "Counter" ->{
+                    val counter = (view?.findViewById(key) as TextView)
+                    val content = (value as Register).Content
+                    var fillZeroes = ""
+                    for (i in 0..(3 - Integer.toBinaryString(content).length)) {
+                        fillZeroes += "0"
+                    }
+                    counter.text = String.format(fillZeroes + Integer.toBinaryString (content))
+                }
                 else -> {
                     //should be a Register when you get here.
                     val someTextView = (view?.findViewById(key) as TextView)
                     var fillZeros = ""
-                    for ( i in 0.. (7 - (value as Register).Content.toString().length)){
+                    for ( i in 0.. (5 -   Integer.toHexString((value as Register).Content).length)){
                         fillZeros += "0"
                     }
                     someTextView.text = String.format("0x" + fillZeros + Integer.toHexString(value.Content))
@@ -297,12 +313,12 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
         if (activate){
             view.findViewById(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.arrow_right_active)
             view.findViewById(R.id.arrowFromSARToMemory).setBackgroundResource(R.drawable.arrow_up_active)
-            view.findViewById(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_right_active)
+            view.findViewById(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down_active)
         }
         else{
             view.findViewById(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.arrow_right)
             view.findViewById(R.id.arrowFromSARToMemory).setBackgroundResource(R.drawable.arrow_up)
-            view.findViewById(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_right)
+            view.findViewById(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down)
         }
     }
 
@@ -310,12 +326,12 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
         if (activate){
             view.findViewById(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.arrow_right_active)
             view.findViewById(R.id.arrowFromSARToIOBus).setBackgroundResource(R.drawable.arrow_down_active)
-            view.findViewById(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_right_active)
+            view.findViewById(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down_active)
         }
         else{
             view.findViewById(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.arrow_right)
             view.findViewById(R.id.arrowFromSARToIOBus).setBackgroundResource(R.drawable.arrow_down)
-            view.findViewById(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_right)
+            view.findViewById(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down)
         }
     }
 
@@ -325,8 +341,8 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
     }
 
     override fun arrowSirToBus(activate: Boolean, ingoing: Boolean) {
-        if (activate && ingoing) view.findViewById(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.arrow_left_active)
-        else if (activate && !ingoing) view.findViewById(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.arrow_right_active)
+        if (activate && ingoing) view.findViewById(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.arrow_right_active)
+        else if (activate && !ingoing) view.findViewById(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.arrow_left_active)
         else view.findViewById(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.left_and_right_arrow)
     }
 

@@ -24,17 +24,17 @@
         android:id="@+id/instructionSaveButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Speichern"
-        app:layout_constraintBottom_toTopOf="@+id/instructionAbortButton"
+        android:text="Schließen"
+        app:layout_constraintBottom_toTopOf="@+id/instructionClearButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/instructionAbortButton"
+        android:id="@+id/instructionClearButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Abbrechen"
+        android:text="Clear Mima"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
