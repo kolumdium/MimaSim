@@ -4,11 +4,14 @@ import android.app.Fragment
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.TextView
 import com.example.mimasim.R
 import com.example.mimasim.Simulator.Instruction
 
@@ -20,10 +23,10 @@ class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapte
     /*TODO The SWipeListner does not work when we swipe in the List View!!! Find out why not and fix it*/
 
     var mCallback : instructionSaveButtonClickedCallback? = null
-    var mInstructions = ArrayList<Instruction>()
-    var mInstructionAdapter : InstructionAdapter? = null
+    var instructionManager = InstructionManager()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        instructionManager.loadDefaultInstructions()
         return inflater.inflate(R.layout.instruction_big, container , false)
     }
 
@@ -33,51 +36,56 @@ class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapte
         /* TODO When the save Button is Clicked save Instructions undependent from the Fragment
         * also TODO when the same button is clicked iterate all instructions and save. or make a editText onfocuschangedlistener saveInstructions*/
         view?.findViewById(R.id.instructionSaveButton)?.setOnClickListener{
-            //  mInstructionAdapter?.saveInstructions()
-            mCallback?.saveInstructions(mInstructions)
+            //  pass to Memory now
+            mCallback?.saveInstructions(instructionManager.instructions)
+        }
 
+        view?.findViewById(R.id.instructionAbortButton)?.setOnClickListener{
+            mCallback?.abortInstructions()
         }
 
 
         val listView = activity.findViewById(R.id.instructionListView) as ListView
-        listView.adapter = InstructionAdapter(activity,  mInstructions, this)
-        mInstructionAdapter = listView.adapter as InstructionAdapter
+        listView.adapter = InstructionAdapter(activity,  instructionManager.instructions, this)
+        val mInstructionAdapter = listView.adapter as InstructionAdapter
 
         //Just a debug thing
-        //mInstructionAdapter?.add(Instruction())
-        mInstructions.add(Instruction())
 
         view?.findViewById(R.id.instructionAddButton)?.setOnClickListener{
-            //mInstructionAdapter?.add(Instruction())
-            mInstructions.add(Instruction())
-            mInstructionAdapter?.notifyDataSetChanged()
+            mInstructionAdapter.add(Instruction())
+            val textView = view.findViewById(R.id.instructionTextView) as TextView
+            textView.text = instructionManager.getAsCharSequence()
+            Log.d("Test", "${instructionManager.getAsCharSequence()}" )
         }
     }
 
     fun makeBigLayout(){
         view?.findViewById(R.id.instructionSaveToFile)?.visibility = View.VISIBLE
         view?.findViewById(R.id.instructionLoadFromFile)?.visibility = View.VISIBLE
+        view?.findViewById(R.id.instructionTextView)?.visibility = View.GONE
+        view?.findViewById(R.id.instructionListView)?.visibility = View.VISIBLE
+        view?.findViewById(R.id.scrollViewInstructions)?.visibility = View.GONE
     }
 
     fun makeSmallLayout(){
         view?.findViewById(R.id.instructionSaveToFile)?.visibility = View.GONE
         view?.findViewById(R.id.instructionLoadFromFile)?.visibility = View.GONE
+        val textView = view?.findViewById(R.id.instructionTextView) as TextView
+        view?.findViewById(R.id.instructionListView)?.visibility = View.GONE
+        view?.findViewById(R.id.scrollViewInstructions)?.visibility = View.VISIBLE
+
+        textView.visibility = View.VISIBLE
+        textView.text = instructionManager.getAsCharSequence()
     }
 
-    fun setInstructions(instructions : ArrayList<Instruction>){
-        mInstructions.clear()
-        mInstructions.addAll(instructions)
-        mInstructionAdapter?.notifyDataSetChanged()
+    override fun saveInstruction(position: Int, instruction: Instruction) {
+        instructionManager.instructions.set(position, instruction)
     }
 
     interface instructionSaveButtonClickedCallback{
         fun saveInstructions(currentInstructions : ArrayList<Instruction>)
-    }
-
-    override fun saveInstruction(position: Int, instruction: Instruction) {
-        /*When a Instruction was chaned in the editor save it here*/
-        mInstructions[position] = instruction
-        //mCallback?.saveInstructions(mInstructions)
+        fun abortInstructions()
+        fun addedInstruction()
     }
 
     override fun onAttach(context: Context?) {

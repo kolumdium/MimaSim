@@ -68,10 +68,10 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
 
         }
 
-        /*holder.editText?.setOnFocusChangeListener{ view: View, b: Boolean ->
+        holder.editText?.setOnFocusChangeListener{ view: View, b: Boolean ->
             tmpInstruction.adress = Integer.decode( "0x" + holder.editText?.text)
             saveInstructionCallback.saveInstruction(position, tmpInstruction)
-        }*/
+        }
 
         holder.editText?.setText( Integer.toHexString(tmpInstruction.adress) )
         holder.spinner?.setSelection( tmpInstruction.opCode)
@@ -86,7 +86,7 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
     }
 
     interface saveInstructionAdapterCallback{
-        fun saveInstruction(position: Int, instruction: Instruction){}
+        fun saveInstruction(position: Int, instruction: Instruction)
     }
 
     class ListItemHolder{

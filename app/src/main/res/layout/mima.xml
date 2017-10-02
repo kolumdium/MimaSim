@@ -42,18 +42,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/registerONE"
-                app:layout_constraintTop_toBottomOf="@+id/calculatorModulLabel"
-                tools:layout_editor_absoluteX="0dp" />
-
-            <View
-                android:id="@+id/arrowFromONEToBus"
-                android:layout_width="0dp"
-                android:layout_height="10dp"
-                app:layout_constraintBottom_toBottomOf="@+id/registerONE"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/registerONE"
-                app:layout_constraintTop_toTopOf="@+id/registerONE" />
-
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/calculatorModulLabel" />
             <TextView
                 android:id="@+id/registerONE"
                 android:layout_width="wrap_content"
@@ -76,17 +66,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0x00000000"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/registerACCLabel" />
-
-            <View
-                android:id="@+id/arrowFromACCToBus"
-                android:layout_width="0dp"
-                android:layout_height="10dp"
-                app:layout_constraintBottom_toBottomOf="@+id/registerACC"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/registerACC"
-                app:layout_constraintTop_toTopOf="@+id/registerACC" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registerACCLabel" />
 
             <TextView
                 android:id="@+id/registerXLabel"
@@ -104,6 +85,79 @@
                 android:text="0x00000000"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/registerXLabel" />
+
+            <TextView
+                android:id="@+id/registerY"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="0dp"
+                android:text="0x00000000"
+                app:layout_constraintStart_toEndOf="@+id/arrowFromXToAlu"
+                app:layout_constraintTop_toBottomOf="@+id/registerYLabel" />
+
+            <TextView
+                android:id="@+id/registerYLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/registerY"
+                app:layout_constraintStart_toStartOf="@+id/registerY"
+                app:layout_constraintTop_toBottomOf="@+id/registerX" />
+
+            <TextView
+                android:id="@+id/registerZ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:text="0x00000000"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/viewALU" />
+
+            <TextView
+                android:id="@+id/registerZLabel"
+                android:layout_width="7dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="0dp"
+                android:text="@string/registerZ"
+                app:layout_constraintBottom_toTopOf="@+id/registerZ"
+                app:layout_constraintEnd_toStartOf="@+id/arrowFromAluToZ"
+                app:layout_constraintStart_toStartOf="@+id/registerZ"
+                tools:layout_editor_absoluteX="20dp" />
+
+            <TextView
+                android:id="@+id/aluText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="ADD"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toTopOf="@+id/arrowFromAluToZ"
+                app:layout_constraintEnd_toEndOf="@+id/viewALU"
+                app:layout_constraintStart_toStartOf="@+id/viewALU" />
+
+            <View
+            android:id="@+id/arrowFromONEToBus"
+            android:layout_width="0dp"
+            android:layout_height="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/registerONE"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/registerONE"
+            app:layout_constraintTop_toTopOf="@+id/registerONE" />
+
+            <View
+            android:id="@+id/arrowFromACCToBus"
+            android:layout_width="0dp"
+            android:layout_height="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/registerACC"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/registerACC"
+            app:layout_constraintTop_toTopOf="@+id/registerACC" />
 
             <View
                 android:id="@+id/arrowFromXToBus"
@@ -176,60 +230,7 @@
 
             </View>
 
-            <TextView
-                android:id="@+id/registerY"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="0dp"
-                android:text="0x00000000"
-                app:layout_constraintStart_toEndOf="@+id/arrowFromXToAlu"
-                app:layout_constraintTop_toBottomOf="@+id/registerYLabel" />
 
-            <TextView
-                android:id="@+id/registerYLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/registerY"
-                app:layout_constraintStart_toStartOf="@+id/registerY"
-                app:layout_constraintTop_toBottomOf="@+id/registerX" />
-
-            <TextView
-                android:id="@+id/registerZ"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:text="0x00000000"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/viewALU" />
-
-            <TextView
-                android:id="@+id/registerZLabel"
-                android:layout_width="7dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="0dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="0dp"
-                android:text="@string/registerZ"
-                app:layout_constraintBottom_toTopOf="@+id/registerZ"
-                app:layout_constraintEnd_toStartOf="@+id/arrowFromAluToZ"
-                app:layout_constraintStart_toStartOf="@+id/registerZ"
-                tools:layout_editor_absoluteX="20dp" />
-
-            <TextView
-                android:id="@+id/aluText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="ADD"
-                android:textAlignment="center"
-                app:layout_constraintBottom_toTopOf="@+id/arrowFromAluToZ"
-                app:layout_constraintEnd_toEndOf="@+id/viewALU"
-                app:layout_constraintStart_toStartOf="@+id/viewALU" />
 
 
         </android.support.constraint.ConstraintLayout>
@@ -356,6 +357,74 @@
         app:layout_constraintTop_toBottomOf="@+id/controlModul"
         tools:layout_editor_absoluteX="188dp">
 
+        <View
+            android:id="@+id/arrowFromSIRToCenterBus"
+            android:layout_width="0dp"
+            android:layout_height="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/registerSIR"
+            app:layout_constraintEnd_toStartOf="@+id/registerSIR"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/registerSIR" />
+
+
+        <View
+            android:id="@+id/arrowFromSARToCenterBus"
+            android:layout_width="0dp"
+            android:layout_height="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/registerSAR"
+            app:layout_constraintEnd_toStartOf="@+id/registerSAR"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/registerSAR" />
+
+        <View
+            android:id="@+id/arrowFromSARToIOBus"
+            android:layout_width="10dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/registerSAR"
+            app:layout_constraintTop_toBottomOf="@+id/registerSAR" />
+
+        <View
+            android:id="@+id/arrowFromSIRToMemory"
+            android:layout_width="10dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/registerSIR"
+            app:layout_constraintEnd_toEndOf="@+id/registerSIR"
+            app:layout_constraintStart_toEndOf="@+id/registerSIRLabel"
+            app:layout_constraintTop_toBottomOf="@+id/viewMemory" />
+
+        <View
+            android:id="@+id/arrowFromSARToMemory"
+            android:layout_width="10dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/registerSAR"
+            app:layout_constraintEnd_toEndOf="@+id/registerSAR"
+            app:layout_constraintTop_toBottomOf="@+id/viewMemory" />
+
+        <View
+            android:id="@+id/arrowFromSIRToIOBus"
+            android:layout_width="10dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/registerSIR"
+            app:layout_constraintTop_toBottomOf="@+id/registerSIR" />
+
+        <View
+            android:id="@+id/arrowFromSARToIOControler"
+            android:layout_width="10dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/IOControler"
+            app:layout_constraintEnd_toEndOf="@+id/registerSAR"
+            app:layout_constraintStart_toStartOf="@+id/IOControler"
+            app:layout_constraintTop_toBottomOf="@+id/registerSAR" />
+
         <TextView
             android:id="@+id/memoryModulLabel"
             android:layout_width="0dp"
@@ -386,25 +455,23 @@
             app:layout_constraintStart_toStartOf="@+id/viewMemory"
             app:layout_constraintTop_toBottomOf="@+id/memoryModulLabel" />
 
-        <View
-            android:id="@+id/arrowFromSIRToMemory"
-            android:layout_width="10dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/registerSIR"
-            app:layout_constraintEnd_toEndOf="@+id/registerSIR"
-            app:layout_constraintStart_toEndOf="@+id/registerSIRLabel"
-            app:layout_constraintTop_toBottomOf="@+id/viewMemory" />
+        <TextView
+            android:id="@+id/IOControler"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/IOControl"
+            app:layout_constraintBottom_toTopOf="@+id/IOState"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <View
-            android:id="@+id/arrowFromSARToMemory"
-            android:layout_width="10dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/registerSAR"
-            app:layout_constraintEnd_toEndOf="@+id/registerSAR"
-            app:layout_constraintTop_toBottomOf="@+id/viewMemory" />
+        <TextView
+            android:id="@+id/IOState"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/IOControler"
+            app:layout_constraintStart_toStartOf="@+id/IOControler" />
 
         <TextView
             android:id="@+id/registerSIR"
@@ -426,15 +493,6 @@
             android:text="@string/registerSIR"
             app:layout_constraintStart_toStartOf="@+id/registerSIR"
             app:layout_constraintTop_toBottomOf="@+id/viewMemory" />
-
-        <View
-            android:id="@+id/arrowFromSIRToCenterBus"
-            android:layout_width="0dp"
-            android:layout_height="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/registerSIR"
-            app:layout_constraintEnd_toStartOf="@+id/registerSIR"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/registerSIR" />
 
         <TextView
             android:id="@+id/registerSAR"
@@ -458,61 +516,7 @@
             app:layout_constraintStart_toStartOf="@+id/registerSAR"
             app:layout_constraintTop_toBottomOf="@+id/registerSIR" />
 
-        <View
-            android:id="@+id/arrowFromSARToCenterBus"
-            android:layout_width="0dp"
-            android:layout_height="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/registerSAR"
-            app:layout_constraintEnd_toStartOf="@+id/registerSAR"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/registerSAR" />
 
-        <View
-            android:id="@+id/arrowFromSARToIOBus"
-            android:layout_width="10dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/registerSAR"
-            app:layout_constraintTop_toBottomOf="@+id/registerSAR" />
-
-        <View
-            android:id="@+id/arrowFromSIRToIOBus"
-            android:layout_width="10dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/registerSIR"
-            app:layout_constraintTop_toBottomOf="@+id/registerSIR" />
-
-        <TextView
-            android:id="@+id/IOControler"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/IOControl"
-            app:layout_constraintBottom_toTopOf="@+id/IOState"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <View
-            android:id="@+id/arrowFromSARToIOControler"
-            android:layout_width="10dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/IOControler"
-            app:layout_constraintEnd_toEndOf="@+id/registerSAR"
-            app:layout_constraintStart_toStartOf="@+id/IOControler"
-            app:layout_constraintTop_toBottomOf="@+id/registerSAR" />
-
-        <TextView
-            android:id="@+id/IOState"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="TextView"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/IOControler"
-            app:layout_constraintStart_toStartOf="@+id/IOControler" />
     </android.support.constraint.ConstraintLayout>
 
 
@@ -532,25 +536,36 @@
         app:layout_constraintBottom_toTopOf="@+id/viewSpeed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteX="16dp">
+        tools:layout_editor_absoluteX="16dp"
+        style = "?android:attr/buttonBarStyle"
+       >
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Start" />
+            android:text="Start"
+            android:id="@+id/stepControlStartButton"
+            style = "?android:attr/buttonBarButtonStyle"
+            />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Single Step" />
+            android:id="@+id/stepControlStepButton"
+            android:text="Single Step"
+            style = "?android:attr/buttonBarButtonStyle"
+            />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Stop" />
+            android:id="@+id/stepControlStopButton"
+            android:text="Stop"
+            style = "?android:attr/buttonBarButtonStyle"
+            />
     </LinearLayout>
 
     <SeekBar

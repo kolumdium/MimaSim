@@ -31,12 +31,23 @@ class ControlModul(name: String, description : String, var context: Context) : E
         for (index in OpCodes.indices)
             if ((index xor content) == 0)
                 return index
-               /* The Mima does only use 14 Instruktions so we dont actually need to implement the extended version right?
-               if ((index xor 1111) == 0){
 
-                   /*Extended Opcode*/
-                   content = IR.Content
-                   content.shr(24)
+               /* The Mima does only use 14 Instruktions so we dont actually need to implement the extended version right?
+              for (index in OpCodes.indices)
+            when(content){
+                in 0..10 -> {
+                    if ((index xor content) == 0)
+                        return index
+                }
+                in 11..14 -> {
+                    Log.d("OPCODE Interpreting: ","Didn't find matching OpCode please check ControlModul or input Instruction")
+                    return 0
+                }
+                15->{
+                    content = IR.Content
+                    content.shr(24)
+                }
+            }
                }*/
 
         Log.d("OPCODE Interpreting: ","Didn't find matching OpCode please check ControlModul or input Instruction")

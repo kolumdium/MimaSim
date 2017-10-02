@@ -4,12 +4,16 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.Window
 
 import android.widget.LinearLayout
+import android.widget.SeekBar
+import android.widget.TextView
 import com.example.mimasim.GUI.*
 import com.example.mimasim.Simulator.Element
 import com.example.mimasim.Simulator.Instruction
 import com.example.mimasim.Simulator.MimaModul
+import java.util.*
 
 
 /*TODO: Credits for the Images:
@@ -22,13 +26,14 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
     var instructionFragment = InstructionFragment()
     var optionPreviewFragment = OptionPreviewFragment()
     var instructionPreviewFragment = InstructionPreviewFragment()
-    var MimaModul : MimaModul? = null
+    var mimaModul : MimaModul? = null
 
     var leftView : View? = null
     var rightView : View? = null
     var centerView : View? = null
 
-    var mcurrentInstructions = ArrayList<Instruction>()
+    val timer = Timer()
+    var speed : Long = 0
 
     enum class Extended{
         NORMAL, RIGHT, LEFT , RIGHTFULL, LEFTFULL
@@ -39,13 +44,15 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+       //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main)
 
+        //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         /*Get an instance of the simulator*/
-        MimaModul = MimaModul(resources.getString(R.string.MimaModul), resources.getString(R.string.MimaModulDescription), applicationContext)
+        mimaModul = MimaModul(resources.getString(R.string.MimaModul), resources.getString(R.string.MimaModulDescription), this, mimaFragment)
 
         init()
-        loadDefaultInstructions()
     }
 
     override fun onStart() {
@@ -70,10 +77,6 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
         transaction.hide(instructionFragment)
         transaction.commit()
 
-    }
-
-    fun loadDefaultInstructions(){
-        mcurrentInstructions.add(Instruction())
     }
 
     fun setListener(){
@@ -200,8 +203,16 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
     }
 
     override fun saveInstructions(currentInstructions : ArrayList<Instruction>){
-        mcurrentInstructions = currentInstructions
+        this.mimaModul?.memoryModul?.saveToMemory(currentInstructions)
         extendNormal()
+    }
+
+    override fun abortInstructions() {
+        extendNormal()
+    }
+
+    override fun addedInstruction() {
+
     }
 
     override fun abortOptions() {
@@ -212,24 +223,30 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
         mimaFragment.updateView()
     }
 
-    override fun onResume() {
-        super.onResume()
-        instructionFragment.setInstructions(mcurrentInstructions)
+    override fun startButtonPressed() {
 
-        val decorView = window.decorView
-        // Hide the status bar.
-        decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                or View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                or View.SYSTEM_UI_FLAG_IMMERSIVE)
-
-        // Remember that you should never show the action bar if the
-        // status bar is hidden, so hide that too if necessary.
-        /*val actionBar = actionBar
-        actionBar!!.hide()*/
     }
 
+    override fun stopButtonPressed() {
+        timer.cancel()
+    }
 
+    override fun stepButtonPressed() {
+        mimaModul?.step()
+        updateMima()
+    }
+
+    override fun speedChanged(speed: Long) {
+       this.speed = speed
+    }
+
+    override fun onBackPressed() {
+        //super.onBackPressed()
+        when (extended){
+            MainActivity.Extended.LEFTFULL ->{extendLeft()}
+            MainActivity.Extended.NORMAL -> {}
+            MainActivity.Extended.RIGHT, MainActivity.Extended.LEFT -> extendNormal()
+            MainActivity.Extended.RIGHTFULL -> {extendRight()}
+        }
+    }
 }

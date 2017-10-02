@@ -12,20 +12,26 @@ class MemoryModul(name: String, description : String, context: Context) : Elemen
     val IOControl = Element(context.resources.getString(R.string.IOControl), context.resources.getString(R.string.IOControlDescription))
     //TODO I/O Control
 
-    val Memory = Memory(context.resources.getString(R.string.Memory), context.resources.getString(R.string.MemoryDescription))
+    val memory = Memory(context.resources.getString(R.string.Memory), context.resources.getString(R.string.MemoryDescription))
 
     fun loadMapToMemory(content : Map<Int,Int>){
         for ((key, value) in content) {
-            Memory.Content[key] = value
+            memory.Content[key] = value
+        }
+    }
+
+    fun saveToMemory(instructions : ArrayList<Instruction>){
+        for (instruction in instructions){
+            memory.Content[instructions.indexOf(instruction)] =  instruction.adress xor instruction.opCode
         }
     }
 
     fun loadFromMemory(){
-        SIR.Content = Memory.getInstruction(SAR.Content)
+        SIR.Content = memory.getInstruction(SAR.Content)
     }
 
     fun saveToMemory(){
-        Memory.Content[SAR.Content] = SIR.Content
+        memory.Content[SAR.Content] = SIR.Content
     }
 
 }

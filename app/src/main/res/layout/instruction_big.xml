@@ -45,10 +45,32 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginStart="0dp"
         android:footerDividersEnabled="true"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/InstructionLabel" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/scrollViewInstructions"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/InstructionLabel"
-        tools:layout_editor_absoluteX="0dp" />
+        android:layout_marginBottom="8dp">
+        <TextView
+            android:id="@+id/instructionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="false"
+
+            />
+    </ScrollView>
+
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/linearLayout3"

@@ -2,7 +2,9 @@ package com.example.mimasim.Simulator
 
 import android.content.Context
 import android.util.Log
+import com.example.mimasim.GUI.MimaFragment
 import com.example.mimasim.GUI.OptionFragment
+import com.example.mimasim.MainActivity
 import com.example.mimasim.R
 import java.util.*
 import kotlin.collections.ArrayList
@@ -10,7 +12,7 @@ import kotlin.collections.ArrayList
 /**
  * Created by Martin on 08.09.2017.
  */
-class MimaModul(name: String, description : String, var context: Context) : Element(name, description){
+class MimaModul(name: String, description : String, var context: Context, mimaFragment: MimaFragment) : Element(name, description){
 
     var running = false
     var currentInstruction = Instruction()
@@ -36,7 +38,7 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
         allRegisters.add(controlModul.IR)
         centerBus.allRegsiters.addAll(allRegisters)
         try {
-            uiTrigger = context as UITrigger
+            uiTrigger = mimaFragment
         } catch (e : ClassCastException){
            Log.d("ClassCastException","Didn't implement uiTrigger")
         }
@@ -55,11 +57,12 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
                 centerBus.transfer(controlModul.IAR, memoryModul.SAR, calculatorModul.X)
                 memoryModul.loadFromMemory()
                 controlModul.Counter.Content++
-                //trigger UI Bus, IAR,SAR,X, memory,counter
+
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowIar(true, false)
                 uiTrigger?.arrowX(true)
                 uiTrigger?.arrowsSarMem(true)
+                uiTrigger?.mem("READ")
             }
             1 -> {
                 uiTrigger?.centerBus(false)
@@ -75,6 +78,8 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
                 uiTrigger?.arrowOne(true)
                 uiTrigger?.arrowY(true)
                 uiTrigger?.alu("ADD")
+                uiTrigger?.mem("READING...")
+
             }
             2 ->{
                 uiTrigger?.centerBus(false)
@@ -94,6 +99,8 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowZ(true)
                 uiTrigger?.arrowIar(true, true)
+                uiTrigger?.mem("READ DONE")
+
             }
             4 -> {
                 uiTrigger?.centerBus(false)
@@ -106,6 +113,7 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowSirToMemory(true)
                 uiTrigger?.arrowIr(true, true)
+                uiTrigger?.mem("")
             }
             5 -> {
                 uiTrigger?.centerBus(false)
@@ -166,6 +174,7 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowsSarMem(true)
                 uiTrigger?.arrowIr(true, false)
+                uiTrigger?.mem("READ")
 
             }
             6 -> {
@@ -178,6 +187,8 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowAcc(true, false)
                 uiTrigger?.arrowX(true)
+                uiTrigger?.mem("READING...")
+
             }
             7 -> {
                 uiTrigger?.centerBus(false)
@@ -189,6 +200,7 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
                 controlModul.Counter.Content++
 
                 uiTrigger?.arrowSirToMemory(true)
+                uiTrigger?.mem("READ DONE")
             }
 
             9 -> {
@@ -222,6 +234,7 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowSirToBus(true, false)
                 uiTrigger?.arrowY(true)
+                uiTrigger?.mem("")
             }
             10 -> {
                 uiTrigger?.centerBus(false)
@@ -264,6 +277,7 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowsSarMem(true)
                 uiTrigger?.arrowIr(true, false)
+                uiTrigger?.mem("READ")
 
             }
             6 -> {
@@ -276,6 +290,8 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowAcc(true, false)
                 uiTrigger?.arrowX(true)
+                uiTrigger?.mem("READING...")
+
             }
             7 -> {
                 uiTrigger?.centerBus(false)
@@ -287,6 +303,7 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
                 controlModul.Counter.Content++
 
                 uiTrigger?.arrowSirToMemory(true)
+                uiTrigger?.mem("READ DONE")
             }
 
             9 -> {
@@ -297,6 +314,7 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowSirToBus(true, false)
                 uiTrigger?.arrowAcc(true, true)
+                uiTrigger?.mem("")
             }
             10 -> {
                 uiTrigger?.centerBus(false)
@@ -338,12 +356,20 @@ class MimaModul(name: String, description : String, var context: Context) : Elem
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowIr(true, false)
                 uiTrigger?.arrowsSarMem(true)
+                uiTrigger?.mem("WRITE")
+
             }
             7-> {
                 uiTrigger?.centerBus(false)
                 uiTrigger?.arrowIr(false, false)
                 uiTrigger?.arrowsSarMem(false)
                 controlModul.Counter.Content++
+                uiTrigger?.mem("WRITING...")
+            }
+            9->{
+                controlModul.Counter.Content++
+
+                uiTrigger?.mem("")
             }
             11 -> {
                 centerBus.transfer(calculatorModul.Z, calculatorModul.ACC)

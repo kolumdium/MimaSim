@@ -3,11 +3,13 @@ package com.example.mimasim.GUI
 import android.app.Fragment
 import android.content.Context
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import android.widget.TextView
 import com.example.mimasim.MainActivity
 import com.example.mimasim.R
@@ -18,7 +20,7 @@ import com.example.mimasim.Simulator.Register
 /**
  * Created by Martin on 04.09.2017.
  */
-class MimaFragment : Fragment(),  MimaModul.UITrigger {
+class MimaFragment : Fragment(), MimaModul.UITrigger {
 
     var currentlyLoadedElement = Element(" ", "Long Click an Element to see the Options for it")
     var mCallback : elementSelectedListener? = null
@@ -26,6 +28,10 @@ class MimaFragment : Fragment(),  MimaModul.UITrigger {
 
     interface elementSelectedListener{
         fun sendElement(currentlyLoadedElement : Element)
+        fun startButtonPressed()
+        fun stopButtonPressed()
+        fun stepButtonPressed()
+        fun speedChanged(speed : Long)
     }
 
 
@@ -48,23 +54,23 @@ class MimaFragment : Fragment(),  MimaModul.UITrigger {
         val main = activity as MainActivity
 
         /*A map of all Clickable Items*/
-        map.put(R.id.registerONE, main.MimaModul!!.calculatorModul.ONE)
-        map.put(R.id.registerACC, main.MimaModul!!.calculatorModul.ACC)
-        map.put(R.id.registerX, main.MimaModul!!.calculatorModul.X)
-        map.put(R.id.registerY, main.MimaModul!!.calculatorModul.Y)
-        map.put(R.id.registerZ, main.MimaModul!!.calculatorModul.Z)
-        map.put(R.id.registerIAR, main.MimaModul!!.controlModul.IAR)
-        map.put(R.id.registerIR, main.MimaModul!!.controlModul.IR)
-        map.put(R.id.registerSIR, main.MimaModul!!.memoryModul.SIR)
-        map.put(R.id.registerSAR, main.MimaModul!!.memoryModul.SAR)
-        map.put(R.id.IOControler, main.MimaModul!!.memoryModul.IOControl)
-        map.put(R.id.centerBus, main.MimaModul!!.centerBus)
-        map.put(R.id.ViewIOBus, main.MimaModul!!.IOBus)
-        map.put(R.id.viewALU, main.MimaModul!!.calculatorModul.Alu)
-        map.put(R.id.viewMemory, main.MimaModul!!.memoryModul.Memory)
-        map.put(R.id.memoryModul, main.MimaModul!!.memoryModul)
-        map.put(R.id.calculatorModul, main.MimaModul!!.calculatorModul)
-        map.put(R.id.controlModul, main.MimaModul!!.controlModul)
+        map.put(R.id.registerONE, main.mimaModul!!.calculatorModul.ONE)
+        map.put(R.id.registerACC, main.mimaModul!!.calculatorModul.ACC)
+        map.put(R.id.registerX, main.mimaModul!!.calculatorModul.X)
+        map.put(R.id.registerY, main.mimaModul!!.calculatorModul.Y)
+        map.put(R.id.registerZ, main.mimaModul!!.calculatorModul.Z)
+        map.put(R.id.registerIAR, main.mimaModul!!.controlModul.IAR)
+        map.put(R.id.registerIR, main.mimaModul!!.controlModul.IR)
+        map.put(R.id.registerSIR, main.mimaModul!!.memoryModul.SIR)
+        map.put(R.id.registerSAR, main.mimaModul!!.memoryModul.SAR)
+        map.put(R.id.IOControler, main.mimaModul!!.memoryModul.IOControl)
+        map.put(R.id.centerBus, main.mimaModul!!.centerBus)
+        map.put(R.id.ViewIOBus, main.mimaModul!!.IOBus)
+        map.put(R.id.viewALU, main.mimaModul!!.calculatorModul.Alu)
+        map.put(R.id.viewMemory, main.mimaModul!!.memoryModul.memory)
+        map.put(R.id.memoryModul, main.mimaModul!!.memoryModul)
+        map.put(R.id.calculatorModul, main.mimaModul!!.calculatorModul)
+        map.put(R.id.controlModul, main.mimaModul!!.controlModul)
 
         for ((key,value) in map) {
             val someView = view?.findViewById(key)
@@ -76,6 +82,34 @@ class MimaFragment : Fragment(),  MimaModul.UITrigger {
                 true
             }
         }
+
+        view?.findViewById(R.id.stepControlStartButton)?.setOnClickListener{
+            mCallback?.startButtonPressed()
+        }
+        view?.findViewById(R.id.stepControlStepButton)?.setOnClickListener{
+            mCallback?.stepButtonPressed()
+        }
+        view?.findViewById(R.id.stepControlStopButton)?.setOnClickListener{
+            mCallback?.stopButtonPressed()
+        }
+
+        val seekBar = view?.findViewById(R.id.viewSpeed) as SeekBar
+
+        seekBar.max = 1000
+        seekBar.progress = 1
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+
+            }
+
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                mCallback?.speedChanged( seekBar.progress.toLong())
+            }
+        })
 
         drawArrows()
         updateView()
@@ -96,6 +130,8 @@ class MimaFragment : Fragment(),  MimaModul.UITrigger {
                         fillZeros += "0"
                     }
                     someTextView.text = String.format("0x" + fillZeros + Integer.toHexString(value.Content))
+                    someTextView.bringToFront()
+                    view.findViewById(R.id.aluText).bringToFront()
                }
             }
         }
@@ -174,7 +210,6 @@ class MimaFragment : Fragment(),  MimaModul.UITrigger {
 
     override fun normal() {
         drawArrows()
-        setBackgrounds()
     }
 
     override fun centerBus(activate: Boolean) {
@@ -183,7 +218,7 @@ class MimaFragment : Fragment(),  MimaModul.UITrigger {
     }
 
     override fun highlightRegister(activate: Boolean, register: String){
-        var tmpView :View? = null
+        var tmpView : View? = null
         when(register){
             "IAR" -> tmpView = view.findViewById(R.id.registerIAR)
             "IR" -> tmpView = view.findViewById(R.id.registerIR)
@@ -217,7 +252,7 @@ class MimaFragment : Fragment(),  MimaModul.UITrigger {
     }
 
     override fun ioControl(state : String) {
-        (view.findViewById(R.id.IOState) as TextView ).text = state
+        (view.findViewById(R.id.IOState) as TextView).text = state
     }
 
     override fun arrowIr(activate: Boolean, ingoing : Boolean) {
@@ -294,5 +329,6 @@ class MimaFragment : Fragment(),  MimaModul.UITrigger {
         else if (activate && !ingoing) view.findViewById(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.arrow_right_active)
         else view.findViewById(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.left_and_right_arrow)
     }
+
 
 }

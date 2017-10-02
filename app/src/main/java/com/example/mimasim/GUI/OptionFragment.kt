@@ -42,7 +42,7 @@ class OptionFragment : Fragment() {
         view?.findViewById(R.id.optionsAbort)?.setOnClickListener{
             /*  When Abort Button was Clicked Restore the View to it's original State*/
 
-            val contentView = view?.findViewById(R.id.optionsElementContent) as EditText
+            val contentView = view.findViewById(R.id.optionsElementContent) as EditText
             contentView.visibility = View.VISIBLE
             if (_hasContent)
                 contentView.setText((_currentlyLoadedElement as Register).Content.toString(), TextView.BufferType.EDITABLE)
