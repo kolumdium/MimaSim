@@ -1,6 +1,7 @@
 package com.example.mimasim.GUI
 
 import android.content.Context
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +24,8 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
         val holder : ListItemHolder
         var row = convertView
 
+        var lastItemClickedPosition = 0
+
         val tmpInstruction = this.getItem(position)
         /*
         * View Holder Pattern for smoother Scrolling
@@ -35,15 +38,16 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
             row = inflater.inflate(R.layout.instruction_list_item, parent, false)
 
             holder = ListItemHolder()
-            holder.spinner = row?.findViewById(R.id.instructionItemSpinner) as Spinner
-            holder.editText = row.findViewById(R.id.instructionItemText) as EditText
+            holder.spinner = row?.findViewById(R.id.instructionItemSpinner)
+            holder.editText = row.findViewById(R.id.instructionItemText)
+            holder.elementStatus = row.findViewById(R.id.elementStatus)
             row.setTag(holder)
         }
         else {
             /*
             * If View was inflated before just load it's contents (no new inflation)
             * */
-            holder = row?.getTag() as ListItemHolder
+            holder = row?.tag as ListItemHolder
         }
 
         /*
@@ -51,7 +55,7 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
         * */
         /*TODO set the Selected Item properly*/
         val adapter : ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(context, R.array.OPCodeArray , android.R.layout.simple_spinner_dropdown_item)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         holder.spinner?.adapter = adapter
         holder.spinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -64,33 +68,42 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
+                //
             }
-
         }
+
+        holder.elementStatus?.setOnClickListener{
+            saveInstructionCallback.lastSelectedItem(position)
+        }
+
+        if (getItem(position).isActive){
+            holder.elementStatus?.setBackgroundColor(ContextCompat.getColor(context, R.color.green))
+        } else {
+            holder.elementStatus?.setBackgroundColor(ContextCompat.getColor(context, R.color.grey))
+        }
+
+        holder.spinner?.setSelection(tmpInstruction.opCode)
 
         holder.editText?.setOnFocusChangeListener{ view: View, b: Boolean ->
             tmpInstruction.adress = Integer.decode( "0x" + holder.editText?.text)
             saveInstructionCallback.saveInstruction(position, tmpInstruction)
+            //saveInstructionCallback.lastSelectedItem(position)
         }
 
         holder.editText?.setText( Integer.toHexString(tmpInstruction.adress) )
         holder.spinner?.setSelection( tmpInstruction.opCode)
 
-        return row
-    }
-
-    fun saveInstructions(){
-        for (i in 0..this.count){
-            saveInstructionCallback.saveInstruction(i, this.getItem(i))
-        }
+        return row as View
     }
 
     interface saveInstructionAdapterCallback{
         fun saveInstruction(position: Int, instruction: Instruction)
+        fun lastSelectedItem(position : Int)
     }
 
     class ListItemHolder{
         var spinner : Spinner? = null
         var editText : EditText? = null
+        var elementStatus : View? = null
     }
 }

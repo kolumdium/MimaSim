@@ -24,20 +24,23 @@
         android:id="@+id/instructionSaveButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="Schließen"
-        app:layout_constraintBottom_toTopOf="@+id/instructionClearButton"
+        app:layout_constraintBottom_toTopOf="@+id/instructionsClearButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/instructionClearButton"
+        android:id="@+id/mimaClearButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:text="Clear Mima"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/instructionsClearButton" />
 
 
     <ListView
@@ -54,14 +57,15 @@
         app:layout_constraintTop_toBottomOf="@+id/InstructionLabel" />
 
     <ScrollView
+        android:id="@+id/scrollViewInstructions"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:id="@+id/scrollViewInstructions"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/instructionMangment"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/InstructionLabel"
-        android:layout_marginBottom="8dp">
+        app:layout_constraintTop_toBottomOf="@+id/InstructionLabel">
+
         <TextView
             android:id="@+id/instructionTextView"
             android:layout_width="match_parent"
@@ -69,6 +73,7 @@
             android:singleLine="false"
 
             />
+
     </ScrollView>
 
 
@@ -81,40 +86,97 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/instructionAddButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Add Instruction"
-            android:textSize="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
             android:id="@+id/instructionSaveToFile"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:text="Save to File"
             android:textSize="10dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/instructionLoadFromFile"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/instructionLoadFromFile"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:text="Load From File"
             android:textSize="10dp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toStartOf="@+id/instructionSaveToFile"
-            app:layout_constraintStart_toEndOf="@+id/instructionAddButton"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+    </android.support.constraint.ConstraintLayout>
+
+    <Button
+        android:id="@+id/instructionsClearButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Clear Instructions"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/instructionMangment"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/InstructionLabel"
+        app:layout_constraintVertical_bias="1.0">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/instructionUpButton"
+            android:layout_width="wrap_content"
+            android:layout_height="102dp"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            app:layout_constraintBottom_toTopOf="@+id/instructionDownButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@android:drawable/arrow_up_float" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/instructionDownButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            app:layout_constraintBottom_toTopOf="@+id/instructionAddButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@android:drawable/arrow_down_float" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/instructionDeleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@android:drawable/ic_delete" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/instructionAddButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            app:layout_constraintBottom_toTopOf="@+id/instructionDeleteButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@android:drawable/ic_input_add" />
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

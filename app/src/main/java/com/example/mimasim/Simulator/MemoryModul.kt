@@ -27,10 +27,12 @@ class MemoryModul(name: String, description : String, context: Context) : Elemen
     }
 
     fun loadFromMemory(){
+        if (SIR.Content >= 0)
         SIR.Content = memory.getInstruction(SAR.Content)
     }
 
     fun saveToMemory(){
+        if (SIR.Content >= 0)
         memory.Content[SAR.Content] = SIR.Content
     }
 

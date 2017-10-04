@@ -449,7 +449,6 @@ class MimaModul(name: String, description : String, var context: Context, val mi
     }
 
     fun JMP() {
-        /*TODO maybe check if acc is positiv?!?!*/
         /* JMP
         * IR -> IAR
         * empty
@@ -458,6 +457,23 @@ class MimaModul(name: String, description : String, var context: Context, val mi
         * empty
         * empty
         * empty*/
+
+        when (controlModul.Counter.Content){
+            5 -> {
+                centerBus.transfer(controlModul.IR, controlModul.IAR)
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowIr(true, false)
+                uiTrigger?.arrowIar(true, true)
+                controlModul.Counter.Content++
+            }
+            6 -> {
+                uiTrigger?.centerBus(true)
+                uiTrigger?.arrowIr(false, false)
+                uiTrigger?.arrowIar(false, true)
+                controlModul.Counter.Content++
+            }
+            else -> controlModul.Counter.Content++
+        }
     }
 
     fun JMN() {
@@ -470,6 +486,25 @@ class MimaModul(name: String, description : String, var context: Context, val mi
         * empty
         * empty
         * empty*/
+
+        when (controlModul.Counter.Content){
+            5 -> {
+                if (calculatorModul.ACC.Content == -1){
+                    centerBus.transfer(controlModul.IR, controlModul.IAR)
+                    uiTrigger?.centerBus(true)
+                    uiTrigger?.arrowIr(true, false)
+                    uiTrigger?.arrowIar(true, true)
+                    controlModul.Counter.Content++
+                }
+            }
+            6 -> {
+                    uiTrigger?.centerBus(true)
+                    uiTrigger?.arrowIr(false, false)
+                    uiTrigger?.arrowIar(false, true)
+                    controlModul.Counter.Content++
+                }
+            else -> controlModul.Counter.Content++
+        }
     }
 
     fun RRN() {

@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
 import com.example.mimasim.MainActivity
@@ -74,7 +75,8 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
         map.put(R.id.controlModul, main.mimaModul!!.controlModul)
 
         for ((key,value) in map) {
-            val someView = view?.findViewById(key)
+            val someView = view?.findViewById<View>(key)
+            //someView?.setBackgroundColor(resources.getColor(R.color.grey))
             someView?.setBackgroundResource(R.drawable.kasten)
             currentlyLoadedElement = value
             someView?.isLongClickable = true
@@ -84,9 +86,9 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
             }
         }
 
-        val startButton = view?.findViewById(R.id.stepControlStartButton)
-        val stopButton = view?.findViewById(R.id.stepControlStopButton)
-        val stepButton = view?.findViewById(R.id.stepControlStepButton)
+        val startButton = view?.findViewById<Button>(R.id.stepControlStartButton)
+        val stopButton = view?.findViewById<Button>(R.id.stepControlStopButton)
+        val stepButton = view?.findViewById<Button>(R.id.stepControlStepButton)
 
         startButton?.setOnClickListener{
             mCallback?.startButtonPressed()
@@ -100,11 +102,11 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
             mCallback?.stopButtonPressed()
         }
 
-        val seekBar = view?.findViewById(R.id.viewSpeed) as SeekBar
+        val seekBar = view?.findViewById<SeekBar>(R.id.viewSpeed)
 
-        seekBar.max = 1000
-        seekBar.progress = 1
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        seekBar?.max = 1000
+        seekBar?.progress = 1
+        seekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
 
             }
@@ -130,31 +132,31 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
                 "Memory" -> {//TODO some fancy stuff
                     }
                 "Counter" ->{
-                    val counter = (view?.findViewById(key) as TextView)
+                    val counter = (view?.findViewById<TextView>(key))
                     val content = (value as Register).Content
                     var fillZeroes = ""
                     for (i in 0..(3 - Integer.toBinaryString(content).length)) {
                         fillZeroes += "0"
                     }
-                    counter.text = String.format(fillZeroes + Integer.toBinaryString (content))
+                    counter?.text = String.format(fillZeroes + Integer.toBinaryString (content))
                 }
                 else -> {
                     //should be a Register when you get here.
-                    val someTextView = (view?.findViewById(key) as TextView)
+                    val someTextView = view?.findViewById<TextView>(key)
                     var fillZeros = ""
                     for ( i in 0.. (5 -   Integer.toHexString((value as Register).Content).length)){
                         fillZeros += "0"
                     }
-                    someTextView.text = String.format("0x" + fillZeros + Integer.toHexString(value.Content))
-                    someTextView.bringToFront()
-                    view.findViewById(R.id.aluText).bringToFront()
+                    someTextView?.text = String.format("0x" + fillZeros + Integer.toHexString(value.Content))
+                    someTextView?.bringToFront()
+                    view.findViewById<View>(R.id.aluText).bringToFront()
                }
             }
         }
     }
 
     fun setBackgrounds(){
-        this.view.findViewById(R.id.viewALU).setBackgroundResource(R.drawable.alu)
+        this.view.findViewById<View>(R.id.viewALU).setBackgroundResource(R.drawable.alu)
 
     }
 
@@ -172,33 +174,33 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
         * X -> Alu
         * Y - > Alu
         * Alu -> Z*/
-        this.view.findViewById(R.id.arrowFromSARToIOBus).setBackgroundResource(R.drawable.arrow_down)
-        this.view.findViewById(R.id.arrowFromXToAlu).setBackgroundResource(R.drawable.arrow_down)
-        this.view.findViewById(R.id.arrowFromYToAlu).setBackgroundResource(R.drawable.arrow_down)
-        this.view.findViewById(R.id.arrowFromAluToZ).setBackgroundResource(R.drawable.arrow_down)
-        this.view.findViewById(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down)
+        this.view.findViewById<View>(R.id.arrowFromSARToIOBus).setBackgroundResource(R.drawable.arrow_down)
+        this.view.findViewById<View>(R.id.arrowFromXToAlu).setBackgroundResource(R.drawable.arrow_down)
+        this.view.findViewById<View>(R.id.arrowFromYToAlu).setBackgroundResource(R.drawable.arrow_down)
+        this.view.findViewById<View>(R.id.arrowFromAluToZ).setBackgroundResource(R.drawable.arrow_down)
+        this.view.findViewById<View>(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down)
 
     }
 
     private fun drawBottomUpArrows() {
         /*SAR --> Memory*/
-        this.view.findViewById(R.id.arrowFromSARToMemory).setBackgroundResource(R.drawable.arrow_up)
+        this.view.findViewById<View>(R.id.arrowFromSARToMemory).setBackgroundResource(R.drawable.arrow_up)
     }
 
     private fun drawRightAndLeftArrows() {
         /* ACC,IR,IAR,SIR -> cBus
         * IOBus*/
-        this.view.findViewById(R.id.arrowFromACCToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
-        this.view.findViewById(R.id.arrowFromIRToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
-        this.view.findViewById(R.id.arrowFromIARToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
-        this.view.findViewById(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.left_and_right_arrow)
-        this.view.findViewById(R.id.ViewIOBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+        this.view.findViewById<View>(R.id.arrowFromACCToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+        this.view.findViewById<View>(R.id.arrowFromIRToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+        this.view.findViewById<View>(R.id.arrowFromIARToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+        this.view.findViewById<View>(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+        this.view.findViewById<View>(R.id.ViewIOBus).setBackgroundResource(R.drawable.left_and_right_arrow)
     }
 
     private fun drawRightToLeftArrows() {
         /*cBus-> x,y*/
-        this.view.findViewById(R.id.arrowFromXToBus).setBackgroundResource(R.drawable.arrow_left)
-        this.view.findViewById(R.id.arrowFromYToBus).setBackgroundResource(R.drawable.arrow_left)
+        this.view.findViewById<View>(R.id.arrowFromXToBus).setBackgroundResource(R.drawable.arrow_left)
+        this.view.findViewById<View>(R.id.arrowFromYToBus).setBackgroundResource(R.drawable.arrow_left)
     }
 
     private fun drawLeftToRightArrows() {
@@ -206,9 +208,9 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
         * cBus ->SAR
         * SAR -> IO/Control*/
 
-        this.view.findViewById(R.id.arrowFromONEToBus).setBackgroundResource(R.drawable.arrow_right)
-        this.view.findViewById(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.arrow_right)
-        this.view.findViewById(R.id.arrowFromZToBus).setBackgroundResource(R.drawable.arrow_right)
+        this.view.findViewById<View>(R.id.arrowFromONEToBus).setBackgroundResource(R.drawable.arrow_right)
+        this.view.findViewById<View>(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.arrow_right)
+        this.view.findViewById<View>(R.id.arrowFromZToBus).setBackgroundResource(R.drawable.arrow_right)
     }
 
     private fun drawUpAndDownArrows() {
@@ -216,9 +218,9 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
         * SIR -> IOBUS
         * cBus
         * */
-        this.view.findViewById(R.id.arrowFromSIRToMemory).setBackgroundResource(R.drawable.arrow_up_down)
-        this.view.findViewById(R.id.arrowFromSIRToIOBus).setBackgroundResource(R.drawable.arrow_up_down)
-        this.view.findViewById(R.id.centerBus).setBackgroundResource(R.drawable.arrow_up_down)
+        this.view.findViewById<View>(R.id.arrowFromSIRToMemory).setBackgroundResource(R.drawable.arrow_up_down)
+        this.view.findViewById<View>(R.id.arrowFromSIRToIOBus).setBackgroundResource(R.drawable.arrow_up_down)
+        this.view.findViewById<View>(R.id.centerBus).setBackgroundResource(R.drawable.arrow_up_down)
         //view?.invalidate()
     }
 
@@ -229,8 +231,8 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
     }
 
     override fun centerBus(activate: Boolean) {
-        if (activate) view.findViewById(R.id.centerBus).setBackgroundResource(R.drawable.arrow_up_down_active)
-        else view.findViewById(R.id.centerBus).setBackgroundResource(R.drawable.arrow_up_down)
+        if (activate) view.findViewById<View>(R.id.centerBus).setBackgroundResource(R.drawable.arrow_up_down_active)
+        else view.findViewById<View>(R.id.centerBus).setBackgroundResource(R.drawable.arrow_up_down)
     }
 
     override fun highlightRegister(activate: Boolean, register: String){
@@ -255,95 +257,95 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
     }
 
     override fun alu(instruction : String) {
-        (view.findViewById(R.id.aluText) as TextView).text = instruction
+        view.findViewById<TextView>(R.id.aluText).text = instruction
     }
 
     override fun mem(instruction: String) {
-        (view.findViewById(R.id.viewMemory) as TextView).text = instruction
+        view.findViewById<TextView>(R.id.viewMemory).text = instruction
     }
 
     override fun ioBus(activate: Boolean) {
-        if (activate) view.findViewById(R.id.ViewIOBus).setBackgroundResource(R.drawable.left_and_right_arrow_active)
-        else view.findViewById(R.id.ViewIOBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+        if (activate) view.findViewById<View>(R.id.ViewIOBus).setBackgroundResource(R.drawable.left_and_right_arrow_active)
+        else view.findViewById<View>(R.id.ViewIOBus).setBackgroundResource(R.drawable.left_and_right_arrow)
     }
 
     override fun ioControl(state : String) {
-        (view.findViewById(R.id.IOState) as TextView).text = state
+        view.findViewById<TextView>(R.id.IOState).text = state
     }
 
     override fun arrowIr(activate: Boolean, ingoing : Boolean) {
-        if (activate && ingoing) view.findViewById(R.id.arrowFromIRToBus).setBackgroundResource(R.drawable.arrow_right_active)
-        else if (activate && !ingoing) view.findViewById(R.id.arrowFromIRToBus).setBackgroundResource(R.drawable.arrow_left_active)
-        else view.findViewById(R.id.arrowFromIRToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+        if (activate && ingoing) view.findViewById<View>(R.id.arrowFromIRToBus).setBackgroundResource(R.drawable.arrow_right_active)
+        else if (activate && !ingoing) view.findViewById<View>(R.id.arrowFromIRToBus).setBackgroundResource(R.drawable.arrow_left_active)
+        else view.findViewById<View>(R.id.arrowFromIRToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
     }
 
     override fun arrowIar(activate: Boolean, ingoing: Boolean) {
-        if (activate && ingoing) view.findViewById(R.id.arrowFromIARToBus).setBackgroundResource(R.drawable.arrow_right_active)
-        else if (activate && !ingoing) view.findViewById(R.id.arrowFromIARToBus).setBackgroundResource(R.drawable.arrow_left_active)
-        else view.findViewById(R.id.arrowFromIARToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+        if (activate && ingoing) view.findViewById<View>(R.id.arrowFromIARToBus).setBackgroundResource(R.drawable.arrow_right_active)
+        else if (activate && !ingoing) view.findViewById<View>(R.id.arrowFromIARToBus).setBackgroundResource(R.drawable.arrow_left_active)
+        else view.findViewById<View>(R.id.arrowFromIARToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
     }
 
     override fun arrowAcc(activate: Boolean, ingoing: Boolean) {
-        if (activate && ingoing) view.findViewById(R.id.arrowFromACCToBus).setBackgroundResource(R.drawable.arrow_left_active)
-        else if (activate && !ingoing) view.findViewById(R.id.arrowFromACCToBus).setBackgroundResource(R.drawable.arrow_right_active)
-        else view.findViewById(R.id.arrowFromACCToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+        if (activate && ingoing) view.findViewById<View>(R.id.arrowFromACCToBus).setBackgroundResource(R.drawable.arrow_left_active)
+        else if (activate && !ingoing) view.findViewById<View>(R.id.arrowFromACCToBus).setBackgroundResource(R.drawable.arrow_right_active)
+        else view.findViewById<View>(R.id.arrowFromACCToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
     }
 
     override fun arrowOne(activate: Boolean) {
-        if (activate) view.findViewById(R.id.arrowFromONEToBus).setBackgroundResource(R.drawable.arrow_right_active)
-        else view.findViewById(R.id.arrowFromONEToBus).setBackgroundResource(R.drawable.arrow_right)
+        if (activate) view.findViewById<View>(R.id.arrowFromONEToBus).setBackgroundResource(R.drawable.arrow_right_active)
+        else view.findViewById<View>(R.id.arrowFromONEToBus).setBackgroundResource(R.drawable.arrow_right)
     }
 
     override fun arrowX(activate: Boolean) {
-        if (activate) view.findViewById(R.id.arrowFromXToBus).setBackgroundResource(R.drawable.arrow_left_active)
-        else view.findViewById(R.id.arrowFromXToBus).setBackgroundResource(R.drawable.arrow_left)
+        if (activate) view.findViewById<View>(R.id.arrowFromXToBus).setBackgroundResource(R.drawable.arrow_left_active)
+        else view.findViewById<View>(R.id.arrowFromXToBus).setBackgroundResource(R.drawable.arrow_left)
     }
 
     override fun arrowY(activate: Boolean) {
-        if (activate) view.findViewById(R.id.arrowFromYToBus).setBackgroundResource(R.drawable.arrow_left_active)
-        else view.findViewById(R.id.arrowFromYToBus).setBackgroundResource(R.drawable.arrow_left)
+        if (activate) view.findViewById<View>(R.id.arrowFromYToBus).setBackgroundResource(R.drawable.arrow_left_active)
+        else view.findViewById<View>(R.id.arrowFromYToBus).setBackgroundResource(R.drawable.arrow_left)
     }
 
     override fun arrowZ(activate: Boolean) {
-        if (activate) view.findViewById(R.id.arrowFromZToBus).setBackgroundResource(R.drawable.arrow_right_active)
-        else view.findViewById(R.id.arrowFromZToBus).setBackgroundResource(R.drawable.arrow_right)
+        if (activate) view.findViewById<View>(R.id.arrowFromZToBus).setBackgroundResource(R.drawable.arrow_right_active)
+        else view.findViewById<View>(R.id.arrowFromZToBus).setBackgroundResource(R.drawable.arrow_right)
     }
 
     override fun arrowsSarMem(activate: Boolean) {
         if (activate){
-            view.findViewById(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.arrow_right_active)
-            view.findViewById(R.id.arrowFromSARToMemory).setBackgroundResource(R.drawable.arrow_up_active)
-            view.findViewById(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down_active)
+            view.findViewById<View>(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.arrow_right_active)
+            view.findViewById<View>(R.id.arrowFromSARToMemory).setBackgroundResource(R.drawable.arrow_up_active)
+            view.findViewById<View>(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down_active)
         }
         else{
-            view.findViewById(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.arrow_right)
-            view.findViewById(R.id.arrowFromSARToMemory).setBackgroundResource(R.drawable.arrow_up)
-            view.findViewById(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down)
+            view.findViewById<View>(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.arrow_right)
+            view.findViewById<View>(R.id.arrowFromSARToMemory).setBackgroundResource(R.drawable.arrow_up)
+            view.findViewById<View>(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down)
         }
     }
 
     override fun arrowsSarIO(activate: Boolean){
         if (activate){
-            view.findViewById(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.arrow_right_active)
-            view.findViewById(R.id.arrowFromSARToIOBus).setBackgroundResource(R.drawable.arrow_down_active)
-            view.findViewById(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down_active)
+            view.findViewById<View>(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.arrow_right_active)
+            view.findViewById<View>(R.id.arrowFromSARToIOBus).setBackgroundResource(R.drawable.arrow_down_active)
+            view.findViewById<View>(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down_active)
         }
         else{
-            view.findViewById(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.arrow_right)
-            view.findViewById(R.id.arrowFromSARToIOBus).setBackgroundResource(R.drawable.arrow_down)
-            view.findViewById(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down)
+            view.findViewById<View>(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.arrow_right)
+            view.findViewById<View>(R.id.arrowFromSARToIOBus).setBackgroundResource(R.drawable.arrow_down)
+            view.findViewById<View>(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down)
         }
     }
 
     override fun arrowSirToMemory(activate: Boolean) {
-        if (activate) view.findViewById(R.id.arrowFromSIRToMemory).setBackgroundResource(R.drawable.arrow_down_active)
-        else view.findViewById(R.id.arrowFromSIRToMemory).setBackgroundResource(R.drawable.arrow_down)
+        if (activate) view.findViewById<View>(R.id.arrowFromSIRToMemory).setBackgroundResource(R.drawable.arrow_down_active)
+        else view.findViewById<View>(R.id.arrowFromSIRToMemory).setBackgroundResource(R.drawable.arrow_down)
     }
 
     override fun arrowSirToBus(activate: Boolean, ingoing: Boolean) {
-        if (activate && ingoing) view.findViewById(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.arrow_right_active)
-        else if (activate && !ingoing) view.findViewById(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.arrow_left_active)
-        else view.findViewById(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+        if (activate && ingoing) view.findViewById<View>(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.arrow_right_active)
+        else if (activate && !ingoing) view.findViewById<View>(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.arrow_left_active)
+        else view.findViewById<View>(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.left_and_right_arrow)
     }
 
 

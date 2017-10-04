@@ -5,11 +5,11 @@ package com.example.mimasim.Simulator
  */
 class CenterBus(name: String, description : String, var allRegsiters : ArrayList<Register>) : Element(name, description) {
 
-    fun step(inputregister : Register){
+    /*fun step(inputregister : Register){
         allRegsiters
                 .filter { it.write }
                 .forEach { it.Content = inputregister.Content }
-    }
+    }*/
 
     /*For convenience*/
     fun transfer(inputregister: Register, outpuRegister: Register){

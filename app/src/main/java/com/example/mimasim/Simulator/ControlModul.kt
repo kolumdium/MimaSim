@@ -17,13 +17,13 @@ class ControlModul(name: String, description : String, var context: Context) : E
 
     fun decodeInstruction() : Instruction{
         val instr = Instruction()
-        val opCode = getOpcode()
+        val opCode = getOpCode()
         instr.opCode = opCode
         instr.opCodeString = OpCodes[opCode]
         return instr
     }
 
-    fun getOpcode() : Int{
+    fun getOpCode() : Int{
         val content = IR.Content
 
         content.shr(28)

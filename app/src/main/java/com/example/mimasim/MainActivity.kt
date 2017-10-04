@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.Window
 
@@ -15,7 +16,6 @@ import com.example.mimasim.Simulator.Element
 import com.example.mimasim.Simulator.Instruction
 import com.example.mimasim.Simulator.MimaModul
 import java.util.*
-
 
 /*TODO: Credits for the Images:
 * left-and-right-arrow -> <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>*/
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
         override fun run() {
             mimaModul?.step()
             updateMima()
-            timerHandler?.postDelayed(this, speed);
+            timerHandler?.postDelayed(this, speed)
         }
     }
 
@@ -99,7 +99,8 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
         /*
         * Swipe Listener to extend/close the right and left View
         * */
-        findViewById(R.id.baseLayout)?.setOnTouchListener(object : OnSwipeTouchListener(applicationContext){
+        val baseView = findViewById<LinearLayout>(R.id.baseLayout)
+        baseView.setOnTouchListener(object : OnSwipeTouchListener(applicationContext){
             override fun onSwipeRight() {
                 when(extended) {
                     MainActivity.Extended.NORMAL -> extendLeft()
@@ -119,6 +120,7 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
                 }
             }
         })
+
     }
 
     fun extendNormal(){
@@ -132,7 +134,7 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
         transaction.show(mimaFragment)
         transaction.commit()
 
-        extended = Extended.NORMAL;
+        extended = Extended.NORMAL
     }
 
     fun extendRight() {
@@ -145,7 +147,7 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
 
         transaction.hide(optionPreviewFragment)
         transaction.commit()
-        extended = Extended.RIGHT;
+        extended = Extended.RIGHT
 
     }
 
@@ -159,7 +161,7 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
 
         transaction.hide(instructionPreviewFragment)
         transaction.commit()
-        extended = Extended.LEFT;
+        extended = Extended.LEFT
 
         instructionFragment.makeSmallLayout()
     }
@@ -189,15 +191,15 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
     fun resize(leftSize : Float, centerSize : Float, rightSize : Float){
         val lparamsR= rightView?.layoutParams as LinearLayout.LayoutParams
         lparamsR.weight = rightSize
-        rightView?.layoutParams = lparamsR;
+        rightView?.layoutParams = lparamsR
 
         val lparamsC= centerView?.layoutParams as LinearLayout.LayoutParams
         lparamsC.weight = centerSize
-        centerView?.layoutParams = lparamsC;
+        centerView?.layoutParams = lparamsC
 
         val lparamsL= leftView?.layoutParams as LinearLayout.LayoutParams
         lparamsL.weight = leftSize
-        leftView?.layoutParams = lparamsL;
+        leftView?.layoutParams = lparamsL
     }
 
     fun openOptions(){
@@ -243,7 +245,7 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
         extendNormal()
     }
 
-    override fun clearInstructions() {
+    override fun clearMima() {
         mimaModul?.reset()
     }
 

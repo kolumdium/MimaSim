@@ -16,14 +16,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/instructionItemText" />
 
+    <View
+        android:id="@+id/elementStatus"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/instructionItemText"
+        app:layout_constraintStart_toEndOf="@+id/instructionItemSpinner"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/instructionItemText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_weight="1"
-        android:ems="10"
         android:digits="@string/allowedHexSymbols"
+        android:maxLength="7"
+        android:ems="10"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/instructionItemSpinner"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/elementStatus"
+        app:layout_constraintTop_toTopOf="parent"
+        android:inputType="textAutoComplete" />
+
 </android.support.constraint.ConstraintLayout>
