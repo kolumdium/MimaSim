@@ -380,11 +380,9 @@
             android:id="@+id/arrowFromSARToIOBus"
             android:layout_width="10dp"
             android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginEnd="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/IOControler"
-            app:layout_constraintStart_toStartOf="@+id/registerSAR"
+            app:layout_constraintEnd_toEndOf="@+id/registerSAR"
             app:layout_constraintTop_toBottomOf="@+id/registerSAR" />
 
         <View
@@ -403,8 +401,10 @@
             android:layout_width="10dp"
             android:layout_height="0dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             app:layout_constraintBottom_toTopOf="@+id/registerSAR"
             app:layout_constraintEnd_toEndOf="@+id/registerSAR"
+            app:layout_constraintStart_toEndOf="@+id/registerSARLabel"
             app:layout_constraintTop_toBottomOf="@+id/viewMemory" />
 
         <View
@@ -461,9 +461,12 @@
             android:id="@+id/IOControler"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:text="@string/IOControl"
             app:layout_constraintBottom_toTopOf="@+id/IOState"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toStartOf="@+id/arrowFromSARToIOBus"
+            app:layout_constraintStart_toEndOf="@+id/arrowFromSIRToIOBus" />
 
         <TextView
             android:id="@+id/IOState"
@@ -500,10 +503,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
-            android:layout_marginStart="16dp"
             android:text="0x00000000"
             app:layout_constraintBottom_toTopOf="@+id/IOControler"
-            app:layout_constraintStart_toEndOf="@+id/arrowFromSIRToIOBus"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/registerSARLabel" />
 
         <TextView
