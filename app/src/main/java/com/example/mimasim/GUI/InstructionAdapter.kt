@@ -53,7 +53,6 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
         /*
         * Set Spinner Adapter
         * */
-        /*TODO set the Selected Item properly*/
         val adapter : ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(context, R.array.OPCodeArray , android.R.layout.simple_spinner_dropdown_item)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         holder.spinner?.adapter = adapter
@@ -76,21 +75,23 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
             saveInstructionCallback.lastSelectedItem(position)
         }
 
+
+        //This is terribly slow TODO check if can make faster
         if (getItem(position).isActive){
             holder.elementStatus?.setBackgroundColor(ContextCompat.getColor(context, R.color.green))
         } else {
-            holder.elementStatus?.setBackgroundColor(ContextCompat.getColor(context, R.color.grey))
+            holder.elementStatus?.setBackgroundColor(ContextCompat.getColor(context, R.color.primary50))
         }
 
         holder.spinner?.setSelection(tmpInstruction.opCode)
 
         holder.editText?.setOnFocusChangeListener{ view: View, b: Boolean ->
-            tmpInstruction.adress = Integer.decode( "0x" + holder.editText?.text)
+            tmpInstruction.address = Integer.decode( "0x" + holder.editText?.text)
             saveInstructionCallback.saveInstruction(position, tmpInstruction)
             //saveInstructionCallback.lastSelectedItem(position)
         }
 
-        holder.editText?.setText( Integer.toHexString(tmpInstruction.adress) )
+        holder.editText?.setText( Integer.toHexString(tmpInstruction.address) )
         holder.spinner?.setSelection( tmpInstruction.opCode)
 
         return row as View

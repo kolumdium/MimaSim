@@ -9,35 +9,37 @@
 
     <TextView
         android:id="@+id/optionsOptionLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:background="@color/primaryDarkColor"
         android:text="Options"
+        android:textAlignment="center"
+        android:textColor="@color/primaryTextColor"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/optionsElementName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="Gustav"
+        android:text="Element"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/optionsElementNameLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/optionsElementNameLabel"
+        android:textColor="@color/black"
+        />
 
     <TextView
         android:id="@+id/optionsElementNameLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Mein Name ist: "
+        android:background="@color/primaryColor"
+        android:textColor="@color/primaryTextColor"
+        android:text="Name:"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/optionsOptionLabel" />
@@ -45,12 +47,12 @@
 
     <TextView
         android:id="@+id/optionsDescriptionLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Beschreibung"
+        android:background="@color/primaryColor"
+        android:text="Beschreibung:"
+        android:textAlignment="center"
+        android:textColor="@color/primaryTextColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/optionsElementName" />
@@ -99,7 +101,9 @@
         app:layout_constraintBottom_toTopOf="@+id/optionsAbort"
         tools:layout_editor_absoluteX="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/primaryLightColor"
+        android:textColor="@color/primaryTextColor" />
 
     <Button
         android:id="@+id/optionsAbort"
@@ -111,5 +115,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/primaryLightColor"
+        android:textColor="@color/primaryTextColor"/>
 </android.support.constraint.ConstraintLayout>

@@ -2,39 +2,46 @@ package com.example.mimasim.GUI
 
 import android.app.Fragment
 import android.content.Context
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.TextView
 import com.example.mimasim.MainActivity
 import com.example.mimasim.R
 import com.example.mimasim.Simulator.Element
+import com.example.mimasim.Simulator.MemoryModul
 import com.example.mimasim.Simulator.MimaModul
 import com.example.mimasim.Simulator.Register
+import org.w3c.dom.Text
+
 
 /**
  * Created by Martin on 04.09.2017.
  */
-class MimaFragment : Fragment(), MimaModul.UITrigger {
+class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTrigger{
 
     var currentlyLoadedElement = Element(" ", "Long Click an Element to see the Options for it")
-    var mCallback : elementSelectedListener? = null
-    val map = mutableMapOf<Int, Element>()
+    var mCallback : MimaFragmentCallback? = null
+    private val clickableElementsMap = mutableMapOf<Int, Element>()
+    private val registerMap = mutableMapOf<Int, Register>()
 
-    interface elementSelectedListener{
+    interface MimaFragmentCallback {
         fun sendElement(currentlyLoadedElement : Element)
         fun startButtonPressed()
         fun stopButtonPressed()
         fun stepButtonPressed()
         fun speedChanged(speed : Long)
+        fun readExternal()
+        fun readExternalDone()
+        fun makeToast(text: String)
     }
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.mima, container , false)
@@ -43,41 +50,67 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         try {
-            mCallback = context as elementSelectedListener
+            mCallback = context as MimaFragmentCallback
         } catch (e : ClassCastException){
-            throw ClassCastException(activity.toString() + " must implement elementSelectedListener")
+            throw ClassCastException(activity.toString() + " must implement MimaFragmentCallback")
         }
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        view?.setBackgroundColor(resources.getColor(R.color.lighterGrey) )
-
         val main = activity as MainActivity
 
-        /*A map of all Clickable Items*/
-        map.put(R.id.registerONE, main.mimaModul!!.calculatorModul.ONE)
-        map.put(R.id.registerACC, main.mimaModul!!.calculatorModul.ACC)
-        map.put(R.id.registerX, main.mimaModul!!.calculatorModul.X)
-        map.put(R.id.registerY, main.mimaModul!!.calculatorModul.Y)
-        map.put(R.id.registerZ, main.mimaModul!!.calculatorModul.Z)
-        map.put(R.id.registerIAR, main.mimaModul!!.controlModul.IAR)
-        map.put(R.id.registerIR, main.mimaModul!!.controlModul.IR)
-        map.put(R.id.registerSIR, main.mimaModul!!.memoryModul.SIR)
-        map.put(R.id.registerCounter, main.mimaModul!!.controlModul.Counter)
-        map.put(R.id.registerSAR, main.mimaModul!!.memoryModul.SAR)
-        map.put(R.id.IOControler, main.mimaModul!!.memoryModul.IOControl)
-        map.put(R.id.centerBus, main.mimaModul!!.centerBus)
-        map.put(R.id.ViewIOBus, main.mimaModul!!.IOBus)
-        map.put(R.id.viewALU, main.mimaModul!!.calculatorModul.Alu)
-        map.put(R.id.viewMemory, main.mimaModul!!.memoryModul.memory)
-        map.put(R.id.memoryModul, main.mimaModul!!.memoryModul)
-        map.put(R.id.calculatorModul, main.mimaModul!!.calculatorModul)
-        map.put(R.id.controlModul, main.mimaModul!!.controlModul)
+        getRegister(main)
+        getClickableElements(main)
+        setBackgrounds()
+        setOnClickListeners()
+        initSeekBar()
+        drawArrows()
+        updateRegisters()
+        drawAlu()
+        prepareIO()
+    }
 
-        for ((key,value) in map) {
+    private fun getRegister(mainActivity: MainActivity){
+        registerMap.put(R.id.registerONE, mainActivity.mimaModul!!.calculatorModul.ONE)
+        registerMap.put(R.id.registerACC, mainActivity.mimaModul!!.calculatorModul.ACC)
+        registerMap.put(R.id.registerX, mainActivity.mimaModul!!.calculatorModul.X)
+        registerMap.put(R.id.registerY, mainActivity.mimaModul!!.calculatorModul.Y)
+        registerMap.put(R.id.registerZ, mainActivity.mimaModul!!.calculatorModul.Z)
+        registerMap.put(R.id.registerIAR, mainActivity.mimaModul!!.controlModul.IAR)
+        registerMap.put(R.id.registerIR, mainActivity.mimaModul!!.controlModul.IR)
+        registerMap.put(R.id.registerSIR, mainActivity.mimaModul!!.memoryModul.SIR)
+        registerMap.put(R.id.registerCounter, mainActivity.mimaModul!!.controlModul.Counter)
+        registerMap.put(R.id.registerSAR, mainActivity.mimaModul!!.memoryModul.SAR)
+    }
+
+    private fun getClickableElements(mainActivity: MainActivity){
+        /*A clickableElementsMap of all Clickable Items*/
+
+        clickableElementsMap.putAll(registerMap)
+        clickableElementsMap.put(R.id.IOControler, mainActivity.mimaModul!!.memoryModul.IOControl)
+        clickableElementsMap.put(R.id.centerBus, mainActivity.mimaModul!!.centerBus)
+        clickableElementsMap.put(R.id.ViewIOBus, mainActivity.mimaModul!!.IOBus)
+        clickableElementsMap.put(R.id.viewALU, mainActivity.mimaModul!!.calculatorModul.Alu)
+        clickableElementsMap.put(R.id.viewMemory, mainActivity.mimaModul!!.memoryModul.memory)
+        clickableElementsMap.put(R.id.memoryModul, mainActivity.mimaModul!!.memoryModul)
+        clickableElementsMap.put(R.id.calculatorModul, mainActivity.mimaModul!!.calculatorModul)
+        clickableElementsMap.put(R.id.controlModul, mainActivity.mimaModul!!.controlModul)
+    }
+
+    private fun setBackgrounds(){
+        for ((key, _) in clickableElementsMap) {
             val someView = view?.findViewById<View>(key)
-            //someView?.setBackgroundColor(resources.getColor(R.color.grey))
-            someView?.setBackgroundResource(R.drawable.kasten)
+            when (key) {
+                R.id.memoryModul, R.id.calculatorModul, R.id.controlModul -> someView?.setBackgroundResource(R.drawable.kasten)
+                else -> someView?.setBackgroundColor(resources.getColor(R.color.primary50))
+            }
+        }
+    }
+
+    private fun setOnClickListeners(){
+
+        for ((key,value) in clickableElementsMap) {
+            val someView = view?.findViewById<View>(key)
             currentlyLoadedElement = value
             someView?.isLongClickable = true
             someView?.setOnLongClickListener {
@@ -93,15 +126,20 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
         startButton?.setOnClickListener{
             mCallback?.startButtonPressed()
             stepButton?.isClickable = false
+            startButton?.isClickable = false
         }
         stepButton?.setOnClickListener{
             mCallback?.stepButtonPressed()
         }
         stopButton?.setOnClickListener{
             stepButton?.isClickable = true
+            startButton?.isClickable = true
             mCallback?.stopButtonPressed()
         }
 
+    }
+
+    private  fun initSeekBar(){
         val seekBar = view?.findViewById<SeekBar>(R.id.viewSpeed)
 
         seekBar?.max = 1000
@@ -119,21 +157,15 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
                 mCallback?.speedChanged( seekBar.progress.toLong())
             }
         })
-
-        drawArrows()
-        updateView()
-        setBackgrounds()
     }
 
-    fun updateView(){
-        for ((key,value) in map) {
+    fun updateRegisters(){
+        for ((key,value) in registerMap) {
             when (value.name){
-                "ALU" , "I/O-Bus", "I/O-Control" , "Prozessorbus", "Mima", "Speicherwerk" , "Steuerwerk" , "Rechenwerk" -> {}
-                "Memory" -> {//TODO some fancy stuff
-                    }
                 "Counter" ->{
                     val counter = (view?.findViewById<TextView>(key))
-                    val content = (value as Register).Content
+                    val content = value.Content
+                    /*Some Code to make the Register Content same length when displayed aka filling empty stuff with 0*/
                     var fillZeroes = ""
                     for (i in 0..(3 - Integer.toBinaryString(content).length)) {
                         fillZeroes += "0"
@@ -141,10 +173,9 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
                     counter?.text = String.format(fillZeroes + Integer.toBinaryString (content))
                 }
                 else -> {
-                    //should be a Register when you get here.
                     val someTextView = view?.findViewById<TextView>(key)
                     var fillZeros = ""
-                    for ( i in 0.. (5 -   Integer.toHexString((value as Register).Content).length)){
+                    for ( i in 0.. (5 - Integer.toHexString(value.Content).length)){
                         fillZeros += "0"
                     }
                     someTextView?.text = String.format("0x" + fillZeros + Integer.toHexString(value.Content))
@@ -155,12 +186,12 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
         }
     }
 
-    fun setBackgrounds(){
+    private fun drawAlu(){
         this.view.findViewById<View>(R.id.viewALU).setBackgroundResource(R.drawable.alu)
 
     }
 
-    fun drawArrows(){
+    private fun drawArrows(){
         drawLeftToRightArrows()
         drawRightToLeftArrows()
         drawRightAndLeftArrows()
@@ -168,6 +199,49 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
         drawTopDownArrows()
         drawUpAndDownArrows()
     }
+
+    private fun prepareIO(){
+        hideInput()
+        val importView = view.findViewById<EditText>(R.id.ImportView)
+
+        importView.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(p0: Editable?) {
+                hideInput()
+                mCallback?.readExternalDone()
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+        })
+
+        val exportView = view.findViewById<TextView>(R.id.ExportView)
+        exportView.text = ""
+    }
+
+    fun hideInput(){
+        val importView = view.findViewById<EditText>(R.id.ImportView)
+        importView.isClickable = false
+        importView.setText("")
+        importView.visibility = View.INVISIBLE
+
+    }
+
+    override fun readExternal() {
+        mCallback?.readExternal()
+    }
+
+    override fun writeExternal() {
+        view.findViewById<TextView>(R.id.ExportView).text // = Acccontent to char
+    }
+
+    override fun noDeviceFound() {
+        mCallback?.makeToast("No Device with that Adress on IOBus found")
+    }
+
 
     private fun drawTopDownArrows() {
         /*SAR -> IOBus
@@ -179,7 +253,6 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
         this.view.findViewById<View>(R.id.arrowFromYToAlu).setBackgroundResource(R.drawable.arrow_down)
         this.view.findViewById<View>(R.id.arrowFromAluToZ).setBackgroundResource(R.drawable.arrow_down)
         this.view.findViewById<View>(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down)
-
     }
 
     private fun drawBottomUpArrows() {
@@ -221,7 +294,8 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
         this.view.findViewById<View>(R.id.arrowFromSIRToMemory).setBackgroundResource(R.drawable.arrow_up_down)
         this.view.findViewById<View>(R.id.arrowFromSIRToIOBus).setBackgroundResource(R.drawable.arrow_up_down)
         this.view.findViewById<View>(R.id.centerBus).setBackgroundResource(R.drawable.arrow_up_down)
-        //view?.invalidate()
+        this.view.findViewById<View>(R.id.arrowFromIOToImport).setBackgroundResource(R.drawable.arrow_up_down)
+        this.view.findViewById<View>(R.id.arrowFromIOToExport).setBackgroundResource(R.drawable.arrow_up_down)
     }
 
     /* UI Trigger*/
@@ -252,8 +326,8 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
                 Log.d("highlightRegister", "Didn't find a Register to Highlight")
             }
         }
-        if (activate) tmpView?.setBackgroundResource(R.drawable.kasten_active)
-        else tmpView?.setBackgroundResource(R.drawable.kasten)
+        if (activate) tmpView?.setBackgroundColor(resources.getColor(R.color.green))
+        else tmpView?.setBackgroundColor(resources.getColor(R.color.registerColor))
     }
 
     override fun alu(instruction : String) {
@@ -346,6 +420,18 @@ class MimaFragment : Fragment(), MimaModul.UITrigger {
         if (activate && ingoing) view.findViewById<View>(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.arrow_right_active)
         else if (activate && !ingoing) view.findViewById<View>(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.arrow_left_active)
         else view.findViewById<View>(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+    }
+
+    override fun ioRead() {
+        view.findViewById<TextView>(R.id.IOState).text = getText(R.string.ioRead)
+    }
+
+    override fun ioWrite() {
+        view.findViewById<TextView>(R.id.IOState).text = getText(R.string.ioWrite)
+    }
+
+    override fun ioClear(){
+        view.findViewById<TextView>(R.id.IOState).text = ""
     }
 
 

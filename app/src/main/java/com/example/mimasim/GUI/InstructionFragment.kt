@@ -105,6 +105,8 @@ class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapte
         view?.findViewById<ListView>(R.id.instructionListView)?.visibility = View.GONE
         view?.findViewById<ScrollView>(R.id.scrollViewInstructions)?.visibility = View.VISIBLE
         view?.findViewById<ConstraintLayout>(R.id.instructionMangment)?.visibility = View.GONE
+        view?.findViewById<Button>(R.id.instructionsClearButton)?.visibility = View.GONE
+
 
         textView?.visibility = View.VISIBLE
         textView?.text = instructionManager.getAsCharSequence()

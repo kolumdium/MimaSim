@@ -4,23 +4,23 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
-import android.view.Window
+import android.widget.EditText
 
 import android.widget.LinearLayout
-import android.widget.SeekBar
-import android.widget.TextView
 import com.example.mimasim.GUI.*
 import com.example.mimasim.Simulator.Element
 import com.example.mimasim.Simulator.Instruction
 import com.example.mimasim.Simulator.MimaModul
 import java.util.*
+import android.widget.Toast
+
+
 
 /*TODO: Credits for the Images:
 * left-and-right-arrow -> <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>*/
 
-class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, InstructionFragment.InstructionButtonClickedCallback , OptionFragment.optionSaveButtonClickedCallback{
+class MainActivity : AppCompatActivity(), MimaFragment.MimaFragmentCallback, InstructionFragment.InstructionButtonClickedCallback , OptionFragment.optionSaveButtonClickedCallback, OptionPreviewFragment.OptionPreviewCallback, InstructionPreviewFragment.InstructionPreviewCallback{
 
     var mimaFragment = MimaFragment()
     var optionsFragment = OptionFragment()
@@ -212,28 +212,12 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
         }
     }
 
-
-    /*
-    * StepControl
-    * */
-    override fun startButtonPressed() {
-        mimaModul?.speedChanged(speed)
-        timerHandler?.postDelayed(timerRunnable, 0)
-    }
-
-    override fun stopButtonPressed() {
+    fun stopMima(){
         timerHandler?.removeCallbacks(timerRunnable)
     }
 
-    override fun stepButtonPressed() {
-        mimaModul?.speedChanged(1000)
-        mimaModul?.step()
-        updateMima()
-    }
-
-    override fun speedChanged(speed: Long) {
-        this.speed = speed
-        mimaModul?.speedChanged(speed)
+    fun startMima(){
+        timerHandler?.postDelayed(timerRunnable, 0)
     }
 
     /*
@@ -257,6 +241,38 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
     * OptionsCallbacks
     * */
 
+    override fun abortOptions() {
+        extendNormal()
+    }
+
+    override fun updateMima() {
+        mimaFragment.updateRegisters()
+    }
+
+    /*
+    * MimaFragmentCallbacks
+    * */
+
+    override fun readExternal() {
+        stopMima()
+        val importView = findViewById<EditText>(R.id.ImportView)
+        importView.visibility = View.VISIBLE
+        importView.isClickable
+
+    }
+
+    override fun readExternalDone() {
+        startMima()
+    }
+
+    override fun makeToast(text: String) {
+        val context = applicationContext
+        val duration = Toast.LENGTH_SHORT
+
+        val toast = Toast.makeText(context, text, duration)
+        toast.show()
+    }
+
     override fun sendElement(currentlyLoadedElement: Element) {
         /*When an Element is Long hold (wants to be edited) this gets Called*/
         openOptions()
@@ -265,11 +281,36 @@ class MainActivity : AppCompatActivity(), MimaFragment.elementSelectedListener, 
         optionsFragment.updateView(currentlyLoadedElement)
     }
 
-    override fun abortOptions() {
-        extendNormal()
+    /* StepControl */
+    override fun startButtonPressed() {
+        mimaModul?.speedChanged(speed)
+        startMima()
     }
 
-    override fun updateMima() {
-        mimaFragment.updateView()
+    override fun stopButtonPressed() {
+        stopMima()
+    }
+
+    override fun stepButtonPressed() {
+        mimaModul?.speedChanged(1000)
+        mimaModul?.step()
+        updateMima()
+    }
+
+    override fun speedChanged(speed: Long) {
+        this.speed = speed
+        mimaModul?.speedChanged(speed)
+    }
+
+    /*
+    * Preview Callbacks
+    * */
+
+    override fun optionPreviewClicked() {
+        openOptions()
+    }
+
+    override fun instructionPreviewClicked() {
+        extendLeft()
     }
 }

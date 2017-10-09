@@ -39,10 +39,10 @@ class OptionFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        view?.setBackgroundColor(resources.getColor(R.color.grey))
-        view?.findViewById<Button>(R.id.optionsAbort)?.setOnClickListener{
-            /*  When Abort Button was Clicked Restore the View to it's original State*/
 
+        val abortButton = view?.findViewById<Button>(R.id.optionsAbort)
+        abortButton?.setOnClickListener{
+            /*  When Abort Button was Clicked Restore the View to it's original State*/
             val contentView = view.findViewById<EditText>(R.id.optionsElementContent)
             contentView.visibility = View.VISIBLE
             if (_hasContent)
@@ -51,6 +51,7 @@ class OptionFragment : Fragment() {
                 contentView.text.clear()
             optionCallback?.abortOptions()
         }
+
     }
 
     fun updateView(currentlyLoadedElement: Element){
@@ -80,7 +81,7 @@ class OptionFragment : Fragment() {
                 view?.findViewById<Button>(R.id.optionsSave)?.setOnClickListener{
                     val inputString = contentView?.text.toString()
 
-                    //TODO this should also go into an callback and then get passed to the modul.
+                    //TODO this should go into an callback and then get passed to the modul. though this works too it is not as modular
                     (currentlyLoadedElement as Register).Content = Integer.decode( "0x" + inputString )
                     optionCallback?.updateMima()
                     contentView?.visibility = View.VISIBLE

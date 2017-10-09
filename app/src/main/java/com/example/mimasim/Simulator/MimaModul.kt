@@ -19,7 +19,7 @@ class MimaModul(name: String, description : String, var context: Context, val mi
 
     val calculatorModul = CaculatorModul(context.resources.getString(R.string.calculatorModul), context.resources.getString(R.string.calculatorModulDescription), context)
     val controlModul = ControlModul(context.resources.getString(R.string.controlModul), context.resources.getString(R.string.controlModulDescription), context)
-    val memoryModul = MemoryModul(context.resources.getString(R.string.memoryModul), context.resources.getString(R.string.memoryModulDescription), context)
+    val memoryModul = MemoryModul(context.resources.getString(R.string.memoryModul), context.resources.getString(R.string.memoryModulDescription), context, mimaFragment)
     val allRegisters = ArrayList<Register>()
     val centerBus = CenterBus(context.resources.getString(R.string.centerBus), context.resources.getString(R.string.centerBusDescription), allRegisters)
     val IOBus = IOBus(context.resources.getString(R.string.IOBus), context.resources.getString(R.string.IOBusDescription))
@@ -77,14 +77,22 @@ class MimaModul(name: String, description : String, var context: Context, val mi
             0 -> {
                 uiTrigger?.normal()
                 centerBus.transfer(controlModul.IAR, memoryModul.SAR, calculatorModul.X)
-                memoryModul.loadFromMemory()
-                controlModul.Counter.Content++
 
-                uiTrigger?.centerBus(true)
-                uiTrigger?.arrowIar(true, false)
-                uiTrigger?.arrowX(true)
-                uiTrigger?.arrowsSarMem(true)
-                uiTrigger?.mem("READ")
+                if (memoryModul.IOControl.isExternal(memoryModul.SAR.Content)){
+                    uiTrigger?.ioRead()
+                    uiTrigger?.arrowsSarIO(true)
+                    controlModul.Counter.Content++
+
+                }
+                else {
+                    controlModul.Counter.Content++
+                    uiTrigger?.centerBus(true)
+                    uiTrigger?.arrowIar(true, false)
+                    uiTrigger?.arrowX(true)
+                    uiTrigger?.arrowsSarMem(true)
+                    uiTrigger?.mem("READ")
+                }
+
             }
             1 -> {
                 uiTrigger?.centerBus(false)
@@ -100,7 +108,8 @@ class MimaModul(name: String, description : String, var context: Context, val mi
                 uiTrigger?.arrowOne(true)
                 uiTrigger?.arrowY(true)
                 uiTrigger?.alu("ADD")
-                uiTrigger?.mem("READING...")
+                if (!memoryModul.IOControl.isExternal(memoryModul.SAR.Content))
+                    uiTrigger?.mem("READING...")
 
             }
             2 ->{
@@ -118,10 +127,13 @@ class MimaModul(name: String, description : String, var context: Context, val mi
                 centerBus.transfer(calculatorModul.Z, controlModul.IAR)
                 controlModul.Counter.Content++
 
+                memoryModul.read()
+
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowZ(true)
                 uiTrigger?.arrowIar(true, true)
-                uiTrigger?.mem("READ DONE")
+                if (!memoryModul.IOControl.isExternal(memoryModul.SAR.Content))
+                    uiTrigger?.mem("READ DONE")
 
             }
             4 -> {
@@ -157,7 +169,7 @@ class MimaModul(name: String, description : String, var context: Context, val mi
     }
 
     fun stepInstruction(cInstr : Instruction){
-        //val adress = cInstr.opCode.shl(28) xor controlModul.IR.Content
+        //val address = cInstr.opCode.shl(28) xor controlModul.IR.Content
         when (cInstr.opCodeString){
             "ADD" -> common("ADD")
             "AND" -> common("AND")
@@ -188,7 +200,7 @@ class MimaModul(name: String, description : String, var context: Context, val mi
         when (controlModul.Counter.Content) {
             5 -> {
                 centerBus.transfer(controlModul.IR, memoryModul.SAR)
-                memoryModul.loadFromMemory()
+                memoryModul.read()
 
                 controlModul.Counter.Content++
 
@@ -286,7 +298,7 @@ class MimaModul(name: String, description : String, var context: Context, val mi
     fun LDV() {
         /* LDV
         * IR -> SAR; IO-Read
-        * ACC->X
+        * empty
         * empty
         * empty
         * SIR-> ACC
@@ -295,15 +307,28 @@ class MimaModul(name: String, description : String, var context: Context, val mi
 
         when (controlModul.Counter.Content){
             5 -> {
+
                 centerBus.transfer(controlModul.IR, memoryModul.SAR)
-                memoryModul.loadFromMemory()
+
+                if (memoryModul.IOControl.isExternal(memoryModul.SAR.Content)){
+                    uiTrigger?.ioRead()
+                    uiTrigger?.arrowsSarIO(true)
+                }
+                else {
+                    controlModul.Counter.Content++
+                    uiTrigger?.centerBus(true)
+                    uiTrigger?.arrowIar(true, false)
+                    uiTrigger?.arrowX(true)
+                    uiTrigger?.arrowsSarMem(true)
+                    uiTrigger?.mem("READ")
+                }
 
                 controlModul.Counter.Content++
+
 
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowsSarMem(true)
                 uiTrigger?.arrowIr(true, false)
-                uiTrigger?.mem("READ")
 
             }
             6 -> {
@@ -311,13 +336,10 @@ class MimaModul(name: String, description : String, var context: Context, val mi
                 uiTrigger?.arrowsSarMem(false)
                 uiTrigger?.arrowIr(false,false)
 
-                centerBus.transfer(calculatorModul.ACC, calculatorModul.X)
                 controlModul.Counter.Content++
 
-                uiTrigger?.centerBus(true)
-                uiTrigger?.arrowAcc(true, false)
-                uiTrigger?.arrowX(true)
-                uiTrigger?.mem("READING...")
+                if (!memoryModul.IOControl.isExternal(memoryModul.SAR.Content))
+                    uiTrigger?.mem("READING...")
 
             }
             7 -> {
@@ -329,8 +351,11 @@ class MimaModul(name: String, description : String, var context: Context, val mi
             8 -> {
                 controlModul.Counter.Content++
 
+                memoryModul.read()
+
                 uiTrigger?.arrowSirToMemory(true)
-                uiTrigger?.mem("READ DONE")
+                if (!memoryModul.IOControl.isExternal(memoryModul.SAR.Content))
+                    uiTrigger?.mem("READ DONE")
             }
 
             9 -> {
@@ -368,6 +393,7 @@ class MimaModul(name: String, description : String, var context: Context, val mi
         when (controlModul.Counter.Content) {
             5 -> {
                 centerBus.transfer(calculatorModul.ACC, memoryModul.SIR)
+
                 controlModul.Counter.Content++
 
                 uiTrigger?.centerBus(true)
@@ -380,13 +406,18 @@ class MimaModul(name: String, description : String, var context: Context, val mi
                 uiTrigger?.arrowAcc(false, false)
 
                 centerBus.transfer(controlModul.IR, memoryModul.SAR)
-                memoryModul.saveToMemory()
+
+                memoryModul.write()
+
                 controlModul.Counter.Content++
 
                 uiTrigger?.centerBus(true)
                 uiTrigger?.arrowIr(true, false)
                 uiTrigger?.arrowsSarMem(true)
-                uiTrigger?.mem("WRITE")
+                if (!memoryModul.IOControl.isExternal(memoryModul.SAR.Content))
+                    uiTrigger?.mem("WRITE")
+                else
+                    uiTrigger?.ioWrite()
 
             }
             7-> {
@@ -394,7 +425,8 @@ class MimaModul(name: String, description : String, var context: Context, val mi
                 uiTrigger?.arrowIr(false, false)
                 uiTrigger?.arrowsSarMem(false)
                 controlModul.Counter.Content++
-                uiTrigger?.mem("WRITING...")
+                if (!memoryModul.IOControl.isExternal(memoryModul.SAR.Content))
+                    uiTrigger?.mem("WRITING...")
             }
             9->{
                 controlModul.Counter.Content++
@@ -714,6 +746,9 @@ class MimaModul(name: String, description : String, var context: Context, val mi
         fun mem(instruction: String)
         fun ioBus(activate: Boolean)
         fun ioControl(state : String)
+        fun ioRead()
+        fun ioWrite()
+        fun ioClear()
         fun normal()
     }
 

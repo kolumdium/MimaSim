@@ -11,7 +11,7 @@ class InstructionManager {
     fun getAsString() : ArrayList<String>{
         val string = ArrayList<String>()
 
-        instructions.mapTo(string) { "${instructions.indexOf(it)}: ${it.opCodeString} ${it.adress} \n" }
+        instructions.mapTo(string) { "${instructions.indexOf(it)}: ${it.opCodeString} ${it.address} \n" }
 
         return string
     }
@@ -26,9 +26,9 @@ class InstructionManager {
 
         for (instruction in instructions) {
             string += if (instruction.isInMima)
-                ">> ${instructions.indexOf(instruction)}: ${instruction.opCodeString} 0x${Integer.toHexString(instruction.adress)} ${System.getProperty("line.separator")}"
+                ">> ${instructions.indexOf(instruction)}: ${instruction.opCodeString} 0x${Integer.toHexString(instruction.address)} ${System.getProperty("line.separator")}"
             else
-                " ${instructions.indexOf(instruction)}: ${instruction.opCodeString} 0x${Integer.toHexString(instruction.adress)} ${System.getProperty("line.separator")}"
+                " ${instructions.indexOf(instruction)}: ${instruction.opCodeString} 0x${Integer.toHexString(instruction.address)} ${System.getProperty("line.separator")}"
         }
         return string
     }

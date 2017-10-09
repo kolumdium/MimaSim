@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="1"
-    android:orientation="horizontal">
-
+    android:orientation="horizontal"
+    android:background="@color/white">
 
         <LinearLayout
         android:id="@+id/calculatorModul"
@@ -383,7 +383,6 @@
             android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/IOControler"
-            app:layout_constraintStart_toStartOf="@+id/registerSAR"
             app:layout_constraintTop_toBottomOf="@+id/registerSAR" />
 
         <View
@@ -469,7 +468,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/IOControler"
             app:layout_constraintStart_toStartOf="@+id/IOControler" />
@@ -500,11 +498,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
-            android:layout_marginEnd="8dp"
             android:text="0x00000000"
             app:layout_constraintBottom_toTopOf="@+id/IOControler"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/arrowFromSARToCenterBus"
+            app:layout_constraintStart_toStartOf="@+id/arrowFromSARToIOBus"
             app:layout_constraintTop_toBottomOf="@+id/registerSARLabel" />
 
         <TextView
@@ -579,5 +575,58 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteX="0dp" />
+
+    <TextView
+        android:id="@+id/ExportViewLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Ausgabe"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/arrowFromIOToExport" />
+
+    <TextView
+        android:id="@+id/ImportViewLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Eingabe:"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/arrowFromIOToImport" />
+
+    <View
+        android:id="@+id/arrowFromIOToImport"
+        android:layout_width="10dp"
+        android:layout_height="20dp"
+        app:layout_constraintStart_toStartOf="@+id/ImportViewLabel"
+        app:layout_constraintTop_toBottomOf="@+id/ViewIOBus" />
+
+    <View
+        android:id="@+id/arrowFromIOToExport"
+        android:layout_width="10dp"
+        android:layout_height="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/ExportViewLabel"
+        app:layout_constraintTop_toBottomOf="@+id/ViewIOBus" />
+
+    <TextView
+        android:id="@+id/ExportView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="empty"
+        app:layout_constraintStart_toStartOf="@+id/ExportViewLabel"
+        app:layout_constraintTop_toBottomOf="@+id/ExportViewLabel" />
+
+    <EditText
+        android:id="@+id/ImportView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:inputType="textCapCharacters"
+        android:text="A"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/ImportViewLabel"
+        app:layout_constraintTop_toBottomOf="@+id/ImportViewLabel" />
 
 </android.support.constraint.ConstraintLayout>

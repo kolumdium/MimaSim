@@ -23,6 +23,8 @@
     <string name="registerIRDescription">IR</string>
     <string name="registerIAR">IAR</string>
     <string name="registerIARDescription">IAR</string>
+    <string name="ioRead">Reading External</string>
+    <string name="ioWrite">Writing External</string>
 
     <string name="centerBus">Prozessorbus</string>
     <string name="centerBusDescription">Prozessorbus</string>

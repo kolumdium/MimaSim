@@ -3,11 +3,11 @@ package com.example.mimasim.Simulator
 /**
  * Created by Martin on 09.09.2017.
  */
-class Instruction (opCode : Int = 0x0, var opCodeString: String = "ADD", adress : Int = 0x0000000) {
+class Instruction (opCode : Int = 0x0, var opCodeString: String = "ADD", address : Int = 0x0000000) {
     var isActive = false
     var isInMima = false
 
-    var adress : Int = adress
+    var address : Int = address
     set(value) {
         while (value > 0xFFFFFFF) {
             value.shr(1)
@@ -21,6 +21,10 @@ class Instruction (opCode : Int = 0x0, var opCodeString: String = "ADD", adress 
             field = 13
         else
             field = value
+    }
+
+    fun getBoth() : Int{
+        return (opCode.shl(28)  xor address)
     }
 
 }
