@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity(), MimaFragment.MimaFragmentCallback, Ins
         timerHandler = Handler()
 
         /*Get an instance of the simulator*/
-        mimaModul = MimaModul(resources.getString(R.string.MimaModul), resources.getString(R.string.MimaModulDescription), this, mimaFragment)
+        mimaModul = MimaModul(resources.getString(R.string.MimaModul), resources.getString(R.string.MimaModulDescription), this, mimaFragment, instructionFragment)
         init()
     }
 

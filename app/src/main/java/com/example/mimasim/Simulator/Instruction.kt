@@ -5,7 +5,6 @@ package com.example.mimasim.Simulator
  */
 class Instruction (opCode : Int = 0x0, var opCodeString: String = "ADD", address : Int = 0x0000000) {
     var isActive = false
-    var isInMima = false
 
     var address : Int = address
     set(value) {

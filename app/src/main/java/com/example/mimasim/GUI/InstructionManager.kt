@@ -7,6 +7,7 @@ import com.example.mimasim.Simulator.Instruction
  */
 class InstructionManager {
     var instructions = ArrayList<Instruction>()
+    var currentlyLoadedInstruction = 0;
 
     fun getAsString() : ArrayList<String>{
         val string = ArrayList<String>()
@@ -25,7 +26,7 @@ class InstructionManager {
         var string = ""
 
         for (instruction in instructions) {
-            string += if (instruction.isInMima)
+            string += if (instructions.indexOf(instruction) == currentlyLoadedInstruction)
                 ">> ${instructions.indexOf(instruction)}: ${instruction.opCodeString} 0x${Integer.toHexString(instruction.address)} ${System.getProperty("line.separator")}"
             else
                 " ${instructions.indexOf(instruction)}: ${instruction.opCodeString} 0x${Integer.toHexString(instruction.address)} ${System.getProperty("line.separator")}"

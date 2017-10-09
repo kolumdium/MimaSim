@@ -14,15 +14,13 @@ import android.widget.ScrollView
 import android.widget.TextView
 import com.example.mimasim.R
 import com.example.mimasim.Simulator.Instruction
+import com.example.mimasim.Simulator.MimaModul
 import org.w3c.dom.Text
 
 /**
  * Created by Martin on 03.09.2017.
  */
-class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapterCallback {
-
-    /*TODO The SWipeListner does not work when we swipe in the List View!!! Find out why not and fix it*/
-
+class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapterCallback , MimaModul.InstructionTrigger{
     var mCallback : InstructionButtonClickedCallback? = null
     var instructionManager = InstructionManager()
     var lastSelectedItem : Int = 0
@@ -110,6 +108,16 @@ class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapte
 
         textView?.visibility = View.VISIBLE
         textView?.text = instructionManager.getAsCharSequence()
+    }
+
+    override fun instructionDone() {
+        instructionManager.currentlyLoadedInstruction++
+        val textView = view.findViewById<TextView>(R.id.instructionTextView)
+        textView.text = instructionManager.getAsCharSequence()
+    }
+
+    override fun mimaReset() {
+        instructionManager.currentlyLoadedInstruction = 0
     }
 
     override fun saveInstruction(position: Int, instruction: Instruction) {

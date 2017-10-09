@@ -9,13 +9,14 @@ class Memory(name: String, description : String) : Element(name, description) {
     var Content = mutableMapOf<Int, Int>()
 
     fun getInstruction(address : Int) : Int{
+        var returnValue = 0
+
         for ((key,value) in Content){
            if (key == address)
-               return value
+               returnValue = value
        }
-        //no value found
         Content.put(address, 0)
-        return 0
+        return returnValue
     }
 
     fun saveToMemory(address: Int, value:Int){

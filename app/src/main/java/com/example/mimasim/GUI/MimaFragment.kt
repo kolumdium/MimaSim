@@ -242,7 +242,6 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
         mCallback?.makeToast("No Device with that Adress on IOBus found")
     }
 
-
     private fun drawTopDownArrows() {
         /*SAR -> IOBus
         * X -> Alu
@@ -302,11 +301,11 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
 
     override fun normal() {
         drawArrows()
+        highlightRegister(false, "Z")
     }
 
-    override fun centerBus(activate: Boolean) {
-        if (activate) view.findViewById<View>(R.id.centerBus).setBackgroundResource(R.drawable.arrow_up_down_active)
-        else view.findViewById<View>(R.id.centerBus).setBackgroundResource(R.drawable.arrow_up_down)
+    override fun centerBus() {
+        view.findViewById<View>(R.id.centerBus).setBackgroundResource(R.drawable.arrow_up_down_active)
     }
 
     override fun highlightRegister(activate: Boolean, register: String){
@@ -338,88 +337,65 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
         view.findViewById<TextView>(R.id.viewMemory).text = instruction
     }
 
-    override fun ioBus(activate: Boolean) {
-        if (activate) view.findViewById<View>(R.id.ViewIOBus).setBackgroundResource(R.drawable.left_and_right_arrow_active)
-        else view.findViewById<View>(R.id.ViewIOBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+    override fun ioBus() {
+        view.findViewById<View>(R.id.ViewIOBus).setBackgroundResource(R.drawable.left_and_right_arrow_active)
     }
 
     override fun ioControl(state : String) {
         view.findViewById<TextView>(R.id.IOState).text = state
     }
 
-    override fun arrowIr(activate: Boolean, ingoing : Boolean) {
-        if (activate && ingoing) view.findViewById<View>(R.id.arrowFromIRToBus).setBackgroundResource(R.drawable.arrow_right_active)
-        else if (activate && !ingoing) view.findViewById<View>(R.id.arrowFromIRToBus).setBackgroundResource(R.drawable.arrow_left_active)
-        else view.findViewById<View>(R.id.arrowFromIRToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+    override fun arrowIr(ingoing : Boolean) {
+        if (ingoing) view.findViewById<View>(R.id.arrowFromIRToBus).setBackgroundResource(R.drawable.arrow_right_active)
+        else view.findViewById<View>(R.id.arrowFromIRToBus).setBackgroundResource(R.drawable.arrow_left_active)
     }
 
-    override fun arrowIar(activate: Boolean, ingoing: Boolean) {
-        if (activate && ingoing) view.findViewById<View>(R.id.arrowFromIARToBus).setBackgroundResource(R.drawable.arrow_right_active)
-        else if (activate && !ingoing) view.findViewById<View>(R.id.arrowFromIARToBus).setBackgroundResource(R.drawable.arrow_left_active)
-        else view.findViewById<View>(R.id.arrowFromIARToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+    override fun arrowIar(ingoing: Boolean) {
+        if (ingoing) view.findViewById<View>(R.id.arrowFromIARToBus).setBackgroundResource(R.drawable.arrow_right_active)
+        else view.findViewById<View>(R.id.arrowFromIARToBus).setBackgroundResource(R.drawable.arrow_left_active)
     }
 
-    override fun arrowAcc(activate: Boolean, ingoing: Boolean) {
-        if (activate && ingoing) view.findViewById<View>(R.id.arrowFromACCToBus).setBackgroundResource(R.drawable.arrow_left_active)
-        else if (activate && !ingoing) view.findViewById<View>(R.id.arrowFromACCToBus).setBackgroundResource(R.drawable.arrow_right_active)
-        else view.findViewById<View>(R.id.arrowFromACCToBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+    override fun arrowAcc(ingoing: Boolean) {
+        if (ingoing) view.findViewById<View>(R.id.arrowFromACCToBus).setBackgroundResource(R.drawable.arrow_left_active)
+        else view.findViewById<View>(R.id.arrowFromACCToBus).setBackgroundResource(R.drawable.arrow_right_active)
     }
 
-    override fun arrowOne(activate: Boolean) {
-        if (activate) view.findViewById<View>(R.id.arrowFromONEToBus).setBackgroundResource(R.drawable.arrow_right_active)
-        else view.findViewById<View>(R.id.arrowFromONEToBus).setBackgroundResource(R.drawable.arrow_right)
+    override fun arrowOne() {
+        view.findViewById<View>(R.id.arrowFromONEToBus).setBackgroundResource(R.drawable.arrow_right_active)
     }
 
-    override fun arrowX(activate: Boolean) {
-        if (activate) view.findViewById<View>(R.id.arrowFromXToBus).setBackgroundResource(R.drawable.arrow_left_active)
-        else view.findViewById<View>(R.id.arrowFromXToBus).setBackgroundResource(R.drawable.arrow_left)
+    override fun arrowX() {
+        view.findViewById<View>(R.id.arrowFromXToBus).setBackgroundResource(R.drawable.arrow_left_active)
     }
 
-    override fun arrowY(activate: Boolean) {
-        if (activate) view.findViewById<View>(R.id.arrowFromYToBus).setBackgroundResource(R.drawable.arrow_left_active)
-        else view.findViewById<View>(R.id.arrowFromYToBus).setBackgroundResource(R.drawable.arrow_left)
+    override fun arrowY() {
+        view.findViewById<View>(R.id.arrowFromYToBus).setBackgroundResource(R.drawable.arrow_left_active)
     }
 
-    override fun arrowZ(activate: Boolean) {
-        if (activate) view.findViewById<View>(R.id.arrowFromZToBus).setBackgroundResource(R.drawable.arrow_right_active)
-        else view.findViewById<View>(R.id.arrowFromZToBus).setBackgroundResource(R.drawable.arrow_right)
+    override fun arrowZ() {
+        view.findViewById<View>(R.id.arrowFromZToBus).setBackgroundResource(R.drawable.arrow_right_active)
     }
 
-    override fun arrowsSarMem(activate: Boolean) {
-        if (activate){
-            view.findViewById<View>(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.arrow_right_active)
-            view.findViewById<View>(R.id.arrowFromSARToMemory).setBackgroundResource(R.drawable.arrow_up_active)
-            view.findViewById<View>(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down_active)
-        }
-        else{
-            view.findViewById<View>(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.arrow_right)
-            view.findViewById<View>(R.id.arrowFromSARToMemory).setBackgroundResource(R.drawable.arrow_up)
-            view.findViewById<View>(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down)
-        }
+    override fun arrowsSarMem() {
+        view.findViewById<View>(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.arrow_right_active)
+        view.findViewById<View>(R.id.arrowFromSARToMemory).setBackgroundResource(R.drawable.arrow_up_active)
+        view.findViewById<View>(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down_active)
     }
 
-    override fun arrowsSarIO(activate: Boolean){
-        if (activate){
-            view.findViewById<View>(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.arrow_right_active)
-            view.findViewById<View>(R.id.arrowFromSARToIOBus).setBackgroundResource(R.drawable.arrow_down_active)
-            view.findViewById<View>(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down_active)
-        }
-        else{
-            view.findViewById<View>(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.arrow_right)
-            view.findViewById<View>(R.id.arrowFromSARToIOBus).setBackgroundResource(R.drawable.arrow_down)
-            view.findViewById<View>(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down)
-        }
+    override fun arrowsSarIO(){
+        view.findViewById<View>(R.id.arrowFromSARToCenterBus).setBackgroundResource(R.drawable.arrow_right_active)
+        view.findViewById<View>(R.id.arrowFromSARToIOBus).setBackgroundResource(R.drawable.arrow_down_active)
+        view.findViewById<View>(R.id.arrowFromSARToIOControler).setBackgroundResource(R.drawable.arrow_down_active)
+
     }
 
-    override fun arrowSirToMemory(activate: Boolean) {
-        if (activate) view.findViewById<View>(R.id.arrowFromSIRToMemory).setBackgroundResource(R.drawable.arrow_down_active)
-        else view.findViewById<View>(R.id.arrowFromSIRToMemory).setBackgroundResource(R.drawable.arrow_down)
+    override fun arrowSirToMemory() {
+        view.findViewById<View>(R.id.arrowFromSIRToMemory).setBackgroundResource(R.drawable.arrow_down_active)
     }
 
-    override fun arrowSirToBus(activate: Boolean, ingoing: Boolean) {
-        if (activate && ingoing) view.findViewById<View>(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.arrow_right_active)
-        else if (activate && !ingoing) view.findViewById<View>(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.arrow_left_active)
-        else view.findViewById<View>(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.left_and_right_arrow)
+    override fun arrowSirToBus(ingoing: Boolean) {
+        if (ingoing) view.findViewById<View>(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.arrow_right_active)
+        else view.findViewById<View>(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.arrow_left_active)
     }
 
     override fun ioRead() {
