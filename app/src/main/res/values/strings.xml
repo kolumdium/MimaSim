@@ -3,6 +3,26 @@
 
     <string name="allowedHexSymbols">0123456789abcdefABCDEF</string>
 
+    <string name="close">Schließen</string>
+    <string name="clearMima">Mima leeren</string>
+    <string name="clearInstructions">Instruktionen leeren</string>
+    <string name="saveToFile">Datei speichern</string>
+    <string name="loadFromFile">Datei laden</string>
+    <string name="previewInstruction">Instruktions Manager</string>
+    <string name="previewOptions">Einstellungen:</string>
+
+    <string name="startButton">Start</string>
+    <string name="stepButton">einf. Schritt</string>
+    <string name="stopButton">Stop</string>
+    <string name="saveButton">Speichern</string>
+    <string name="abortButton">Abbrechen</string>
+
+    <string name="optionDescription">Beschreibung:</string>
+    <string name="optionName">Name:</string>
+
+    <string name="ioExport">Ausgabe</string>
+    <string name="ioImport">Eingabe</string>
+
     <string name="registerONE">ONE</string>
     <string name="registerONEDescription">Has the constant Value 1</string>
     <string name="registerY">Y</string>
@@ -48,7 +68,7 @@
     <string name="ALU">ALU</string>
     <string name="ALUDescription">ALU</string>
 
-    <string name="Memory">Memory</string>
+    <string name="Memory">Speicher</string>
     <string name="MemoryDescription">Memory</string>
 
     <string name="MimaModul">Mima</string>

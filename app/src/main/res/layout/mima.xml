@@ -381,8 +381,10 @@
             android:layout_width="10dp"
             android:layout_height="0dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/IOControler"
+            app:layout_constraintStart_toStartOf="@+id/registerSAR"
             app:layout_constraintTop_toBottomOf="@+id/registerSAR" />
 
         <View
@@ -498,9 +500,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
+            android:layout_marginStart="16dp"
             android:text="0x00000000"
             app:layout_constraintBottom_toTopOf="@+id/IOControler"
-            app:layout_constraintStart_toStartOf="@+id/arrowFromSARToIOBus"
+            app:layout_constraintStart_toEndOf="@+id/arrowFromSIRToIOBus"
             app:layout_constraintTop_toBottomOf="@+id/registerSARLabel" />
 
         <TextView
@@ -541,7 +544,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Start"
+            android:text="@string/startButton"
             android:id="@+id/stepControlStartButton"
             style = "?android:attr/buttonBarButtonStyle"
             />
@@ -551,7 +554,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/stepControlStepButton"
-            android:text="Single Step"
+            android:text="@string/stepButton"
             style = "?android:attr/buttonBarButtonStyle"
             />
 
@@ -560,7 +563,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/stepControlStopButton"
-            android:text="Stop"
+            android:text="@string/stopButton"
             style = "?android:attr/buttonBarButtonStyle"
             />
     </LinearLayout>
@@ -581,7 +584,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="Ausgabe"
+        android:text="@string/ioExport"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/arrowFromIOToExport" />
 
@@ -590,7 +593,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:text="Eingabe:"
+        android:text="@string/ioImport"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/arrowFromIOToImport" />
 
