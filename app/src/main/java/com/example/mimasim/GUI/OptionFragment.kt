@@ -66,7 +66,7 @@ class OptionFragment : Fragment() {
         val contentView = view?.findViewById<EditText>(R.id.optionsElementContent)
 
         when (currentlyLoadedElement.name){
-            "ALU" , "I/O-Bus", "I/O-Control" , "Prozessorbus", "Mima", "Speicherwerk" , "Steuerwerk" , "Rechenwerk", "Counter", "Memory" -> {
+            "ALU" , "I/O-Bus", "I/O-Control" , "Prozessorbus", "Mima", "Speicherwerk" , "Steuerwerk" , "Rechenwerk", "Counter", "Speicher" -> {
                 contentView?.visibility = View.GONE
                 view?.findViewById<Button>(R.id.optionsSave)?.setOnClickListener{
                     optionCallback?.abortOptions()
