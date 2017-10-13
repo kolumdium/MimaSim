@@ -531,7 +531,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/memoryModul" />
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/StepControl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -539,36 +539,37 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteX="16dp"
-        style = "?android:attr/buttonBarStyle"
        >
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/startButton"
+        <android.support.design.widget.FloatingActionButton
             android:id="@+id/stepControlStartButton"
-            style = "?android:attr/buttonBarButtonStyle"
-            />
-
-        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="@string/startButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@android:drawable/ic_media_play" />
+
+        <android.support.design.widget.FloatingActionButton
             android:id="@+id/stepControlStepButton"
-            android:text="@string/stepButton"
-            style = "?android:attr/buttonBarButtonStyle"
-            />
-
-        <Button
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:text="@string/stepButton"
+            app:layout_constraintEnd_toStartOf="@+id/stepControlStopButton"
+            app:layout_constraintStart_toEndOf="@+id/stepControlStartButton"
+            app:srcCompat="@android:drawable/ic_media_next" />
+
+        <android.support.design.widget.FloatingActionButton
             android:id="@+id/stepControlStopButton"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:text="@string/stopButton"
-            style = "?android:attr/buttonBarButtonStyle"
-            />
-    </LinearLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@android:drawable/ic_media_pause" />
+    </android.support.constraint.ConstraintLayout>
 
     <SeekBar
         android:id="@+id/viewSpeed"

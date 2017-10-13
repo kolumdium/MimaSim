@@ -1,121 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_weight="1"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/optionsOptionLabel"
+    <CheckBox
+        android:id="@+id/FillZerosCheck"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/primaryDarkColor"
-        android:text="@string/previewOptions"
-        android:textAlignment="center"
-        android:textColor="@color/primaryTextColor"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/optionsElementName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Element"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/optionsElementNameLabel"
-        android:textColor="@color/black"
-        />
-
-    <TextView
-        android:id="@+id/optionsElementNameLabel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/primaryColor"
-        android:textColor="@color/primaryTextColor"
-        android:text="@string/optionName"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/optionsOptionLabel" />
-
-
-    <TextView
-        android:id="@+id/optionsDescriptionLabel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/primaryColor"
-        android:text="@string/optionDescription"
-        android:textAlignment="center"
-        android:textColor="@color/primaryTextColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/optionsElementName" />
-
-    <TextView
-        android:id="@+id/optionsDescription"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/optionsElementContent"
+        android:text="@string/optionsFillZero"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/optionsDescriptionLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/informationLabel" />
 
+    <CheckBox
+        android:id="@+id/invertViewsCheck"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/optionsSwitchViews"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/FillZerosCheck" />
 
-    <EditText
-        android:id="@+id/optionsElementContent"
+    <TextView
+        android:id="@+id/informationLabel"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/primaryDarkColor"
+        android:text="@string/Options"
+        android:textAlignment="center"
+        android:textColor="@color/primaryTextColor"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <Button
+        android:id="@+id/optionsSaveButton"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:singleLine="true"
-        android:maxLength="10"
-        android:text="0"
-        android:digits="@string/allowedHexSymbols"
-        app:layout_constraintBottom_toTopOf="@+id/optionsSave"
+        android:text="@string/saveButton"
+        android:textColor="@color/primaryTextColor"
+        android:background="@color/primaryLightColor"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/optionsSave"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/saveButton"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/optionsAbort"
-        tools:layout_editor_absoluteX="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:background="@color/primaryLightColor"
-        android:textColor="@color/primaryTextColor" />
-
-    <Button
-        android:id="@+id/optionsAbort"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/abortButton"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@color/primaryLightColor"
-        android:textColor="@color/primaryTextColor"/>
 </android.support.constraint.ConstraintLayout>

@@ -9,7 +9,7 @@
     <string name="saveToFile">Datei speichern</string>
     <string name="loadFromFile">Datei laden</string>
     <string name="previewInstruction">Instruktions Manager</string>
-    <string name="previewOptions">Einstellungen:</string>
+    <string name="previewInformation">Informationen:</string>
 
     <string name="startButton">Start</string>
     <string name="stepButton">einf. Schritt</string>
@@ -17,8 +17,14 @@
     <string name="saveButton">Speichern</string>
     <string name="abortButton">Abbrechen</string>
 
-    <string name="optionDescription">Beschreibung:</string>
-    <string name="optionName">Name:</string>
+    <string name="informationDescription">Beschreibung:</string>
+    <string name="informationName">Name des Elements:</string>
+    <string name="informationHowToUse">Nutzungsinformationen</string>
+
+    <string name="Options">Einstellungen</string>
+    <string name="optionsSwitchViews">Seite der Informationen/Instruktionen tauschen</string>
+    <string name="optionsFillZero">Register immer auf der Selben Länge</string>
+
 
     <string name="ioExport">Ausgabe</string>
     <string name="ioImport">Eingabe</string>

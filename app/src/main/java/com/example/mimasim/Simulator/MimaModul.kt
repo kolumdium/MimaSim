@@ -1,14 +1,10 @@
 package com.example.mimasim.Simulator
 
 import android.content.Context
-import android.provider.Contacts
 import android.util.Log
 import com.example.mimasim.GUI.InstructionFragment
 import com.example.mimasim.GUI.MimaFragment
-import com.example.mimasim.GUI.OptionFragment
-import com.example.mimasim.MainActivity
 import com.example.mimasim.R
-import java.util.*
 import kotlin.collections.ArrayList
 
 /**
@@ -176,9 +172,6 @@ class MimaModul(name: String, description : String, var context: Context, val mi
                 uiTrigger?.arrowIr(true)
                 uiTrigger?.mem("")
                 uiTrigger?.arrowSirToBus( false)
-            }
-            5 -> {
-                stepInstruction(currentInstruction)
             }
             11 -> {
                 stepInstruction(currentInstruction)

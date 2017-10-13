@@ -22,34 +22,39 @@ import com.example.mimasim.Simulator.Register
  * Created by Martin on 03.09.2017.
  */
 
-class OptionFragment : Fragment() {
+class InformationFragment : Fragment() {
 
     var _currentlyLoadedElement = Element("", "")
     var _hasContent = false
 
-    var optionCallback : optionSaveButtonClickedCallback? = null
+    var informationCallback : informationSaveButtonClickedCallback? = null
 
-    interface optionSaveButtonClickedCallback{
+    interface informationSaveButtonClickedCallback{
         fun updateMima()
-        fun abortOptions()
+        fun abortInformations()
+        fun openOptionsClicked()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.options, container , false)
+        return inflater.inflate(R.layout.information, container , false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 
-        val abortButton = view?.findViewById<Button>(R.id.optionsAbort)
+        val abortButton = view?.findViewById<Button>(R.id.informationAbort)
         abortButton?.setOnClickListener{
             /*  When Abort Button was Clicked Restore the View to it's original State*/
-            val contentView = view.findViewById<EditText>(R.id.optionsElementContent)
+            val contentView = view.findViewById<EditText>(R.id.informationElementContent)
             contentView.visibility = View.VISIBLE
             if (_hasContent)
                 contentView.setText((_currentlyLoadedElement as Register).Content.toString(), TextView.BufferType.EDITABLE)
             else
                 contentView.text.clear()
-            optionCallback?.abortOptions()
+            informationCallback?.abortInformations()
+        }
+
+        view?.findViewById<Button>(R.id.openOptionsButton)?.setOnClickListener{
+            informationCallback?.openOptionsClicked()
         }
 
     }
@@ -57,19 +62,19 @@ class OptionFragment : Fragment() {
     fun updateView(currentlyLoadedElement: Element){
         _currentlyLoadedElement = currentlyLoadedElement
 
-        val nameView = view?.findViewById<TextView>(R.id.optionsElementName)
+        val nameView = view?.findViewById<TextView>(R.id.informationElementName)
         nameView?.text = currentlyLoadedElement.name
 
-        val descriptionView = view?.findViewById<TextView>(R.id.optionsDescription)
+        val descriptionView = view?.findViewById<TextView>(R.id.informationDescription)
         descriptionView?.text = currentlyLoadedElement.description
 
-        val contentView = view?.findViewById<EditText>(R.id.optionsElementContent)
+        val contentView = view?.findViewById<EditText>(R.id.informationElementContent)
 
         when (currentlyLoadedElement.name){
             "ALU" , "I/O-Bus", "I/O-Control" , "Prozessorbus", "Mima", "Speicherwerk" , "Steuerwerk" , "Rechenwerk", "Counter", "Speicher" -> {
                 contentView?.visibility = View.GONE
-                view?.findViewById<Button>(R.id.optionsSave)?.setOnClickListener{
-                    optionCallback?.abortOptions()
+                view?.findViewById<Button>(R.id.informationSave)?.setOnClickListener{
+                    informationCallback?.abortInformations()
                 }
             }
             else -> {
@@ -78,12 +83,12 @@ class OptionFragment : Fragment() {
                 contentView?.setText( String.format(Integer.toHexString((currentlyLoadedElement as Register).Content)) , TextView.BufferType.EDITABLE)
                 _hasContent = true
 
-                view?.findViewById<Button>(R.id.optionsSave)?.setOnClickListener{
+                view?.findViewById<Button>(R.id.informationSave)?.setOnClickListener{
                     val inputString = contentView?.text.toString()
 
                     //TODO this should go into an callback and then get passed to the modul. though this works too it is not as modular
                     (currentlyLoadedElement as Register).Content = Integer.decode( "0x" + inputString )
-                    optionCallback?.updateMima()
+                    informationCallback?.updateMima()
                     contentView?.visibility = View.VISIBLE
                 }
             }
@@ -93,9 +98,9 @@ class OptionFragment : Fragment() {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         try {
-            optionCallback = context as optionSaveButtonClickedCallback
+            informationCallback = context as informationSaveButtonClickedCallback
         } catch (e : ClassCastException){
-            throw ClassCastException(activity.toString() + " must implementoptionSaveButtonClickedCallback")
+            throw ClassCastException(activity.toString() + " must implementinformationSaveButtonClickedCallback")
         }
     }
 

@@ -15,7 +15,7 @@
         android:layout_marginTop="0dp"
         android:gravity="center_vertical|center_horizontal"
         android:padding="4dip"
-        android:text="@string/previewOptions"
+        android:text="@string/previewInformation"
         android:textColor="@color/primaryTextColor"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"

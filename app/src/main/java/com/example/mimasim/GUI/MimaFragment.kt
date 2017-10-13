@@ -3,6 +3,7 @@ package com.example.mimasim.GUI
 import android.app.Fragment
 import android.content.Context
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -27,7 +28,7 @@ import org.w3c.dom.Text
  */
 class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTrigger{
 
-    var currentlyLoadedElement = Element(" ", "Long Click an Element to see the Options for it")
+    var currentlyLoadedElement = Element(" ", "Long Click an Element to see the Informations for it")
     var mCallback : MimaFragmentCallback? = null
     private val clickableElementsMap = mutableMapOf<Int, Element>()
     private val registerMap = mutableMapOf<Int, Register>()
@@ -119,14 +120,17 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
             }
         }
 
-        val startButton = view?.findViewById<Button>(R.id.stepControlStartButton)
-        val stopButton = view?.findViewById<Button>(R.id.stepControlStopButton)
-        val stepButton = view?.findViewById<Button>(R.id.stepControlStepButton)
+        val startButton = view?.findViewById<FloatingActionButton>(R.id.stepControlStartButton)
+        val stopButton = view?.findViewById<FloatingActionButton>(R.id.stepControlStopButton)
+        val stepButton = view?.findViewById<FloatingActionButton>(R.id.stepControlStepButton)
 
         startButton?.setOnClickListener{
             mCallback?.startButtonPressed()
             stepButton?.isClickable = false
+            stepButton?.visibility = View.INVISIBLE
             startButton?.isClickable = false
+            startButton?.visibility = View.INVISIBLE
+
         }
         stepButton?.setOnClickListener{
             mCallback?.stepButtonPressed()
@@ -134,6 +138,8 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
         stopButton?.setOnClickListener{
             stepButton?.isClickable = true
             startButton?.isClickable = true
+            startButton?.visibility = View.VISIBLE
+            stepButton?.visibility = View.VISIBLE
             mCallback?.stopButtonPressed()
         }
 
@@ -143,7 +149,7 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
         val seekBar = view?.findViewById<SeekBar>(R.id.viewSpeed)
 
         seekBar?.max = 1000
-        seekBar?.progress = 1
+        seekBar?.progress = 500
         seekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
 
@@ -175,10 +181,10 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
                 else -> {
                     val someTextView = view?.findViewById<TextView>(key)
                     var fillZeros = ""
-                    for ( i in 0.. (5 - Integer.toHexString(value.Content).length)){
+                    for ( i in 0.. (7 - Integer.toHexString(value.Content).length)){
                         fillZeros += "0"
                     }
-                    someTextView?.text = String.format("0x" + fillZeros + Integer.toHexString(value.Content))
+                    someTextView?.text = String.format(fillZeros + Integer.toHexString(value.Content))
                     someTextView?.bringToFront()
                     view.findViewById<View>(R.id.aluText).bringToFront()
                }
