@@ -21,7 +21,14 @@ import android.widget.Toast
 /*TODO: Credits for the Images:
 * left-and-right-arrow -> <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>*/
 
-class MainActivity : AppCompatActivity(), MimaFragment.MimaFragmentCallback, InstructionFragment.InstructionButtonClickedCallback , InformationFragment.informationSaveButtonClickedCallback, InformationPreviewFragment.InformationPreviewCallback, InstructionPreviewFragment.InstructionPreviewCallback, OptionsFragment.OptionsCallback{
+class MainActivity :
+        AppCompatActivity(),
+        MimaFragment.MimaFragmentCallback,
+        InstructionFragment.InstructionButtonClickedCallback ,
+        InformationFragment.InformationCallback,
+        InformationPreviewFragment.InformationPreviewCallback,
+        InstructionPreviewFragment.InstructionPreviewCallback,
+        OptionsFragment.OptionsCallback{
 
     var mimaFragment = MimaFragment()
     var informationFragment = InformationFragment()
@@ -41,7 +48,9 @@ class MainActivity : AppCompatActivity(), MimaFragment.MimaFragmentCallback, Ins
     var rightPreview : Fragment? = null
 
     var speed : Long = 0
-    var minSpeed : Long = 1000
+
+    var optionState = OptionsState()
+
     var timerHandler : Handler? = null
     var timerRunnable = object : Runnable{
         override fun run() {
@@ -62,16 +71,25 @@ class MainActivity : AppCompatActivity(), MimaFragment.MimaFragmentCallback, Ins
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        leftFragment = instructionFragment
-        rightFragment = informationFragment
-        rightPreview = informationPreviewFragment
-        leftPreview = instructionPreviewFragment
+
+        if (optionState.invertViews){
+            leftFragment = instructionFragment
+            rightFragment = informationFragment
+            rightPreview = informationPreviewFragment
+            leftPreview = instructionPreviewFragment
+        }
+        else {
+            rightFragment = instructionFragment
+            leftFragment = informationFragment
+            leftPreview = informationPreviewFragment
+            rightPreview = instructionPreviewFragment
+        }
+
 
         timerHandler = Handler()
 
         /*Get an instance of the simulator*/
         mimaModul = MimaModul(resources.getString(R.string.MimaModul), resources.getString(R.string.MimaModulDescription), this, mimaFragment, instructionFragment)
-        init()
     }
 
     override fun onBackPressed() {
@@ -81,6 +99,7 @@ class MainActivity : AppCompatActivity(), MimaFragment.MimaFragmentCallback, Ins
             MainActivity.Extended.NORMAL -> {}
             MainActivity.Extended.RIGHT, MainActivity.Extended.LEFT -> extendNormal()
             MainActivity.Extended.RIGHTFULL -> {extendRight()}
+            MainActivity.Extended.Options -> {}
         }
     }
 
@@ -91,20 +110,16 @@ class MainActivity : AppCompatActivity(), MimaFragment.MimaFragmentCallback, Ins
 
     fun init(){
 
-        leftView = this.findViewById(R.id.leftView)
-        rightView = this.findViewById(R.id.rightView)
-        centerView = this.findViewById(R.id.centerView)
-
         /* Add all Fragments show/hide to default*/
         val transaction = fragmentManager.beginTransaction()
-        transaction.add(R.id.leftView, instructionPreviewFragment , "FragmentTagInstructionPreview")
-        transaction.add(R.id.leftView, instructionFragment, "FragmentTagInstruction")
+        transaction.add(R.id.leftView, leftPreview , "FragmentTagInstructionPreview")
+        transaction.add(R.id.leftView, leftFragment, "FragmentTagInstruction")
         transaction.add(R.id.centerView, mimaFragment, "FragmentTagMima")
-        transaction.add(R.id.rightView, informationPreviewFragment, "FragmentTagInformationPreview")
-        transaction.add(R.id.rightView, informationFragment, "FragmentTagInformation")
+        transaction.add(R.id.rightView, rightPreview, "FragmentTagInformationPreview")
+        transaction.add(R.id.rightView, rightFragment, "FragmentTagInformation")
         transaction.add(R.id.centerView, optionsFragment, "FragmentTagOptions")
-        transaction.hide(informationFragment)
-        transaction.hide(instructionFragment)
+        transaction.hide(rightFragment)
+        transaction.hide(leftFragment)
         transaction.hide(optionsFragment)
         transaction.commit()
 
@@ -284,8 +299,8 @@ class MainActivity : AppCompatActivity(), MimaFragment.MimaFragmentCallback, Ins
     * OptionsCallback
     * */
 
-    override fun saveOptions() {
-        //TODO Save Options
+    override fun saveOptions(optionState: OptionsState) {
+        this.optionState = optionState
         extendNormal()
     }
 
@@ -339,10 +354,12 @@ class MainActivity : AppCompatActivity(), MimaFragment.MimaFragmentCallback, Ins
 
     override fun speedChanged(speed: Long) {
         /*speed from 0 to 1000*/
-        if (speed >= 0.toLong())
-            this.speed = minSpeed - speed
-        else
-            this.speed = 0.toLong()
+        if (optionState.invertSpeed){
+            if (speed >= 0.toLong())
+                this.speed = optionState.maxDelay - speed
+            else
+                this.speed = 0.toLong()
+        }
         mimaModul?.speedChanged(this.speed)
     }
 

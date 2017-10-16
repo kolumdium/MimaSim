@@ -27,9 +27,9 @@ class InformationFragment : Fragment() {
     var _currentlyLoadedElement = Element("", "")
     var _hasContent = false
 
-    var informationCallback : informationSaveButtonClickedCallback? = null
+    var informationCallback : InformationCallback? = null
 
-    interface informationSaveButtonClickedCallback{
+    interface InformationCallback{
         fun updateMima()
         fun abortInformations()
         fun openOptionsClicked()
@@ -71,7 +71,16 @@ class InformationFragment : Fragment() {
         val contentView = view?.findViewById<EditText>(R.id.informationElementContent)
 
         when (currentlyLoadedElement.name){
-            "ALU" , "I/O-Bus", "I/O-Control" , "Prozessorbus", "Mima", "Speicherwerk" , "Steuerwerk" , "Rechenwerk", "Counter", "Speicher" -> {
+            resources.getString(R.string.ALU),
+            resources.getString(R.string.IOBus),
+            resources.getString(R.string.IOControl),
+            resources.getString(R.string.centerBus),
+            resources.getString(R.string.MimaModul),
+            resources.getString(R.string.calculatorModul),
+            resources.getString(R.string.controlModul),
+            resources.getString(R.string.memoryModul),
+            resources.getString(R.string.registerCounter),
+            resources.getString(R.string.Memory) -> {
                 contentView?.visibility = View.GONE
                 view?.findViewById<Button>(R.id.informationSave)?.setOnClickListener{
                     informationCallback?.abortInformations()
@@ -87,7 +96,7 @@ class InformationFragment : Fragment() {
                     val inputString = contentView?.text.toString()
 
                     //TODO this should go into an callback and then get passed to the modul. though this works too it is not as modular
-                    (currentlyLoadedElement as Register).Content = Integer.decode( "0x" + inputString )
+                    (currentlyLoadedElement as Register).setContent( inputString )
                     informationCallback?.updateMima()
                     contentView?.visibility = View.VISIBLE
                 }
@@ -98,9 +107,9 @@ class InformationFragment : Fragment() {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         try {
-            informationCallback = context as informationSaveButtonClickedCallback
+            informationCallback = context as InformationCallback
         } catch (e : ClassCastException){
-            throw ClassCastException(activity.toString() + " must implementinformationSaveButtonClickedCallback")
+            throw ClassCastException(activity.toString() + " must implement InformationCallback")
         }
     }
 

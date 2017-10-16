@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import com.example.mimasim.R
 
 /**
@@ -17,7 +18,7 @@ class OptionsFragment : Fragment(){
     var optionsCallback : OptionsCallback? = null
 
     interface OptionsCallback{
-        fun saveOptions()
+        fun saveOptions(optionState: OptionsState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -26,7 +27,13 @@ class OptionsFragment : Fragment(){
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         view?.findViewById<Button>(R.id.optionsSaveButton)?.setOnClickListener{
-            optionsCallback?.saveOptions()
+            //TODO read all the options stuff and pu into the Optionstate
+            val currentOptionState = OptionsState()
+
+            currentOptionState.fillZeroes = view?.findViewById<CheckBox>(R.id.FillZerosCheck).isChecked
+            currentOptionState.invertViews = view?.findViewById<CheckBox>(R.id.invertViewsCheck).isChecked
+
+            optionsCallback?.saveOptions(currentOptionState)
         }
     }
 
