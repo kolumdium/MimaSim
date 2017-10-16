@@ -30,6 +30,8 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
 
     var currentlyLoadedElement = Element(" ", "Long Click an Element to see the Informations for it")
     var mCallback : MimaFragmentCallback? = null
+    var optionsState = OptionsState()
+
     private val clickableElementsMap = mutableMapOf<Int, Element>()
     private val registerMap = mutableMapOf<Int, Register>()
 
@@ -60,6 +62,7 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         val main = activity as MainActivity
 
+        getBundle()
         getRegister(main)
         getClickableElements(main)
         setBackgrounds()
@@ -69,6 +72,12 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
         updateRegisters()
         drawAlu()
         prepareIO()
+    }
+
+    private fun getBundle(){
+        val bundle = this.arguments
+        optionsState.fillZeroes = bundle.getBoolean("fillZeroes", true)
+        optionsState.maxDelay = bundle.getInt("maxDelay", 1000)
     }
 
     private fun getRegister(mainActivity: MainActivity){
@@ -128,8 +137,8 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
             mCallback?.startButtonPressed()
             stepButton?.isClickable = false
             stepButton?.visibility = View.INVISIBLE
-            startButton?.isClickable = false
-            startButton?.visibility = View.INVISIBLE
+            startButton.isClickable = false
+            startButton.visibility = View.INVISIBLE
 
         }
         stepButton?.setOnClickListener{
@@ -148,9 +157,10 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
     private  fun initSeekBar(){
         val seekBar = view?.findViewById<SeekBar>(R.id.viewSpeed)
 
-        seekBar?.max = 1000
-        seekBar?.progress = 500
-        seekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        seekBar?.max = optionsState.maxDelay
+        seekBar?.progress = seekBar?.max!!.div(2)
+        mCallback?.speedChanged( seekBar.progress.toLong())
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
 
             }
@@ -181,9 +191,10 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
                 else -> {
                     val someTextView = view?.findViewById<TextView>(key)
                     var fillZeros = ""
-                    for ( i in 0.. (7 - Integer.toHexString(value.Content).length)){
-                        fillZeros += "0"
-                    }
+                    if (optionsState.fillZeroes)
+                        for ( i in 0.. (7 - Integer.toHexString(value.Content).length)){
+                            fillZeros += "0"
+                        }
                     someTextView?.text = String.format(fillZeros + Integer.toHexString(value.Content))
                     someTextView?.bringToFront()
                     view.findViewById<View>(R.id.aluText).bringToFront()
@@ -225,16 +236,26 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
         })
 
         val exportView = view.findViewById<TextView>(R.id.ExportView)
-        exportView.text = ""
+        exportView.text = " "
     }
 
     fun hideInput(){
         val importView = view.findViewById<EditText>(R.id.ImportView)
         importView.isClickable = false
-        importView.setText("")
+        importView.setText(" ")
         importView.visibility = View.INVISIBLE
 
     }
+
+    fun mimaStoped(){
+        val startButton = view?.findViewById<FloatingActionButton>(R.id.stepControlStartButton)
+        startButton?.isClickable
+        startButton?.visibility = View.VISIBLE
+        val stepButton = view?.findViewById<FloatingActionButton>(R.id.stepControlStartButton)
+        stepButton?.isClickable
+        stepButton?.visibility = View.VISIBLE
+    }
+
 
     override fun readExternal() {
         mCallback?.readExternal()

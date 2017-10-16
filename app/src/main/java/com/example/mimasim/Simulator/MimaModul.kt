@@ -188,21 +188,21 @@ class MimaModul(name: String, description : String, var context: Context, val mi
 
     fun stepInstruction(cInstr : Instruction){
         //val address = cInstr.opCode.shl(28) xor controlModul.IR.Content
-        when (cInstr.opCodeString){
-            "ADD" -> common("ADD")
-            "AND" -> common("AND")
-            "OR" -> common("OR")
-            "XOR" -> common("XOR")
-            "LDV" -> LDV()
-            "STV" -> STV()
-            "LDC" -> LDC()
-            "JMP" -> JMP()
-            "JMN" -> JMN()
-            "EQL" -> common("EQL")
-            "RRN" -> RRN()
-            "HLT" -> HLT()
-            "NOT" -> NOT()
-            "RAR" -> RAR()
+        when (cInstr.opCode){
+            0 -> common("ADD")
+            1 -> common("AND")
+            2 -> common("OR")
+            3 -> common("XOR")
+            4 -> LDV()
+            5 -> STV()
+            6 -> LDC()
+            7 -> JMP()
+            8 -> JMN()
+            9 -> common("EQL")
+            10 -> RRN()
+            11 -> HLT()
+            12 -> NOT()
+            13 -> RAR()
         }
     }
 
@@ -440,6 +440,8 @@ class MimaModul(name: String, description : String, var context: Context, val mi
                 uiTrigger?.centerBus()
                 uiTrigger?.arrowIr(false)
                 uiTrigger?.arrowAcc(true)
+
+                controlModul.Counter.Content++
             }
             11 -> {
                 controlModul.Counter.Content = 0

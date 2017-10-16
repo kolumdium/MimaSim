@@ -51,7 +51,7 @@ class MemoryModul(name: String, description : String, context: Context, val mima
     }
 
     private fun loadFromMemory(){
-        if (SIR.Content >= 0)
+        //if (SIR.Content >= 0)
         SIR.Content = memory.getInstruction(SAR.Content)
     }
 

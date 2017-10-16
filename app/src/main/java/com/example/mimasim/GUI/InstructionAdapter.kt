@@ -24,8 +24,6 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
         val holder : ListItemHolder
         var row = convertView
 
-        var lastItemClickedPosition = 0
-
         val tmpInstruction = this.getItem(position)
         /*
         * View Holder Pattern for smoother Scrolling
@@ -85,7 +83,7 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
 
         holder.spinner?.setSelection(tmpInstruction.opCode)
 
-        holder.editText?.setOnFocusChangeListener{ view: View, b: Boolean ->
+        holder.editText?.setOnFocusChangeListener{ _: View, _: Boolean ->
             tmpInstruction.address = Integer.decode( "0x" + holder.editText?.text)
             saveInstructionCallback.saveInstruction(position, tmpInstruction)
             //saveInstructionCallback.lastSelectedItem(position)

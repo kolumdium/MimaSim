@@ -71,7 +71,7 @@
     <TextView
         android:id="@+id/informationElementNameLabel"
         android:layout_width="0dp"
-        android:layout_height="16dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@color/primaryColor"
         android:text="@string/informationName"

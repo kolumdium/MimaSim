@@ -1,5 +1,6 @@
 package com.example.mimasim.GUI
 
+import android.app.AlertDialog
 import android.app.Fragment
 import android.content.Context
 import android.os.Bundle
@@ -8,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.EditText
+import android.widget.Switch
 import com.example.mimasim.R
 
 /**
@@ -16,24 +19,38 @@ import com.example.mimasim.R
 class OptionsFragment : Fragment(){
 
     var optionsCallback : OptionsCallback? = null
+    val optionsState = OptionsState()
+
 
     interface OptionsCallback{
-        fun saveOptions(optionState: OptionsState)
+        fun saveOptionsCallback(optionState: OptionsState)
+        fun abortOptions()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val bundle = this.arguments
+
+        optionsState.fillZeroes = bundle.getBoolean("fillZeroes", true)
+        optionsState.invertViews = bundle.getBoolean("invertViews", true)
+        optionsState.invertSpeed = bundle.getBoolean("invertSpeed", true)
+        optionsState.maxDelay = bundle.getInt("maxDelay", 1000)
+
         return inflater.inflate(R.layout.options, container , false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        view?.findViewById<Switch>(R.id.FillZerosSwitch)?.isChecked = optionsState.fillZeroes
+        view?.findViewById<Switch>(R.id.invertViewsSwitch)?.isChecked = optionsState.invertViews
+        view?.findViewById<Switch>(R.id.invertSpeedSwitch)?.isChecked = optionsState.invertSpeed
+        view?.findViewById<EditText>(R.id.optionsMaxDelay)?.setText(optionsState.maxDelay.toString())
+
         view?.findViewById<Button>(R.id.optionsSaveButton)?.setOnClickListener{
-            //TODO read all the options stuff and pu into the Optionstate
-            val currentOptionState = OptionsState()
+            optionsState.fillZeroes = view.findViewById<Switch>(R.id.FillZerosSwitch).isChecked
+            optionsState.invertViews = view.findViewById<Switch>(R.id.invertViewsSwitch).isChecked
+            optionsState.invertSpeed = view.findViewById<Switch>(R.id.invertSpeedSwitch).isChecked
+            optionsState.maxDelay = view.findViewById<EditText>(R.id.optionsMaxDelay).text.toString().toInt()
 
-            currentOptionState.fillZeroes = view?.findViewById<CheckBox>(R.id.FillZerosCheck).isChecked
-            currentOptionState.invertViews = view?.findViewById<CheckBox>(R.id.invertViewsCheck).isChecked
-
-            optionsCallback?.saveOptions(currentOptionState)
+            optionsCallback?.saveOptionsCallback(optionsState)
         }
     }
 

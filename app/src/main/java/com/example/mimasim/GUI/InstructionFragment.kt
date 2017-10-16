@@ -15,20 +15,21 @@ import android.widget.TextView
 import com.example.mimasim.R
 import com.example.mimasim.Simulator.Instruction
 import com.example.mimasim.Simulator.MimaModul
-import org.w3c.dom.Text
 
 /**
  * Created by Martin on 03.09.2017.
  */
 class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapterCallback , MimaModul.InstructionTrigger{
-    var mCallback : InstructionButtonClickedCallback? = null
+    var mCallback : InstructionCallback? = null
     var instructionManager = InstructionManager()
     var lastSelectedItem : Int = 0
+
 
     var mInstructionAdapter : InstructionAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         instructionManager.loadDefaultInstructions()
+        mCallback?.saveInstructions(instructionManager.instructions)
         return inflater.inflate(R.layout.instruction_big, container , false)
     }
 
@@ -91,7 +92,7 @@ class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapte
         view?.findViewById<TextView>(R.id.instructionTextView)?.visibility = View.GONE
         view?.findViewById<ListView>(R.id.instructionListView)?.visibility = View.VISIBLE
         view?.findViewById<ScrollView>(R.id.scrollViewInstructions)?.visibility = View.GONE
-        view?.findViewById<ConstraintLayout>(R.id.instructionMangment)?.visibility = View.VISIBLE
+        view?.findViewById<ConstraintLayout>(R.id.instructionManagement)?.visibility = View.VISIBLE
         view?.findViewById<Button>(R.id.instructionsClearButton)?.visibility = View.VISIBLE
 
     }
@@ -102,7 +103,7 @@ class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapte
         val textView = view?.findViewById<TextView>(R.id.instructionTextView)
         view?.findViewById<ListView>(R.id.instructionListView)?.visibility = View.GONE
         view?.findViewById<ScrollView>(R.id.scrollViewInstructions)?.visibility = View.VISIBLE
-        view?.findViewById<ConstraintLayout>(R.id.instructionMangment)?.visibility = View.GONE
+        view?.findViewById<ConstraintLayout>(R.id.instructionManagement)?.visibility = View.GONE
         view?.findViewById<Button>(R.id.instructionsClearButton)?.visibility = View.GONE
 
 
@@ -130,7 +131,7 @@ class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapte
         mInstructionAdapter?.notifyDataSetChanged()
     }
 
-    interface InstructionButtonClickedCallback{
+    interface InstructionCallback {
         fun saveInstructions(currentInstructions : ArrayList<Instruction>)
         fun closeInstructions()
         fun clearMima()
@@ -139,9 +140,9 @@ class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapte
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         try {
-            mCallback = context as InstructionButtonClickedCallback
+            mCallback = context as InstructionCallback
         } catch (e : ClassCastException){
-            throw ClassCastException(activity.toString() + " must implement instructionButtonClickedCallback")
+            throw ClassCastException(activity.toString() + " must implement InstructionCallback")
         }
     }
 }

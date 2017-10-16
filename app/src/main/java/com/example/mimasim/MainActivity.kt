@@ -1,6 +1,8 @@
 package com.example.mimasim
 
+import android.app.AlertDialog
 import android.app.Fragment
+import android.content.DialogInterface
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -15,6 +17,9 @@ import com.example.mimasim.Simulator.Instruction
 import com.example.mimasim.Simulator.MimaModul
 import java.util.*
 import android.widget.Toast
+import android.os.Build
+
+
 
 
 
@@ -24,7 +29,7 @@ import android.widget.Toast
 class MainActivity :
         AppCompatActivity(),
         MimaFragment.MimaFragmentCallback,
-        InstructionFragment.InstructionButtonClickedCallback ,
+        InstructionFragment.InstructionCallback,
         InformationFragment.InformationCallback,
         InformationPreviewFragment.InformationPreviewCallback,
         InstructionPreviewFragment.InstructionPreviewCallback,
@@ -35,7 +40,6 @@ class MainActivity :
     var instructionFragment = InstructionFragment()
     var informationPreviewFragment = InformationPreviewFragment()
     var instructionPreviewFragment = InstructionPreviewFragment()
-    var optionsFragment = OptionsFragment()
     var mimaModul : MimaModul? = null
 
     var leftView : View? = null
@@ -70,26 +74,7 @@ class MainActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
-        if (optionState.invertViews){
-            leftFragment = instructionFragment
-            rightFragment = informationFragment
-            rightPreview = informationPreviewFragment
-            leftPreview = instructionPreviewFragment
-        }
-        else {
-            rightFragment = instructionFragment
-            leftFragment = informationFragment
-            leftPreview = informationPreviewFragment
-            rightPreview = instructionPreviewFragment
-        }
-
-
-        timerHandler = Handler()
-
-        /*Get an instance of the simulator*/
-        mimaModul = MimaModul(resources.getString(R.string.MimaModul), resources.getString(R.string.MimaModulDescription), this, mimaFragment, instructionFragment)
+        init()
     }
 
     override fun onBackPressed() {
@@ -110,6 +95,40 @@ class MainActivity :
 
     fun init(){
 
+        val optionsBundle = Bundle()
+        optionsBundle.putBoolean("fillZeroes", optionState.fillZeroes)
+        optionsBundle.putInt("maxDelay", optionState.maxDelay)
+        mimaFragment.arguments = optionsBundle
+
+        setViews()
+        timerHandler = Handler()
+        /*Get an instance of the simulator*/
+        mimaModul = MimaModul(resources.getString(R.string.MimaModul), resources.getString(R.string.MimaModulDescription), this, mimaFragment, instructionFragment)
+        setFragmnents()
+    }
+
+    fun setViews(){
+
+        if (optionState.invertViews){
+            rightFragment = instructionFragment
+            leftFragment = informationFragment
+            leftPreview = informationPreviewFragment
+            rightPreview = instructionPreviewFragment
+        }
+        else {
+            leftFragment = instructionFragment
+            rightFragment = informationFragment
+            rightPreview = informationPreviewFragment
+            leftPreview = instructionPreviewFragment
+
+        }
+    }
+
+    fun setFragmnents(){
+        centerView = findViewById(R.id.centerView)
+        rightView = findViewById(R.id.rightView)
+        leftView = findViewById(R.id.leftView)
+
         /* Add all Fragments show/hide to default*/
         val transaction = fragmentManager.beginTransaction()
         transaction.add(R.id.leftView, leftPreview , "FragmentTagInstructionPreview")
@@ -117,12 +136,33 @@ class MainActivity :
         transaction.add(R.id.centerView, mimaFragment, "FragmentTagMima")
         transaction.add(R.id.rightView, rightPreview, "FragmentTagInformationPreview")
         transaction.add(R.id.rightView, rightFragment, "FragmentTagInformation")
-        transaction.add(R.id.centerView, optionsFragment, "FragmentTagOptions")
         transaction.hide(rightFragment)
         transaction.hide(leftFragment)
-        transaction.hide(optionsFragment)
         transaction.commit()
+    }
 
+    fun delFragments(){
+        val transaction = fragmentManager.beginTransaction()
+        transaction.remove(mimaFragment)
+        transaction.remove(instructionFragment)
+        transaction.remove(informationFragment)
+        transaction.remove(instructionPreviewFragment)
+        transaction.remove(informationPreviewFragment)
+        transaction.commit()
+    }
+
+    fun reInitFragment(){
+        mimaFragment = MimaFragment()
+
+        val optionsBundle = Bundle()
+        optionsBundle.putBoolean("fillZeroes", optionState.fillZeroes)
+        optionsBundle.putInt("maxDelay", optionState.maxDelay)
+        mimaFragment.arguments = optionsBundle
+
+        instructionFragment = InstructionFragment()
+        instructionPreviewFragment = InstructionPreviewFragment()
+        informationFragment = InformationFragment()
+        informationPreviewFragment = InformationPreviewFragment()
     }
 
     fun setListener(){
@@ -138,6 +178,7 @@ class MainActivity :
                     MainActivity.Extended.LEFT -> extendFullscreen(leftFragment!!)
                     MainActivity.Extended.RIGHTFULL -> extendRight()
                     MainActivity.Extended.LEFTFULL -> Log.d("SWIPETAG", "I am Full extended")
+                    else -> {}
                 }
             }
             override fun onSwipeLeft() {
@@ -147,6 +188,7 @@ class MainActivity :
                     MainActivity.Extended.LEFT -> extendNormal()
                     MainActivity.Extended.RIGHTFULL -> Log.d("SWIPETAG", "I am Full extended")
                     MainActivity.Extended.LEFTFULL -> extendLeft()
+                    else -> {}
                 }
             }
         })
@@ -159,7 +201,6 @@ class MainActivity :
 
         transaction.hide(informationFragment)
         transaction.hide(instructionFragment)
-        transaction.hide(optionsFragment)
         transaction.show(instructionPreviewFragment)
         transaction.show(informationPreviewFragment)
         transaction.show(mimaFragment)
@@ -211,10 +252,9 @@ class MainActivity :
                 resize(1f, 0f, 0f)
                 extended = Extended.LEFTFULL
             }
-            optionsFragment-> {
+            else -> {
                 resize(0f,1f,0f)
                 extended = Extended.Options
-                transaction.show(optionsFragment)
             }
         }
 
@@ -250,12 +290,45 @@ class MainActivity :
         }
     }
 
+    fun openInstruction(){
+        if (instructionFragment == leftFragment) {
+            if (extended == Extended.NORMAL)
+                extendLeft()
+        } else {
+            if (extended == Extended.NORMAL)
+                extendRight()
+        }
+    }
+
     fun openOptions(){
+        stopMima()
+
+        val optionsFragment = OptionsFragment()
+        val optionsBundle = Bundle()
+        optionsBundle.putBoolean("fillZeroes", optionState.fillZeroes)
+        optionsBundle.putBoolean("invertViews", optionState.invertViews)
+        optionsBundle.putBoolean("invertSpeed", optionState.invertSpeed)
+        optionsBundle.putInt("maxDelay", optionState.maxDelay)
+        optionsFragment.arguments = optionsBundle
+
+        val transaction = fragmentManager.beginTransaction()
+        transaction.add(R.id.centerView, optionsFragment, "OptionsFragmentTag")
+        transaction.hide(mimaFragment)
+        transaction.commit()
+
         extendFullscreen(optionsFragment)
+    }
+
+    fun closeOptions(){
+        val transaction = fragmentManager.beginTransaction()
+        transaction.show(mimaFragment)
+        transaction.remove(fragmentManager.findFragmentByTag("OptionsFragmentTag"))
+        transaction.commit()
     }
 
     fun stopMima(){
         timerHandler?.removeCallbacks(timerRunnable)
+        mimaFragment.mimaStoped()
     }
 
     fun startMima(){
@@ -299,10 +372,42 @@ class MainActivity :
     * OptionsCallback
     * */
 
-    override fun saveOptions(optionState: OptionsState) {
+    override fun saveOptionsCallback(optionState: OptionsState) {
+        val dialogBuilder =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
+                } else {
+                    AlertDialog.Builder(this)
+                }
+        dialogBuilder.setTitle(resources.getString(R.string.optionSaveWarningTitle))
+        dialogBuilder.setMessage(resources.getString(R.string.optionSaveWarningMessage))
+        dialogBuilder.setPositiveButton(android.R.string.yes, object: DialogInterface.OnClickListener {
+            override fun onClick(dialog:DialogInterface, which:Int) {
+                saveOptions(optionState)
+            }
+        })
+        dialogBuilder.setNegativeButton(android.R.string.no) { dialog, _ -> dialog.cancel() }
+        dialogBuilder.setIcon(android.R.drawable.ic_dialog_alert)
+        dialogBuilder.show()
+    }
+
+    fun saveOptions(optionState: OptionsState){
         this.optionState = optionState
+        delFragments()
+        reInitFragment()
+        setViews()
+        setFragmnents()
+        closeOptions()
+        mimaModul = MimaModul(resources.getString(R.string.MimaModul), resources.getString(R.string.MimaModulDescription), this, mimaFragment, instructionFragment)
         extendNormal()
     }
+
+    override fun abortOptions(){
+        closeOptions()
+        extendNormal()
+    }
+
+
 
     /*
     * MimaFragmentCallbacks
@@ -353,12 +458,14 @@ class MainActivity :
     }
 
     override fun speedChanged(speed: Long) {
-        /*speed from 0 to 1000*/
+        /*speed from 0 to maxdelay*/
         if (optionState.invertSpeed){
             if (speed >= 0.toLong())
                 this.speed = optionState.maxDelay - speed
             else
                 this.speed = 0.toLong()
+        } else {
+          this.speed = speed
         }
         mimaModul?.speedChanged(this.speed)
     }
@@ -372,6 +479,6 @@ class MainActivity :
     }
 
     override fun instructionPreviewClicked() {
-        extendLeft()
+        openInstruction()
     }
 }

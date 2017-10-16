@@ -8,6 +8,7 @@ import com.example.mimasim.Simulator.Instruction
 class InstructionManager {
     var instructions = ArrayList<Instruction>()
     var currentlyLoadedInstruction = 0;
+    val opCodes = ArrayList<String>()
 
     fun getAsString() : ArrayList<String>{
         val string = ArrayList<String>()
@@ -17,9 +18,39 @@ class InstructionManager {
         return string
     }
 
+    init {
+        opCodes.add("ADD")
+        opCodes.add("AND")
+        opCodes.add("OR")
+        opCodes.add("XOR")
+        opCodes.add("LDV")
+        opCodes.add("STV")
+        opCodes.add("LDC")
+        opCodes.add("JMP")
+        opCodes.add("JMN")
+        opCodes.add("EQL")
+        opCodes.add("RRN")
+        opCodes.add("HLT")
+        opCodes.add("NOT")
+        opCodes.add("RAR")
+    }
+
     fun loadDefaultInstructions(){
         instructions.clear()
-        instructions.add(Instruction())
+        instructions.add(Instruction(0, opCodes[0]))
+        instructions.add(Instruction(1, opCodes[1], address = 0x0000c002))
+        instructions.add(Instruction(2, opCodes[2]))
+        instructions.add(Instruction(3, opCodes[3]))
+        instructions.add(Instruction(4, opCodes[4]))
+        instructions.add(Instruction(5, opCodes[5]))
+        instructions.add(Instruction(6, opCodes[6]))
+        instructions.add(Instruction(7, opCodes[7]))
+        instructions.add(Instruction(8, opCodes[8]))
+        instructions.add(Instruction(9, opCodes[9]))
+        instructions.add(Instruction(10, opCodes[10]))
+        instructions.add(Instruction(11, opCodes[11]))
+        instructions.add(Instruction(12, opCodes[12]))
+        instructions.add(Instruction(13, opCodes[13]))
     }
 
     fun getAsCharSequence() : CharSequence{

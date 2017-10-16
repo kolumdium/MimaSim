@@ -20,16 +20,18 @@ class ControlModul(name: String, description : String, var context: Context) : E
         val opCode = getOpCode()
         instr.opCode = opCode
         instr.opCodeString = OpCodes[opCode]
+        val tmpCode = instr.opCode.shl(28)
+        instr.address = IR.Content xor tmpCode
+
         return instr
     }
 
     fun getOpCode() : Int{
         val content = IR.Content
-
-        content.shr(28)
+        var shiftedContent = content.shr(28)
 
         for (index in OpCodes.indices)
-            if ((index xor content) == 0)
+            if ((index == shiftedContent))
                 return index
 
                /* The Mima does only use 14 Instruktions so we dont actually need to implement the extended version right?
