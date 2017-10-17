@@ -22,45 +22,28 @@
         app:layout_constraintTop_toBottomOf="@+id/openOptionsButton" />
 
     <Button
-        android:id="@+id/howToButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/primaryLightColor"
-        android:text="@string/informationHowToUse"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textSize="10sp"
-        android:textColor="@color/primaryTextColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
         android:id="@+id/openOptionsButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textSize="10sp"
         android:background="@color/primaryLightColor"
         android:text="@string/Options"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textColor="@color/primaryTextColor"
+        android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/howToButton" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/informationElementName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="Element"
+        android:text="@string/startElement"
         android:textAlignment="center"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
@@ -105,7 +88,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+        android:text="@string/startDescription"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/informationElementContent"
         app:layout_constraintEnd_toEndOf="parent"

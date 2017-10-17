@@ -3,6 +3,13 @@
 
     <string name="allowedHexSymbols">0123456789abcdefABCDEF</string>
 
+    <string name="startElement">Projekt MimaSim</string>
+    <string name="startDescription">Wenn sie lange auf Elemente der Mima drücken erscheinen hier Informationen über diese.\n
+                Mit dem wischen nach Rechts oder Links im freien Bereich können sie ebenso, wie durch (langes)klicken die einzelnen unter Menüs öffnen und schließen.
+    </string>
+    <string name="useInformationTitle">0123456789abcdefABCDEF</string>
+    <string name="useInformationMessage1">Dies ist eine App im Rahmen einer Bachelorarbeit der TU Freiberg.</string>
+
     <string name="close">Schließen</string>
     <string name="clearMima">Mima leeren</string>
     <string name="clearInstructions">Instruktionen leeren</string>

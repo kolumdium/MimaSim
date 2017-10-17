@@ -33,6 +33,7 @@ class InformationFragment : Fragment() {
         fun updateMima()
         fun abortInformations()
         fun openOptionsClicked()
+        fun extendInformations()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -41,15 +42,26 @@ class InformationFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 
+        view?.setOnLongClickListener{
+            informationCallback?.extendInformations()
+            true
+        }
+
+        val contentView = view?.findViewById<EditText>(R.id.informationElementContent)
+
+        //Start Element is the Thing in Information on first Load
+        _currentlyLoadedElement = Element(resources.getString(R.string.startElement),resources.getString(R.string.startDescription))
+        contentView?.visibility = View.GONE
+
         val abortButton = view?.findViewById<Button>(R.id.informationAbort)
         abortButton?.setOnClickListener{
             /*  When Abort Button was Clicked Restore the View to it's original State*/
-            val contentView = view.findViewById<EditText>(R.id.informationElementContent)
-            contentView.visibility = View.VISIBLE
+
+            contentView?.visibility = View.VISIBLE
             if (_hasContent)
-                contentView.setText((_currentlyLoadedElement as Register).Content.toString(), TextView.BufferType.EDITABLE)
+                contentView?.setText((_currentlyLoadedElement as Register).Content.toString(), TextView.BufferType.EDITABLE)
             else
-                contentView.text.clear()
+                contentView?.text?.clear()
             informationCallback?.abortInformations()
         }
 

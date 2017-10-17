@@ -20,29 +20,51 @@ import com.example.mimasim.Simulator.MimaModul
  * Created by Martin on 03.09.2017.
  */
 class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapterCallback , MimaModul.InstructionTrigger{
-    var mCallback : InstructionCallback? = null
+    var instructionCallback: InstructionCallback? = null
     var instructionManager = InstructionManager()
     var lastSelectedItem : Int = 0
 
 
     var mInstructionAdapter : InstructionAdapter? = null
 
+    interface InstructionCallback {
+        fun saveInstructions(currentInstructions : ArrayList<Instruction>)
+        fun closeInstructions()
+        fun clearMima()
+        fun extendInstructions()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         instructionManager.loadDefaultInstructions()
-        mCallback?.saveInstructions(instructionManager.instructions)
+        instructionCallback?.saveInstructions(instructionManager.instructions)
         return inflater.inflate(R.layout.instruction_big, container , false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         view?.setBackgroundColor( resources.getColor(R.color.lighterGrey))
 
+
+        view?.setOnLongClickListener{
+            instructionCallback?.extendInstructions()
+            true
+        }
+        view?.findViewById<ScrollView>(R.id.scrollViewInstructions)?.setOnLongClickListener{
+            instructionCallback?.extendInstructions()
+            true
+        }
+
+        view?.findViewById<TextView>(R.id.instructionTextView)?.setOnLongClickListener{
+            instructionCallback?.extendInstructions()
+            true
+        }
+
         view?.findViewById<Button>(R.id.instructionSaveButton)?.setOnClickListener{
             //  pass to Memory now
-            mCallback?.saveInstructions(instructionManager.instructions)
+            instructionCallback?.saveInstructions(instructionManager.instructions)
         }
 
         view?.findViewById<Button>(R.id.mimaClearButton)?.setOnClickListener{
-            mCallback?.clearMima()
+            instructionCallback?.clearMima()
         }
 
         view?.findViewById<Button>(R.id.instructionsClearButton)?.setOnClickListener{
@@ -56,10 +78,12 @@ class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapte
         mInstructionAdapter = listView.adapter as InstructionAdapter
 
         view?.findViewById<android.support.design.widget.FloatingActionButton>(R.id.instructionAddButton)?.setOnClickListener{
-            mInstructionAdapter?.add(Instruction())
+            instructionManager.add(Instruction())
             val textView = view.findViewById<TextView>(R.id.instructionTextView)
             textView.text = instructionManager.getAsCharSequence()
-            Log.d("Test", "${instructionManager.getAsCharSequence()}" )
+            mInstructionAdapter?.notifyDataSetChanged()
+
+            // Log.d("Test", "${instructionManager.getAsCharSequence()}" )
         }
 
         view?.findViewById<android.support.design.widget.FloatingActionButton>(R.id.instructionUpButton)?.setOnClickListener{
@@ -122,7 +146,8 @@ class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapte
     }
 
     override fun saveInstruction(position: Int, instruction: Instruction) {
-        instructionManager.instructions.set(position, instruction)
+        if (instructionManager.instructions.size > position)
+            instructionManager.instructions.set(position, instruction)
     }
 
     override fun lastSelectedItem(position: Int) {
@@ -131,16 +156,10 @@ class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapte
         mInstructionAdapter?.notifyDataSetChanged()
     }
 
-    interface InstructionCallback {
-        fun saveInstructions(currentInstructions : ArrayList<Instruction>)
-        fun closeInstructions()
-        fun clearMima()
-    }
-
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         try {
-            mCallback = context as InstructionCallback
+            instructionCallback = context as InstructionCallback
         } catch (e : ClassCastException){
             throw ClassCastException(activity.toString() + " must implement InstructionCallback")
         }

@@ -44,6 +44,10 @@ class OptionsFragment : Fragment(){
         view?.findViewById<Switch>(R.id.invertSpeedSwitch)?.isChecked = optionsState.invertSpeed
         view?.findViewById<EditText>(R.id.optionsMaxDelay)?.setText(optionsState.maxDelay.toString())
 
+        view?.findViewById<Button>(R.id.optionsAbortButton)?.setOnClickListener{
+            optionsCallback?.abortOptions()
+        }
+
         view?.findViewById<Button>(R.id.optionsSaveButton)?.setOnClickListener{
             optionsState.fillZeroes = view.findViewById<Switch>(R.id.FillZerosSwitch).isChecked
             optionsState.invertViews = view.findViewById<Switch>(R.id.invertViewsSwitch).isChecked

@@ -142,6 +142,11 @@ class InstructionManager {
         instructions.add(Instruction())
     }
 
+    fun add(instr : Instruction){
+        instr.opCodeString = opCodes[instr.opCode]
+        this.instructions.add(instr)
+    }
+
     fun saveToFile(){
 
     }

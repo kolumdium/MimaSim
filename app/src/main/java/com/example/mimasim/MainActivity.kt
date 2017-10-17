@@ -352,6 +352,10 @@ class MainActivity :
         extendNormal()
     }
 
+    override fun extendInstructions() {
+        extendFullscreen(instructionFragment)
+    }
+
     /*
     * InformationCallbacks
     * */
@@ -366,6 +370,10 @@ class MainActivity :
 
     override fun openOptionsClicked(){
         openOptions()
+    }
+
+    override fun extendInformations() {
+        extendFullscreen(informationFragment)
     }
 
     /*
