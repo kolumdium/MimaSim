@@ -143,6 +143,7 @@ class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapte
 
     override fun mimaReset() {
         instructionManager.currentlyLoadedInstruction = 0
+        instructionCallback?.saveInstructions(instructionManager.instructions)
     }
 
     override fun saveInstruction(position: Int, instruction: Instruction) {

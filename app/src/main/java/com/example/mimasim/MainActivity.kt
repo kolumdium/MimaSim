@@ -18,9 +18,7 @@ import com.example.mimasim.Simulator.MimaModul
 import java.util.*
 import android.widget.Toast
 import android.os.Build
-
-
-
+import android.widget.TextView
 
 
 /*TODO: Credits for the Images:
@@ -52,12 +50,15 @@ class MainActivity :
     var rightPreview : Fragment? = null
 
     var speed : Long = 0
+    var isRunning : Boolean = false
 
     var optionState = OptionsState()
 
     var timerHandler : Handler? = null
     var timerRunnable = object : Runnable{
         override fun run() {
+            if (!isRunning)
+                return
             mimaModul?.step()
             updateMima()
             timerHandler?.postDelayed(this, speed)
@@ -327,11 +328,14 @@ class MainActivity :
     }
 
     fun stopMima(){
+        isRunning = false
+        mimaModul?.speedChanged(1000)
         timerHandler?.removeCallbacks(timerRunnable)
         mimaFragment.mimaStoped()
     }
 
     fun startMima(){
+        isRunning = true
         timerHandler?.postDelayed(timerRunnable, 0)
     }
 
@@ -346,6 +350,7 @@ class MainActivity :
 
     override fun clearMima() {
         mimaModul?.reset()
+        mimaFragment.updateRegisters()
     }
 
     override fun closeInstructions() {
@@ -421,6 +426,13 @@ class MainActivity :
     * MimaFragmentCallbacks
     * */
 
+    override fun writeExternal() {
+        val exportView = findViewById<TextView>(R.id.ExportView)
+        var exportString = exportView.text.toString()
+        exportString += mimaModul?.memoryModul?.SIR?.Content.toString()
+        exportView.setText(exportString)
+    }
+
     override fun readExternal() {
         stopMima()
         val importView = findViewById<EditText>(R.id.ImportView)
@@ -429,8 +441,10 @@ class MainActivity :
 
     }
 
-    override fun readExternalDone() {
-        startMima()
+    override fun readExternalDone(text: Char) {
+        val asciiConvert = Integer.decode("0x" + Integer.toHexString(text.toInt()))
+        mimaModul?.readExternalDone(asciiConvert)
+        mimaFragment.updateRegisters()
     }
 
     override fun makeToast(text: String) {
@@ -457,7 +471,6 @@ class MainActivity :
 
     override fun stopButtonPressed() {
         stopMima()
-        mimaModul?.speedChanged(1000)
     }
 
     override fun stepButtonPressed() {

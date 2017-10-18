@@ -3,6 +3,7 @@ package com.example.mimasim.GUI
 import android.app.Fragment
 import android.content.Context
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
 import android.support.design.widget.FloatingActionButton
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,7 +11,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.TextView
@@ -20,7 +20,6 @@ import com.example.mimasim.Simulator.Element
 import com.example.mimasim.Simulator.MemoryModul
 import com.example.mimasim.Simulator.MimaModul
 import com.example.mimasim.Simulator.Register
-import org.w3c.dom.Text
 
 
 /**
@@ -29,7 +28,7 @@ import org.w3c.dom.Text
 class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTrigger{
 
     var currentlyLoadedElement = Element(" ", "Long Click an Element to see the Informations for it")
-    var mCallback : MimaFragmentCallback? = null
+    var mimaFragmentCallback: MimaFragmentCallback? = null
     var optionsState = OptionsState()
 
     private val clickableElementsMap = mutableMapOf<Int, Element>()
@@ -42,8 +41,9 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
         fun stepButtonPressed()
         fun speedChanged(speed : Long)
         fun readExternal()
-        fun readExternalDone()
+        fun readExternalDone(text: Char)
         fun makeToast(text: String)
+        fun writeExternal()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -53,7 +53,7 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         try {
-            mCallback = context as MimaFragmentCallback
+            mimaFragmentCallback = context as MimaFragmentCallback
         } catch (e : ClassCastException){
             throw ClassCastException(activity.toString() + " must implement MimaFragmentCallback")
         }
@@ -124,17 +124,17 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
             currentlyLoadedElement = value
             someView?.isLongClickable = true
             someView?.setOnLongClickListener {
-                mCallback?.sendElement(value)
+                mimaFragmentCallback?.sendElement(value)
                 true
             }
         }
 
         val startButton = view?.findViewById<FloatingActionButton>(R.id.stepControlStartButton)
-        val stopButton = view?.findViewById<FloatingActionButton>(R.id.stepControlStopButton)
         val stepButton = view?.findViewById<FloatingActionButton>(R.id.stepControlStepButton)
+        val stopButton = view?.findViewById<FloatingActionButton>(R.id.stepControlStopButton)
 
         startButton?.setOnClickListener{
-            mCallback?.startButtonPressed()
+            mimaFragmentCallback?.startButtonPressed()
             stepButton?.isClickable = false
             stepButton?.visibility = View.INVISIBLE
             startButton.isClickable = false
@@ -142,14 +142,14 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
 
         }
         stepButton?.setOnClickListener{
-            mCallback?.stepButtonPressed()
+            mimaFragmentCallback?.stepButtonPressed()
         }
         stopButton?.setOnClickListener{
             stepButton?.isClickable = true
             startButton?.isClickable = true
             startButton?.visibility = View.VISIBLE
             stepButton?.visibility = View.VISIBLE
-            mCallback?.stopButtonPressed()
+            mimaFragmentCallback?.stopButtonPressed()
         }
 
     }
@@ -159,7 +159,7 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
 
         seekBar?.max = optionsState.maxDelay
         seekBar?.progress = seekBar?.max!!.div(2)
-        mCallback?.speedChanged( seekBar.progress.toLong())
+        mimaFragmentCallback?.speedChanged( seekBar.progress.toLong())
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
 
@@ -170,7 +170,7 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                mCallback?.speedChanged( seekBar.progress.toLong())
+                mimaFragmentCallback?.speedChanged( seekBar.progress.toLong())
             }
         })
     }
@@ -203,9 +203,29 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
         }
     }
 
+    fun hideButtons(){
+        val stepCotrol = view?.findViewById<ConstraintLayout>(R.id.StepControl)
+        stepCotrol?.visibility = View.GONE
+    }
+
+    fun showButtons(){
+        val stepCotrol = view?.findViewById<ConstraintLayout>(R.id.StepControl)
+        stepCotrol?.visibility = View.VISIBLE
+
+        val startButton = view?.findViewById<FloatingActionButton>(R.id.stepControlStartButton)
+        val stepButton = view?.findViewById<FloatingActionButton>(R.id.stepControlStepButton)
+        val stopButton = view?.findViewById<FloatingActionButton>(R.id.stepControlStopButton)
+
+        stepButton?.isClickable = true
+        startButton?.isClickable = true
+        stopButton?.isClickable = true
+        startButton?.visibility = View.VISIBLE
+        stepButton?.visibility = View.VISIBLE
+        stopButton?.visibility = View.VISIBLE
+    }
+
     private fun drawAlu(){
         this.view.findViewById<View>(R.id.viewALU).setBackgroundResource(R.drawable.alu)
-
     }
 
     private fun drawArrows(){
@@ -220,11 +240,16 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
     private fun prepareIO(){
         hideInput()
         val importView = view.findViewById<EditText>(R.id.ImportView)
+        importView.setText("")
 
         importView.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(p0: Editable?) {
                 hideInput()
-                mCallback?.readExternalDone()
+                showButtons()
+                if (importView.text.toString() != "") {
+                    mimaFragmentCallback?.readExternalDone(importView.text.toSet().elementAt(0))
+                    importView.setText("")
+                }
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -242,7 +267,6 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
     fun hideInput(){
         val importView = view.findViewById<EditText>(R.id.ImportView)
         importView.isClickable = false
-        importView.setText(" ")
         importView.visibility = View.INVISIBLE
 
     }
@@ -258,15 +282,16 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
 
 
     override fun readExternal() {
-        mCallback?.readExternal()
+        mimaFragmentCallback?.readExternal()
+        hideButtons()
     }
 
     override fun writeExternal() {
-        view.findViewById<TextView>(R.id.ExportView).text // = Acccontent to char
+        mimaFragmentCallback?.writeExternal()
     }
 
     override fun noDeviceFound() {
-        mCallback?.makeToast("No Device with that Adress on IOBus found")
+        mimaFragmentCallback?.makeToast("No Device with that Adress on IOBus found")
     }
 
     private fun drawTopDownArrows() {
@@ -437,5 +462,14 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
         view.findViewById<TextView>(R.id.IOState).text = ""
     }
 
+    override fun ioReadDone() {
+        normal()
+        view.findViewById<View>(R.id.arrowFromSIRToIOBus).setBackgroundResource(R.drawable.arrow_up_active)
+    }
+
+    override fun ioWriteDone(){
+        normal()
+        view.findViewById<View>(R.id.arrowFromSIRToIOBus).setBackgroundResource(R.drawable.arrow_down_active)
+    }
 
 }

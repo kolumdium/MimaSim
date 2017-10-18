@@ -32,6 +32,6 @@ class CenterBus(name: String, description : String, var allRegsiters : ArrayList
 
     fun maskInput(content : Int): Int{
         val x = content.shl(4)
-        return x.shr(4)
+        return x.ushr(4)
     }
 }
