@@ -261,6 +261,10 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
         })
 
         val exportView = view.findViewById<TextView>(R.id.ExportView)
+        exportView.setOnLongClickListener{
+            exportView.text = " "
+            true
+        }
         exportView.text = " "
     }
 

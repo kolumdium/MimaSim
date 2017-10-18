@@ -472,7 +472,7 @@
             android:id="@+id/IOState"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/IOControler"
             app:layout_constraintStart_toStartOf="@+id/IOControler" />

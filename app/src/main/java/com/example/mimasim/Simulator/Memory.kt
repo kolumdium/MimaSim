@@ -15,7 +15,7 @@ class Memory(name: String, description : String) : Element(name, description) {
            if (key == address)
                returnValue = value
        }
-        Content.put(address, 0)
+        Content.put(address, returnValue)
         return returnValue
     }
 

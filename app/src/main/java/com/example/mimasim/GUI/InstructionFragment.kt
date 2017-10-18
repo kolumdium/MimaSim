@@ -146,6 +146,12 @@ class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapte
         instructionCallback?.saveInstructions(instructionManager.instructions)
     }
 
+    override fun jumpTo(adress : Int){
+        //adress -1 because instruction done will call right after this
+        instructionManager.jumpTo(adress - 1)
+        mInstructionAdapter?.notifyDataSetChanged()
+    }
+
     override fun saveInstruction(position: Int, instruction: Instruction) {
         if (instructionManager.instructions.size > position)
             instructionManager.instructions.set(position, instruction)

@@ -40,10 +40,10 @@ class InstructionManager {
        // instructions.add(Instruction(0, opCodes[0]))
         //instructions.add(Instruction(1, opCodes[1], address = 0x0000c002))
         instructions.add(Instruction(2, opCodes[2], address = 0xC000001))
-        instructions.add(Instruction(3, opCodes[3]))
-        instructions.add(Instruction(4, opCodes[4]))
+        //instructions.add(Instruction(3, opCodes[3]))
+       // instructions.add(Instruction(4, opCodes[6], address = 0x0000500))
         instructions.add(Instruction(5, opCodes[5], address = 0xC000002))
-        instructions.add(Instruction(6, opCodes[6]))
+        instructions.add(Instruction(7, opCodes[7], address = 0x0000000))
         instructions.add(Instruction(7, opCodes[7]))
         instructions.add(Instruction(8, opCodes[8]))
         instructions.add(Instruction(9, opCodes[9]))
@@ -135,6 +135,10 @@ class InstructionManager {
     fun setActive(lastItem : Int){
         for (instr in instructions.indices)
             instructions[instr].isActive = instr == lastItem
+    }
+
+    fun jumpTo(item : Int){
+        currentlyLoadedInstruction = item
     }
 
     fun clearInstructions(){

@@ -429,7 +429,7 @@ class MainActivity :
     override fun writeExternal() {
         val exportView = findViewById<TextView>(R.id.ExportView)
         var exportString = exportView.text.toString()
-        exportString += mimaModul?.memoryModul?.SIR?.Content.toString()
+        exportString += mimaModul?.memoryModul?.SIR?.Content?.toChar()
         exportView.setText(exportString)
     }
 
