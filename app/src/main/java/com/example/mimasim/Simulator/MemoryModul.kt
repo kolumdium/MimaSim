@@ -2,6 +2,7 @@ package com.example.mimasim.Simulator
 
 import android.content.Context
 import android.util.Log
+import com.example.mimasim.Instruction
 import com.example.mimasim.GUI.MimaFragment
 import com.example.mimasim.R
 
@@ -12,11 +13,18 @@ class MemoryModul(name: String, description : String, context: Context, val mima
     val SIR = Register(context.resources.getString(R.string.registerSIR), context.resources.getString(R.string.registerSIRDescription))
     val SAR = Register(context.resources.getString(R.string.registerSAR), context.resources.getString(R.string.registerSARDescription))
     val IOControl = IOControl(context.resources.getString(R.string.IOControl), context.resources.getString(R.string.IOControlDescription))
+    val ioBus = IOBus(context.resources.getString(R.string.IOBus), context.resources.getString(R.string.IOBusDescription), SIR)
 
     val memory = Memory(context.resources.getString(R.string.Memory), context.resources.getString(R.string.MemoryDescription))
 
     var externalIOTrigger : ExternalIOTrigger? = null
 
+
+    interface ExternalIOTrigger{
+        fun readExternal()
+        fun writeExternal()
+        fun noDeviceFound()
+    }
 
     init {
         try {
@@ -60,19 +68,16 @@ class MemoryModul(name: String, description : String, context: Context, val mima
     }
 
     private fun external(){
-        when (SAR.Content){
-            0xC000001 -> {externalIOTrigger?.readExternal()}
-            0xC000002 -> {externalIOTrigger?.writeExternal()}
-            else -> {//Toast no external device at that position found
-                externalIOTrigger?.noDeviceFound()
+        if (SIR.Content in ioBus.externallyUsedAddresses) {
+            val read = ioBus.externallyUsedAddresses.get(SIR.Content)
+            if (read!!) {
+                externalIOTrigger?.readExternal()
+            } else {
+                externalIOTrigger?.writeExternal()
             }
+        } else {
+         externalIOTrigger?.noDeviceFound()
         }
-    }
-
-    interface ExternalIOTrigger{
-        fun readExternal()
-        fun writeExternal()
-        fun noDeviceFound()
     }
 
 }

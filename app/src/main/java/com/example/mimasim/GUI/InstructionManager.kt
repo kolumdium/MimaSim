@@ -1,6 +1,6 @@
 package com.example.mimasim.GUI
 
-import com.example.mimasim.Simulator.Instruction
+import com.example.mimasim.Instruction
 
 /**
  * Created by Martin on 01.10.2017.

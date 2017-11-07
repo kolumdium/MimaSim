@@ -13,7 +13,6 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import com.example.mimasim.GUI.*
 import com.example.mimasim.Simulator.Element
-import com.example.mimasim.Simulator.Instruction
 import com.example.mimasim.Simulator.MimaModul
 import java.util.*
 import android.widget.Toast
@@ -337,6 +336,14 @@ class MainActivity :
     fun startMima(){
         isRunning = true
         timerHandler?.postDelayed(timerRunnable, 0)
+    }
+
+    fun saveInstruktions(){
+
+    }
+
+    fun loadInstruktions(){
+
     }
 
     /*

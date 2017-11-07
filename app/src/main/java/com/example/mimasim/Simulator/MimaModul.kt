@@ -2,6 +2,7 @@ package com.example.mimasim.Simulator
 
 import android.content.Context
 import android.util.Log
+import com.example.mimasim.Instruction
 import com.example.mimasim.GUI.InstructionFragment
 import com.example.mimasim.GUI.MimaFragment
 import com.example.mimasim.R
@@ -12,15 +13,14 @@ import kotlin.collections.ArrayList
  */
 class MimaModul(name: String, description : String, var context: Context, val mimaFragment: MimaFragment, val instructionFragment: InstructionFragment) : Element(name, description){
 
-    var running = false
     var currentInstruction = Instruction()
 
-    val calculatorModul = CaculatorModul(context.resources.getString(R.string.calculatorModul), context.resources.getString(R.string.calculatorModulDescription), context)
+    val calculatorModul = CalculatorModal(context.resources.getString(R.string.calculatorModul), context.resources.getString(R.string.calculatorModulDescription), context)
     val controlModul = ControlModul(context.resources.getString(R.string.controlModul), context.resources.getString(R.string.controlModulDescription), context)
     val memoryModul = MemoryModul(context.resources.getString(R.string.memoryModul), context.resources.getString(R.string.memoryModulDescription), context, mimaFragment)
+
     val allRegisters = ArrayList<Register>()
     val centerBus = CenterBus(context.resources.getString(R.string.centerBus), context.resources.getString(R.string.centerBusDescription), allRegisters, context)
-    val IOBus = IOBus(context.resources.getString(R.string.IOBus), context.resources.getString(R.string.IOBusDescription), memoryModul.SIR)
 
     var uiTrigger: UITrigger? = null
     var instructionTrigger: InstructionTrigger? = null
@@ -37,11 +37,11 @@ class MimaModul(name: String, description : String, var context: Context, val mi
         fun arrowY()
         fun arrowZ()
         fun arrowSirToMemory()
-        fun arrowSirToBus( ingoing: Boolean)
+        fun arrowSirToCenterBus(ingoing: Boolean)
         fun arrowsSarIO()
         fun arrowsSarMem()
         fun alu(instruction: String)
-        fun mem(instruction: String)
+        fun mem(state: String)
         fun ioBus()
         fun ioControl(state : String)
         fun ioRead()
@@ -55,7 +55,7 @@ class MimaModul(name: String, description : String, var context: Context, val mi
     interface InstructionTrigger{
         fun instructionDone()
         fun mimaReset()
-        fun jumpTo(adress : Int)
+        fun jumpTo(address : Int)
     }
 
     init {
@@ -68,7 +68,7 @@ class MimaModul(name: String, description : String, var context: Context, val mi
         allRegisters.add(controlModul.IAR)
         allRegisters.add(controlModul.IR)
         allRegisters.add(controlModul.Counter)
-        centerBus.allRegsiters.addAll(allRegisters)
+        centerBus.allRegisters.addAll(allRegisters)
 
         try {
             uiTrigger = mimaFragment
@@ -103,7 +103,7 @@ class MimaModul(name: String, description : String, var context: Context, val mi
     }
 
     fun readExternalDone(externalInput : Int){
-        IOBus.fromExternal(externalInput)
+        memoryModul.ioBus.fromExternal(externalInput)
         uiTrigger?.ioReadDone()
         controlModul.Counter.Content++
     }
@@ -179,7 +179,7 @@ class MimaModul(name: String, description : String, var context: Context, val mi
                 }
                 uiTrigger?.arrowIr(true)
                 uiTrigger?.mem("")
-                uiTrigger?.arrowSirToBus( false)
+                uiTrigger?.arrowSirToCenterBus( false)
             }
             11 -> {
                 stepInstruction(currentInstruction)
@@ -190,9 +190,6 @@ class MimaModul(name: String, description : String, var context: Context, val mi
         }
     }
 
-    fun stop(){
-        running = false
-    }
 
     fun stepInstruction(cInstr : Instruction){
         //val address = cInstr.opCode.shl(28) xor controlModul.IR.Content
@@ -296,7 +293,7 @@ class MimaModul(name: String, description : String, var context: Context, val mi
                 controlModul.Counter.Content++
 
                 uiTrigger?.centerBus()
-                uiTrigger?.arrowSirToBus(false)
+                uiTrigger?.arrowSirToCenterBus(false)
                 uiTrigger?.arrowY()
                 uiTrigger?.mem("")
             }
@@ -369,7 +366,7 @@ class MimaModul(name: String, description : String, var context: Context, val mi
                 controlModul.Counter.Content++
 
                 uiTrigger?.centerBus()
-                uiTrigger?.arrowSirToBus( false)
+                uiTrigger?.arrowSirToCenterBus( false)
                 uiTrigger?.arrowAcc( true)
                 uiTrigger?.mem("")
             }
@@ -398,7 +395,7 @@ class MimaModul(name: String, description : String, var context: Context, val mi
                 controlModul.Counter.Content++
 
                 uiTrigger?.centerBus()
-                uiTrigger?.arrowSirToBus(true)
+                uiTrigger?.arrowSirToCenterBus(true)
                 uiTrigger?.arrowAcc( false)
             }
             6 -> {
@@ -579,7 +576,7 @@ class MimaModul(name: String, description : String, var context: Context, val mi
     }
 
     fun HLT() {
-        stop()
+        //TODO call back to halt mima
     }
 
     fun NOT() {

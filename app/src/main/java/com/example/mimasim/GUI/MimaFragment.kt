@@ -99,7 +99,7 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
         clickableElementsMap.putAll(registerMap)
         clickableElementsMap.put(R.id.IOControler, mainActivity.mimaModul!!.memoryModul.IOControl)
         clickableElementsMap.put(R.id.centerBus, mainActivity.mimaModul!!.centerBus)
-        clickableElementsMap.put(R.id.ViewIOBus, mainActivity.mimaModul!!.IOBus)
+        clickableElementsMap.put(R.id.ViewIOBus, mainActivity.mimaModul!!.memoryModul.ioBus)
         clickableElementsMap.put(R.id.viewALU, mainActivity.mimaModul!!.calculatorModul.Alu)
         clickableElementsMap.put(R.id.viewMemory, mainActivity.mimaModul!!.memoryModul.memory)
         clickableElementsMap.put(R.id.memoryModul, mainActivity.mimaModul!!.memoryModul)
@@ -389,8 +389,8 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
         view.findViewById<TextView>(R.id.aluText).text = instruction
     }
 
-    override fun mem(instruction: String) {
-        view.findViewById<TextView>(R.id.viewMemory).text = instruction
+    override fun mem(state: String) {
+        view.findViewById<TextView>(R.id.viewMemory).text = state
     }
 
     override fun ioBus() {
@@ -449,7 +449,7 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
         view.findViewById<View>(R.id.arrowFromSIRToMemory).setBackgroundResource(R.drawable.arrow_down_active)
     }
 
-    override fun arrowSirToBus(ingoing: Boolean) {
+    override fun arrowSirToCenterBus(ingoing: Boolean) {
         if (ingoing) view.findViewById<View>(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.arrow_right_active)
         else view.findViewById<View>(R.id.arrowFromSIRToCenterBus).setBackgroundResource(R.drawable.arrow_left_active)
     }

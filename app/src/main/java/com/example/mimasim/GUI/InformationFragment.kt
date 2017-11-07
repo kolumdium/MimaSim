@@ -99,7 +99,7 @@ class InformationFragment : Fragment() {
                 }
             }
             else -> {
-                //should be a Register when you get here.
+                //TODO should be a Register when you get here.
                 contentView?.visibility = View.VISIBLE
                 contentView?.setText( String.format(Integer.toHexString((currentlyLoadedElement as Register).Content)) , TextView.BufferType.EDITABLE)
                 _hasContent = true

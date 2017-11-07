@@ -3,7 +3,7 @@ package com.example.mimasim.Simulator
 /**
  * Created bY Martin on 23.09.2017.
  */
-class Alu(name: String, description : String, val X : Register, val Y : Register, val Z : Register) : Element(name, description) {
+class Alu(name: String, description : String, private val X : Register, private val Y : Register, private val Z : Register) : Element(name, description) {
     fun ADD(){
        Z.Content = X.Content + Y.Content
     }

@@ -1,4 +1,4 @@
-package com.example.mimasim.Simulator
+package com.example.mimasim
 
 /**
  * Created by Martin on 09.09.2017.

@@ -9,13 +9,13 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
+import com.example.mimasim.Instruction
 import com.example.mimasim.R
-import com.example.mimasim.Simulator.Instruction
 
 /**
  * Created by Martin on 09.09.2017.
  */
-class InstructionAdapter(context: Context, instructions : ArrayList<Instruction> , var saveInstructionCallback : saveInstructionAdapterCallback) : ArrayAdapter<Instruction> (context, R.layout.instruction_list_item, instructions) {
+class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>, var saveInstructionCallback : InstructionAdapterCallback) : ArrayAdapter<Instruction> (context, R.layout.instruction_list_item, instructions) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 
@@ -95,7 +95,7 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
         return row as View
     }
 
-    interface saveInstructionAdapterCallback{
+    interface InstructionAdapterCallback {
         fun saveInstruction(position: Int, instruction: Instruction)
         fun lastSelectedItem(position : Int)
     }

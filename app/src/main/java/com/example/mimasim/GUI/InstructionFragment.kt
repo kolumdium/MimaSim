@@ -4,7 +4,6 @@ import android.app.Fragment
 import android.content.Context
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,14 +11,14 @@ import android.widget.Button
 import android.widget.ListView
 import android.widget.ScrollView
 import android.widget.TextView
+import com.example.mimasim.Instruction
 import com.example.mimasim.R
-import com.example.mimasim.Simulator.Instruction
 import com.example.mimasim.Simulator.MimaModul
 
 /**
  * Created by Martin on 03.09.2017.
  */
-class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapterCallback , MimaModul.InstructionTrigger{
+class InstructionFragment : Fragment(), InstructionAdapter.InstructionAdapterCallback, MimaModul.InstructionTrigger{
     var instructionCallback: InstructionCallback? = null
     var instructionManager = InstructionManager()
     var lastSelectedItem : Int = 0
@@ -146,9 +145,9 @@ class InstructionFragment : Fragment(), InstructionAdapter.saveInstructionAdapte
         instructionCallback?.saveInstructions(instructionManager.instructions)
     }
 
-    override fun jumpTo(adress : Int){
-        //adress -1 because instruction done will call right after this
-        instructionManager.jumpTo(adress - 1)
+    override fun jumpTo(address : Int){
+        //address -1 because instruction done will call right after this
+        instructionManager.jumpTo(address - 1)
         mInstructionAdapter?.notifyDataSetChanged()
     }
 

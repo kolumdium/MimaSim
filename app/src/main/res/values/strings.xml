@@ -56,10 +56,12 @@
     <string name="registerSIRDescription">SIR</string>
     <string name="registerSAR">SAR</string>
     <string name="registerSARDescription">SAR</string>
-    <string name="registerIR">IR</string>
-    <string name="registerIRDescription">IR</string>
-    <string name="registerIAR">IAR</string>
-    <string name="registerIARDescription">IAR</string>
+    <string name="registerIRshort">IR:</string>
+    <string name="registerIRname">Instruktions-Register</string>
+    <string name="registerIRDescription">In diesem Register wird die aktuelle Instruktion aufbewahrt. Der OpCode dieser Instruktion wird beim Transfer in ein andres Register mit 0 maskiert.</string>
+    <string name="registerIARshort">IAR</string>
+    <string name="registerIARname">Instruktions-Address-Register</string>
+    <string name="registerIARDescription">Dieses Register bewahrt die Adresse der aktuellen bzw. der nächsten zu ladenden Adresse auf. </string>
     <string name="ioRead">Reading External</string>
     <string name="ioWrite">Writing External</string>
 
