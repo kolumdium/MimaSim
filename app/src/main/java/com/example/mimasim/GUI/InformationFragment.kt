@@ -2,17 +2,13 @@ package com.example.mimasim.GUI
 
 import android.app.Fragment
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
-import android.text.InputFilter
-import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import com.example.mimasim.MainActivity
 import com.example.mimasim.R
 import com.example.mimasim.Simulator.Element
 import com.example.mimasim.Simulator.Register

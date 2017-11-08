@@ -31,6 +31,8 @@ class InstructionFragment : Fragment(), InstructionAdapter.InstructionAdapterCal
         fun closeInstructions()
         fun clearMima()
         fun extendInstructions()
+        fun saveToFile()
+        fun loadFromFile()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -83,6 +85,13 @@ class InstructionFragment : Fragment(), InstructionAdapter.InstructionAdapterCal
             mInstructionAdapter?.notifyDataSetChanged()
 
             // Log.d("Test", "${instructionManager.getAsCharSequence()}" )
+        }
+
+        view?.findViewById<Button>(R.id.instructionSaveToFile)?.setOnClickListener{
+            instructionCallback?.saveToFile()
+        }
+        view?.findViewById<Button>(R.id.instructionLoadFromFile)?.setOnClickListener{
+            instructionCallback?.loadFromFile()
         }
 
         view?.findViewById<android.support.design.widget.FloatingActionButton>(R.id.instructionUpButton)?.setOnClickListener{

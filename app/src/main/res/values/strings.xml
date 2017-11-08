@@ -10,6 +10,11 @@
     <string name="useInformationTitle">0123456789abcdefABCDEF</string>
     <string name="useInformationMessage1">Dies ist eine App im Rahmen einer Bachelorarbeit der TU Freiberg.</string>
 
+    <string name="dialogLoadFileTitle">Program laden</string>
+    <string name="dialogloadFileMessage">Klicken sie auf ein Program um es zu laden.</string>
+    <string name="dialogSaveFileTitle">Program speichern</string>
+    <string name="dialgSaveFileMessage">Geben sie einen Namen ein unter dem das Program gespeichert werden soll.</string>
+
     <string name="close">Schließen</string>
     <string name="clearMima">Mima leeren</string>
     <string name="clearInstructions">Instruktionen leeren</string>

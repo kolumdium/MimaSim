@@ -2,8 +2,8 @@ package com.example.mimasim.Simulator
 
 import android.content.Context
 import android.util.Log
-import com.example.mimasim.Instruction
 import com.example.mimasim.GUI.MimaFragment
+import com.example.mimasim.Instruction
 import com.example.mimasim.R
 
 /**

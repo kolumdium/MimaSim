@@ -1,23 +1,26 @@
 package com.example.mimasim
 
+import android.Manifest
 import android.app.AlertDialog
 import android.app.Fragment
 import android.content.DialogInterface
-import android.support.v7.app.AppCompatActivity
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.EditText
-
 import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import com.example.mimasim.GUI.*
 import com.example.mimasim.Simulator.Element
 import com.example.mimasim.Simulator.MimaModul
 import java.util.*
-import android.widget.Toast
-import android.os.Build
-import android.widget.TextView
 
 
 /*TODO: Credits for the Images:
@@ -30,7 +33,8 @@ class MainActivity :
         InformationFragment.InformationCallback,
         InformationPreviewFragment.InformationPreviewCallback,
         InstructionPreviewFragment.InstructionPreviewCallback,
-        OptionsFragment.OptionsCallback{
+        OptionsFragment.OptionsCallback,
+        Filemanager.FilemanagerCallback{
 
     var mimaFragment = MimaFragment()
     var informationFragment = InformationFragment()
@@ -52,6 +56,10 @@ class MainActivity :
     var isRunning : Boolean = false
 
     var optionState = OptionsState()
+
+    var filemanger : Filemanager? = null
+
+    private val PERMISSIONS_MULTIPLE_REQUEST = 1
 
     var timerHandler : Handler? = null
     var timerRunnable = object : Runnable{
@@ -95,6 +103,8 @@ class MainActivity :
 
     fun init(){
 
+        permissions()
+        filemanger = Filemanager(this)
         val optionsBundle = Bundle()
         optionsBundle.putBoolean("fillZeroes", optionState.fillZeroes)
         optionsBundle.putInt("maxDelay", optionState.maxDelay)
@@ -105,6 +115,33 @@ class MainActivity :
         /*Get an instance of the simulator*/
         mimaModul = MimaModul(resources.getString(R.string.MimaModul), resources.getString(R.string.MimaModulDescription), this, mimaFragment, instructionFragment)
         setFragmnents()
+    }
+
+    fun permissions(){
+        val hasPermission =
+                ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) +
+                ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)      == PackageManager.PERMISSION_GRANTED
+        if (!hasPermission) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), PERMISSIONS_MULTIPLE_REQUEST);
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            PERMISSIONS_MULTIPLE_REQUEST ->{
+                if (grantResults.size > 0   && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                                            && grantResults[1] == PackageManager.PERMISSION_GRANTED)  {
+                    //We can now save and load Programs
+                    //TODO maybe add a request again if user denied but wants to save or load
+                } else {
+                    Toast.makeText(parent, "The app was not allowed to read or wirte to your storage. Hence, it cannot function properly. Please consider granting it this permission", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+
     }
 
     fun setViews(){
@@ -338,12 +375,20 @@ class MainActivity :
         timerHandler?.postDelayed(timerRunnable, 0)
     }
 
-    fun saveInstruktions(){
-
+    override fun saveToFile() {
+        //TODO Actually check if loading or saving was succesfull
+        permissions()
+        filemanger?.saveFileDialog(instructionFragment.instructionManager.getStringForSaving())
     }
 
-    fun loadInstruktions(){
+    override fun loadFromFile(){
+        permissions()
+        filemanger?.loadFileDialog()
+    }
 
+    override fun doneLoading(){
+        instructionFragment.instructionManager.load(filemanger!!.instructions)
+        instructionFragment.mInstructionAdapter?.notifyDataSetChanged()
     }
 
     /*

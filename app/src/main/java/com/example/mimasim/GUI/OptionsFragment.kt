@@ -1,6 +1,5 @@
 package com.example.mimasim.GUI
 
-import android.app.AlertDialog
 import android.app.Fragment
 import android.content.Context
 import android.os.Bundle
@@ -8,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Switch
 import com.example.mimasim.R

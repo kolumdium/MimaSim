@@ -10,12 +10,14 @@ class InstructionManager {
     var currentlyLoadedInstruction = 0;
     val opCodes = ArrayList<String>()
 
-    fun getAsString() : ArrayList<String>{
+    fun getStringForSaving() : String{
         val string = ArrayList<String>()
+        instructions.mapTo(string) { "${it.opCodeString} ${ Integer.toHexString(it.address)}\n" }
 
-        instructions.mapTo(string) { "${instructions.indexOf(it)}: ${it.opCodeString} ${it.address} \n" }
-
-        return string
+        var returnstring = ""
+        for (line in string)
+            returnstring += line
+        return returnstring
     }
 
     init {
@@ -151,11 +153,8 @@ class InstructionManager {
         this.instructions.add(instr)
     }
 
-    fun saveToFile(){
-
-    }
-
-    fun loadFromFile(){
-
+    fun load(loadedinstructions : ArrayList<Instruction>){
+        this.instructions.clear()
+        this.instructions.addAll(loadedinstructions)
     }
 }

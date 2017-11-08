@@ -1,7 +1,5 @@
 package com.example.mimasim.Simulator
 
-import android.util.Log
-
 /**
  * Created by Martin on 23.09.2017.
  */

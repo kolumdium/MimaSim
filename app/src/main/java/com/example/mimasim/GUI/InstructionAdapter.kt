@@ -84,9 +84,11 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
         holder.spinner?.setSelection(tmpInstruction.opCode)
 
         holder.editText?.setOnFocusChangeListener{ _: View, _: Boolean ->
-            tmpInstruction.address = Integer.decode( "0x" + holder.editText?.text)
+            if (holder.editText?.text.isNullOrEmpty() || holder.editText?.text.isNullOrBlank()) {
+                holder.editText?.setText("0")
+            }
+            tmpInstruction.address = Integer.decode("0x" + holder.editText?.text)
             saveInstructionCallback.saveInstruction(position, tmpInstruction)
-            //saveInstructionCallback.lastSelectedItem(position)
         }
 
         holder.editText?.setText( Integer.toHexString(tmpInstruction.address) )

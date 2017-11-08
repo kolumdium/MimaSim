@@ -1,7 +1,5 @@
 package com.example.mimasim.Simulator
 
-import kotlin.experimental.and
-
 /**
  * Created by Martin on 08.09.2017.
  */
