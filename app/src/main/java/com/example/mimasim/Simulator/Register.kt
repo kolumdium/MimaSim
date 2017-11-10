@@ -3,7 +3,7 @@ package com.example.mimasim.Simulator
 /**
  * Created by Martin on 08.09.2017.
  */
-class Register(name: String, description : String, content : Int = 0x0) : Element(name, description){
+class Register(name: String, short : String,  description : String, content : Int = 0x0) : Element(name, short,  description){
 
     var Content : Int = content
         set(value) {

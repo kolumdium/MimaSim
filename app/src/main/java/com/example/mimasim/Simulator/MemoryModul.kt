@@ -9,13 +9,13 @@ import com.example.mimasim.R
 /**
  * Created by Martin on 08.09.2017.
  */
-class MemoryModul(name: String, description : String, context: Context, val mimaFragment: MimaFragment) : Element(name, description){
-    val SIR = Register(context.resources.getString(R.string.registerSIR), context.resources.getString(R.string.registerSIRDescription))
-    val SAR = Register(context.resources.getString(R.string.registerSAR), context.resources.getString(R.string.registerSARDescription))
-    val IOControl = IOControl(context.resources.getString(R.string.IOControl), context.resources.getString(R.string.IOControlDescription))
-    val ioBus = IOBus(context.resources.getString(R.string.IOBus), context.resources.getString(R.string.IOBusDescription), SIR)
+class MemoryModul(name: String, short: String, description : String, context: Context, val mimaFragment: MimaFragment) : Element(name, short, description){
+    val SIR = Register(context.resources.getString(R.string.registerSirName),context.resources.getString(R.string.registerSirShort), context.resources.getString(R.string.registerSirDescription))
+    val SAR = Register(context.resources.getString(R.string.registerSarName),context.resources.getString(R.string.registerSarShort), context.resources.getString(R.string.registerSarDescription))
+    val IOControl = IOControl(context.resources.getString(R.string.ioControlName),context.resources.getString(R.string.ioControlName), context.resources.getString(R.string.ioControlDescription))
+    val ioBus = IOBus(context.resources.getString(R.string.ioBusName),context.resources.getString(R.string.ioBusShort), context.resources.getString(R.string.ioBusDescription), SIR)
 
-    val memory = Memory(context.resources.getString(R.string.Memory), context.resources.getString(R.string.MemoryDescription))
+    val memory = Memory(context.resources.getString(R.string.memoryName), context.resources.getString(R.string.memoryShort), context.resources.getString(R.string.memoryDescription))
 
     var externalIOTrigger : ExternalIOTrigger? = null
 

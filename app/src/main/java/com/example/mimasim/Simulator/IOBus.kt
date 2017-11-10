@@ -3,7 +3,7 @@ package com.example.mimasim.Simulator
 /**
  * Created by Martin on 08.09.2017.
  */
-class IOBus(name: String, description : String, var SIR : Register) : Element(name, description){
+class IOBus(name: String, short: String, description : String, var SIR : Register) : Element(name, short, description){
 
     var externallyUsedAddresses = mutableMapOf<Int, Boolean>()
 

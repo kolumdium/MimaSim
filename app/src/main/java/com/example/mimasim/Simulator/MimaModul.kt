@@ -10,16 +10,16 @@ import com.example.mimasim.R
 /**
  * Created by Martin on 08.09.2017.
  */
-class MimaModul(name: String, description : String, var context: Context, val mimaFragment: MimaFragment, val instructionFragment: InstructionFragment) : Element(name, description){
+class MimaModul(name: String, short: String, description : String, var context: Context, val mimaFragment: MimaFragment, val instructionFragment: InstructionFragment) : Element(name, short, description){
 
     var currentInstruction = Instruction()
 
-    val calculatorModul = CalculatorModal(context.resources.getString(R.string.calculatorModul), context.resources.getString(R.string.calculatorModulDescription), context)
-    val controlModul = ControlModul(context.resources.getString(R.string.controlModul), context.resources.getString(R.string.controlModulDescription), context)
-    val memoryModul = MemoryModul(context.resources.getString(R.string.memoryModul), context.resources.getString(R.string.memoryModulDescription), context, mimaFragment)
+    val calculatorModul = CalculatorModul(context.resources.getString(R.string.calculatorModulName), context.resources.getString(R.string.calculatorModulShort), context.resources.getString(R.string.calculatorModulDescription), context)
+    val controlModul = ControlModul(context.resources.getString(R.string.controlModulName), context.resources.getString(R.string.controlModulShort), context.resources.getString(R.string.controlModulDescription), context)
+    val memoryModul = MemoryModul(context.resources.getString(R.string.memoryModulName),context.resources.getString(R.string.memoryModulShort), context.resources.getString(R.string.memoryModulDescription), context, mimaFragment)
 
     val allRegisters = ArrayList<Register>()
-    val centerBus = CenterBus(context.resources.getString(R.string.centerBus), context.resources.getString(R.string.centerBusDescription), allRegisters, context)
+    val centerBus = CenterBus(context.resources.getString(R.string.centerBusName),context.resources.getString(R.string.centerBusDescription), context.resources.getString(R.string.centerBusDescription), allRegisters, context)
 
     var uiTrigger: UITrigger? = null
     var instructionTrigger: InstructionTrigger? = null

@@ -27,7 +27,7 @@ import com.example.mimasim.Simulator.Register
  */
 class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTrigger{
 
-    var currentlyLoadedElement = Element(" ", "Long Click an Element to see the Informations for it")
+    var currentlyLoadedElement = Element(" ", "" , "Long Click an Element to see the Informations for it")
     var mimaFragmentCallback: MimaFragmentCallback? = null
     var optionsState = OptionsState()
 

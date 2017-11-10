@@ -8,10 +8,12 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.support.constraint.ConstraintLayout
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -59,6 +61,7 @@ class MainActivity :
 
     var filemanger : Filemanager? = null
 
+    //Can be any Integer. Is used for Requesting read and write permission at runtime
     private val PERMISSIONS_MULTIPLE_REQUEST = 1
 
     var timerHandler : Handler? = null
@@ -73,11 +76,10 @@ class MainActivity :
     }
 
     enum class Extended{
-        NORMAL, RIGHT, LEFT , RIGHTFULL, LEFTFULL, Options
+        NORMAL, RIGHT, LEFT , RIGHTFULL, LEFTFULL, OPTIONS
     }
 
     var extended = Extended.NORMAL
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,7 +94,7 @@ class MainActivity :
             MainActivity.Extended.NORMAL -> {}
             MainActivity.Extended.RIGHT, MainActivity.Extended.LEFT -> extendNormal()
             MainActivity.Extended.RIGHTFULL -> {extendRight()}
-            MainActivity.Extended.Options -> {}
+            MainActivity.Extended.OPTIONS -> {}
         }
     }
 
@@ -102,7 +104,6 @@ class MainActivity :
     }
 
     fun init(){
-
         permissions()
         filemanger = Filemanager(this)
         val optionsBundle = Bundle()
@@ -113,7 +114,7 @@ class MainActivity :
         setViews()
         timerHandler = Handler()
         /*Get an instance of the simulator*/
-        mimaModul = MimaModul(resources.getString(R.string.MimaModul), resources.getString(R.string.MimaModulDescription), this, mimaFragment, instructionFragment)
+        mimaModul = MimaModul(resources.getString(R.string.mimaModulName), resources.getString(R.string.mimaModulShort) , resources.getString(R.string.mimaModulDescription), this, mimaFragment, instructionFragment)
         setFragmnents()
     }
 
@@ -202,6 +203,7 @@ class MainActivity :
         informationPreviewFragment = InformationPreviewFragment()
     }
 
+
     fun setListener(){
         /*
         * Swipe Listener to extend/close the right and left View
@@ -209,27 +211,36 @@ class MainActivity :
         val baseView = findViewById<LinearLayout>(R.id.baseLayout)
         baseView.setOnTouchListener(object : OnSwipeTouchListener(applicationContext){
             override fun onSwipeRight() {
-                when(extended) {
-                    MainActivity.Extended.NORMAL -> extendLeft()
-                    MainActivity.Extended.RIGHT -> extendNormal()
-                    MainActivity.Extended.LEFT -> extendFullscreen(leftFragment!!)
-                    MainActivity.Extended.RIGHTFULL -> extendRight()
-                    MainActivity.Extended.LEFTFULL -> Log.d("SWIPETAG", "I am Full extended")
-                    else -> {}
-                }
+                swipeRight()
             }
             override fun onSwipeLeft() {
-                when(extended) {
-                    MainActivity.Extended.NORMAL -> extendRight()
-                    MainActivity.Extended.RIGHT -> extendFullscreen(rightFragment!!)
-                    MainActivity.Extended.LEFT -> extendNormal()
-                    MainActivity.Extended.RIGHTFULL -> Log.d("SWIPETAG", "I am Full extended")
-                    MainActivity.Extended.LEFTFULL -> extendLeft()
-                    else -> {}
-                }
+                swipeLeft()
             }
         })
+    }
 
+    fun swipeRight(){
+        when(this.extended) {
+            MainActivity.Extended.NORMAL -> extendLeft()
+            MainActivity.Extended.RIGHT -> extendNormal()
+            MainActivity.Extended.LEFT -> extendFullscreen(leftFragment!!)
+            MainActivity.Extended.RIGHTFULL -> extendRight()
+            MainActivity.Extended.LEFTFULL -> Log.d("SWIPETAG", "I am Full extended")
+            else -> {
+            }
+        }
+    }
+
+    fun swipeLeft(){
+        when(extended) {
+            MainActivity.Extended.NORMAL -> extendRight()
+            MainActivity.Extended.RIGHT -> extendFullscreen(rightFragment!!)
+            MainActivity.Extended.LEFT -> extendNormal()
+            MainActivity.Extended.RIGHTFULL -> Log.d("SWIPETAG", "I am Full extended")
+            MainActivity.Extended.LEFTFULL -> extendLeft()
+            else -> {
+            }
+        }
     }
 
     fun extendNormal(){
@@ -291,7 +302,7 @@ class MainActivity :
             }
             else -> {
                 resize(0f,1f,0f)
-                extended = Extended.Options
+                extended = Extended.OPTIONS
             }
         }
 
@@ -463,7 +474,7 @@ class MainActivity :
         setViews()
         setFragmnents()
         closeOptions()
-        mimaModul = MimaModul(resources.getString(R.string.MimaModul), resources.getString(R.string.MimaModulDescription), this, mimaFragment, instructionFragment)
+        mimaModul = MimaModul(resources.getString(R.string.mimaModulName), resources.getString(R.string.mimaModulShort) , resources.getString(R.string.mimaModulDescription), this, mimaFragment, instructionFragment)
         extendNormal()
     }
 
@@ -511,7 +522,7 @@ class MainActivity :
         /*When an Element is Long hold (wants to be edited) this gets Called*/
         openInformation()
 
-        /* Let Options know which Element there is to Edit*/
+        /* Let OPTIONS know which Element there is to Edit*/
         informationFragment.updateView(currentlyLoadedElement)
     }
 

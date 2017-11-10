@@ -6,11 +6,11 @@ import com.example.mimasim.R
 /**
  * Created by Martin on 08.09.2017.
  */
-class CenterBus(name: String, description : String, var allRegisters: ArrayList<Register>, var context: Context) : Element(name, description) {
+class CenterBus(name: String, short: String, description : String, var allRegisters: ArrayList<Register>, var context: Context) : Element(name, short, description) {
 
     /*For convenience*/
     fun transfer(inputregister: Register, outpuRegister: Register){
-        if (inputregister.name == context.resources.getString(R.string.registerIRname)){
+        if (inputregister.name == context.resources.getString(R.string.registerIrName)){
             val maskedInput =  maskInput(inputregister.Content)
             outpuRegister.Content = maskedInput
             return

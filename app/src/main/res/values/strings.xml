@@ -1,105 +1,121 @@
 <resources>
-    <string name="app_name">MiMaSim</string>
-
+    <string name="abortButton">Abbrechen</string>
     <string name="allowedHexSymbols">0123456789abcdefABCDEF</string>
 
-    <string name="startElement">Projekt MimaSim</string>
-    <string name="startDescription">Wenn sie lange auf Elemente der Mima drücken erscheinen hier Informationen über diese.\n
-                Mit dem wischen nach Rechts oder Links im freien Bereich können sie ebenso, wie durch (langes)klicken die einzelnen unter Menüs öffnen und schließen.
-    </string>
-    <string name="useInformationTitle">0123456789abcdefABCDEF</string>
-    <string name="useInformationMessage1">Dies ist eine App im Rahmen einer Bachelorarbeit der TU Freiberg.</string>
+    <string name="aluDescription">Die ALU beherrscht ADD, AND, OR, XOR, Negation, Shift und das Prüfen auf Gleichheit. Dabei werden die Register X und Y als Inputs genommen und nach einem Takt wird das Ergebnis in das Register Z geschrieben.</string>
+    <string name="aluName">arithmetisch-logische Einheit</string>
+    <string name="aluShort">ALU</string>
 
-    <string name="dialogLoadFileTitle">Program laden</string>
-    <string name="dialogloadFileMessage">Klicken sie auf ein Program um es zu laden.</string>
-    <string name="dialogSaveFileTitle">Program speichern</string>
-    <string name="dialgSaveFileMessage">Geben sie einen Namen ein unter dem das Program gespeichert werden soll.</string>
+    <string name="app_name">MiMaSim</string>
 
-    <string name="close">Schließen</string>
-    <string name="clearMima">Mima leeren</string>
+    <string name="calculatorModulDescription">Das Rechenwerk ist für die Verarbeitung von Daten zuständig.</string>
+    <string name="calculatorModulName">Rechenwerk</string>
+    <string name="calculatorModulShort">RW</string>
+
+    <string name="centerBusDescription">Der PB kann Daten aus einem Register in ein anderes übertragen. Der Bus ist genau wie die Register ein Wort breit. Das Übertragen dauert einen Takt.</string>
+    <string name="centerBusName">Prozessorbus</string>
+    <string name="centerBusShort">PB</string>
+
     <string name="clearInstructions">Instruktionen leeren</string>
-    <string name="saveToFile">Datei speichern</string>
-    <string name="loadFromFile">Datei laden</string>
-    <string name="previewInstruction">Instruktions Manager</string>
-    <string name="previewInformation">Informationen:</string>
+    <string name="clearMima">Mima leeren</string>
+    <string name="close">Schließen</string>
 
-    <string name="startButton">Start</string>
-    <string name="stepButton">einf. Schritt</string>
-    <string name="stopButton">Stop</string>
-    <string name="saveButton">Speichern</string>
-    <string name="abortButton">Abbrechen</string>
+    <string name="controlModulDescription">Das Steuerwerk ist für die Ausführung der Instruktion verantwortlich. Es sendet die entsprechenden Steuersignale an die Register und die ALU.</string>
+    <string name="controlModulName">Steuerwerk</string>
+    <string name="controlModulShort">STW</string>
+
+    <string name="dialgSaveFileMessage">Geben sie einen Namen ein unter dem das Program gespeichert werden soll.</string>
+    <string name="dialogloadFileMessage">Klicken sie auf ein Program um es zu laden.</string>
+    <string name="dialogLoadFileTitle">Program laden</string>
+    <string name="dialogSaveFileTitle">Program speichern</string>
 
     <string name="informationDescription">Beschreibung:</string>
-    <string name="informationName">Name des Elements:</string>
     <string name="informationHowToUse">Nutzungsinformationen</string>
+    <string name="informationName">Name des Elements:</string>
 
-    <string name="Options">Einstellungen</string>
-    <string name="optionSwitchViews">Seite der Informationen/Instruktionen tauschen</string>
-    <string name="optionFillZero">Register immer auf selben Länge</string>
-    <string name="optionMaxDelay">Maximale Zeit zwischen Operationen</string>
-    <string name="optionInvertSpeed">SpeedSlider Invertieren</string>
-    <string name="optionSaveWarningTitle">Einstellungen Speichern</string>
-    <string name="optionSaveWarningMessage">Achtung! Die Mima wird zurück gesetzt und alle Fragmente neu geladen um die Optionen anzuwenden. Nicht gespeicherte Instruktionen gehen Verloren. Sind sie sicher das sie diese Aktion durchführen wollen?</string>
+    <string name="ioBusDescription">Der IO-B funktioniert wie der PB, dient jedoch zur Kommunikation mit externen Geräten.</string>
+    <string name="ioBusName">Ein-/Ausgabe-Bus</string>
+    <string name="ioBusShort">IO-B</string>
 
+    <string name="ioControlDescription">I/O-Control entscheidet nach dem Inhalt des SAR, ob in den internen Speicher oder auf den IO-Bus gelesen wird. Die Adressen 0xC000000 bis 0xFFFFFFF stehen für den externen Zugriff zur Verfügung.</string>
+    <string name="ioControlName">I/O-Control</string>
+    <string name="ioControlShort">IO-C</string>
 
     <string name="ioExport">Ausgabe</string>
     <string name="ioImport">Eingabe</string>
-
-    <string name="registerONE">ONE</string>
-    <string name="registerONEDescription">Has the constant Value 1</string>
-    <string name="registerY">Y</string>
-    <string name="registerYDescription">Y</string>
-    <string name="registerX">X</string>
-    <string name="registerXDescription">X</string>
-    <string name="registerZ">Z</string>
-    <string name="registerZDescription">Z</string>
-    <string name="registerACC">ACC</string>
-    <string name="registerACCDescription">ACC</string>
-    <string name="registerCounter">Counter</string>
-    <string name="registerCounterDescription">Counter</string>
-    <string name="registerSIR">SIR</string>
-    <string name="registerSIRDescription">SIR</string>
-    <string name="registerSAR">SAR</string>
-    <string name="registerSARDescription">SAR</string>
-    <string name="registerIRshort">IR:</string>
-    <string name="registerIRname">Instruktions-Register</string>
-    <string name="registerIRDescription">In diesem Register wird die aktuelle Instruktion aufbewahrt. Der OpCode dieser Instruktion wird beim Transfer in ein andres Register mit 0 maskiert.</string>
-    <string name="registerIARshort">IAR</string>
-    <string name="registerIARname">Instruktions-Address-Register</string>
-    <string name="registerIARDescription">Dieses Register bewahrt die Adresse der aktuellen bzw. der nächsten zu ladenden Adresse auf. </string>
     <string name="ioRead">Reading External</string>
     <string name="ioWrite">Writing External</string>
 
-    <string name="centerBus">Prozessorbus</string>
-    <string name="centerBusDescription">Prozessorbus</string>
+    <string name="loadFromFile">Datei laden</string>
 
-    <string name="IOBus">I/O-Bus</string>
-    <string name="IOBusDescription">I/O-Bus</string>
+    <string name="memoryModulDescription">Das Speicherwerk ist für das Speichermanagement verantwortlich.</string>
+    <string name="memoryModulName">Speicherwerk</string>
+    <string name="memoryModulShort">SW</string>
 
-    <string name="memoryModul">Speicherwerk</string>
-    <string name="memoryModulShort">SPW</string>
-    <string name="memoryModulDescription">Speicherwerk</string>
-    <string name="controlModul">Steuerwerk</string>
-    <string name="controlModulShort">STW</string>
-    <string name="controlModulDescription">Steuerwerk</string>
-    <string name="calculatorModul">Rechenwerk</string>
-    <string name="calculatorModulShort">RW</string>
-    <string name="calculatorModulDescription">Rechenwerk</string>
+    <string name="memoryDescription">Der Speicher enthält alle Adressen zum Speichern von Wörtern. Die Adressen ab \textbf{0xc000000} sind jedoch für I/O reserviert. Der Speicher ist zu Worten von 32 Bit (4 Byte) organisiert. Damit beläuft sich der Speicher auf 1 Gibibyte. Davon sind 256 Mebibyte I/O-mapped.</string>
+    <string name="memoryName">Speicher</string>
+    <string name="memoryShort">Speicher</string>
 
-    <string name="IOControl">I/O-Control</string>
-    <string name="IOControlDescription">I/O-Control</string>
+    <string name="mimaModulDescription">This is the Mima</string>
+    <string name="mimaModulName">Mima</string>
+    <string name="mimaModulShort">Mima</string>
 
-    <string name="ALU">ALU</string>
-    <string name="ALUDescription">ALU</string>
+    <string name="optionFillZero">Register immer auf selben Länge</string>
+    <string name="optionInvertSpeed">SpeedSlider Invertieren</string>
+    <string name="optionMaxDelay">Maximale Zeit zwischen Operationen</string>
+    <string name="options">Einstellungen</string>
+    <string name="optionSaveWarningMessage">Achtung! Die Mima wird zurück gesetzt und alle Fragmente neu geladen um die Optionen anzuwenden. Nicht gespeicherte Instruktionen gehen Verloren. Sind sie sicher das sie diese Aktion durchführen wollen?</string>
+    <string name="optionSaveWarningTitle">Einstellungen Speichern</string>
+    <string name="optionSwitchViews">Seite der Informationen/Instruktionen tauschen</string>
 
-    <string name="Memory">Speicher</string>
-    <string name="MemoryDescription">Memory</string>
+    <string name="placehodler">Placeholder</string>
+    <string name="previewInformation">Informationen:</string>
+    <string name="previewInstruction">Instruktions Manager</string>
 
-    <string name="MimaModul">Mima</string>
-    <string name="MimaModulDescription">This is the Mima</string>
+    <string name="registerAccDescription">Im Akkumulator wird das Ergebnis einer Operation abgelegt.</string>
+    <string name="registerAccName">Akkumulator</string>
+    <string name="registerAccShort">ACC</string>
+    <string name="registerCounterDescription">Ist ein Zähler für die Mikroinstruktionen. Er zählt Eins pro Takt.</string>
+    <string name="registerCounterName">Zähler(engl. Counter)</string>
+    <string name="registerCounterShort">Counter</string>
+    <string name="registerIarDescription">Dieses Register bewahrt die Adresse der aktuellen bzw. der nächsten zu ladenden Adresse auf. </string>
+    <string name="registerIarName">Instruktionsadress-Register</string>
+    <string name="registerIarShort">IAR</string>
+    <string name="registerIrDescription">In diesem Register wird die aktuelle Instruktion aufbewahrt. Der OpCode dieser Instruktion wird beim Transfer in ein andres Register mit 0 maskiert.</string>
+    <string name="registerIrName">Instruktions-Register</string>
+    <string name="registerIrShort">IR:</string>
+    <string name="registerOneDescription">Dieses Register enthält den Wert 1, um den das IAR inkrementiert wird.</string>
+    <string name="registerOneName">ONE</string>
+    <string name="registerOneShort">ONE</string>
+    <string name="registerSarDescription">Das SAR dient als Input für den IO-Control und enthält die intern oder extern zu ladende Adresse.</string>
+    <string name="registerSarName">Speicheradress-Register</string>
+    <string name="registerSarShort">SAR</string>
+    <string name="registerSirDescription">Im SIR landen die Ergebnisse von internen und externen lade Operationen. Wird eine Schreib-Operation im SW ausgelöst, dient es als Quellregister.</string>
+    <string name="registerSirName">Speicherinstruktions-Register</string>
+    <string name="registerSirShort">SIR</string>
+    <string name="registerXDescription">Das X-Register bildet eines der Input-Register der ALU.</string>
+    <string name="registerXName">X</string>
+    <string name="registerXShort">X</string>
+    <string name="registerYDescription">Das X-Register bildet eines der Input-Register der ALU.</string>
+    <string name="registerYName">Y</string>
+    <string name="registerYShort">Y</string>
+    <string name="registerZDescription">Das Z-Register bildet das Output-Register der ALU.</string>
+    <string name="registerZName">Z</string>
+    <string name="registerZShort">Z</string>
 
+    <string name="saveButton">Speichern</string>
+    <string name="saveToFile">Datei speichern</string>
 
-    <string name="Placehodler">Placeholder</string>
+    <string name="startButton">Start</string>
+    <string name="startDescription">Wenn sie lange auf Elemente der Mima drücken erscheinen hier Informationen über diese.\n
+    Mit dem wischen nach Rechts oder Links im freien Bereich können sie ebenso, wie durch (langes)klicken die einzelnen unter Menüs öffnen und schließen.
+    </string>
+    <string name="startElement">Projekt MimaSim</string>
+    <string name="stepButton">einf. Schritt</string>
+    <string name="stopButton">Stop</string>
+
+    <string name="useInformationMessage1">Dies ist eine App im Rahmen einer Bachelorarbeit der TU Freiberg.</string>
+    <string name="useInformationTitle">0123456789abcdefABCDEF</string>
 
     <string-array name="OPCodeArray">
         <item>ADD</item>

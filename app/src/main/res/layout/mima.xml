@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:orientation="horizontal"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:id="@+id/mimabase">
 
         <LinearLayout
         android:id="@+id/calculatorModul"
@@ -32,7 +33,7 @@
                 android:id="@+id/calculatorModulLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/calculatorModul"
+                android:text="@string/calculatorModulShort"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@string/registerONE"
+                android:text="@string/registerOneShort"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/calculatorModulLabel" />
             <TextView
@@ -57,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="16dp"
                 android:layout_marginTop="8dp"
-                android:text="@string/registerACC"
+                android:text="@string/registerAccShort"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/registerONE" />
 
@@ -74,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@string/registerX"
+                android:text="@string/registerXShort"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/registerACC" />
 
@@ -102,7 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginTop="8dp"
-                android:text="@string/registerY"
+                android:text="@string/registerYShort"
                 app:layout_constraintStart_toStartOf="@+id/registerY"
                 app:layout_constraintTop_toBottomOf="@+id/registerX" />
 
@@ -125,7 +126,7 @@
                 android:layout_marginLeft="0dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="0dp"
-                android:text="@string/registerZ"
+                android:text="@string/registerZShort"
                 app:layout_constraintBottom_toTopOf="@+id/registerZ"
                 app:layout_constraintEnd_toStartOf="@+id/arrowFromAluToZ"
                 app:layout_constraintStart_toStartOf="@+id/registerZ"
@@ -265,7 +266,7 @@
             android:id="@+id/controlModulLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/controlModul"
+            android:text="@string/controlModulShort"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -283,7 +284,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/registerCounter"
+            android:text="@string/registerCounterShort"
             app:layout_constraintStart_toStartOf="@+id/registerIRLabel"
             app:layout_constraintTop_toBottomOf="@+id/controlModulLabel" />
 
@@ -300,7 +301,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/registerIRshort"
+            android:text="@string/registerIrShort"
             app:layout_constraintStart_toEndOf="@+id/arrowFromIRToBus"
             app:layout_constraintTop_toBottomOf="@+id/registerCounter" />
 
@@ -329,7 +330,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="0dp"
             android:layout_marginTop="8dp"
-            android:text="@string/registerIARshort"
+            android:text="@string/registerIarShort"
             app:layout_constraintStart_toStartOf="@+id/registerIAR"
             app:layout_constraintTop_toBottomOf="@+id/registerIR" />
 
@@ -433,7 +434,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
-            android:text="@string/memoryModul"
+            android:text="@string/memoryModulShort"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -453,7 +454,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/Memory"
+            android:text="@string/memoryShort"
             app:layout_constraintStart_toStartOf="@+id/viewMemory"
             app:layout_constraintTop_toBottomOf="@+id/memoryModulLabel" />
 
@@ -463,7 +464,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:text="@string/IOControl"
+            android:text="@string/ioControlShort"
             app:layout_constraintBottom_toTopOf="@+id/IOState"
             app:layout_constraintEnd_toStartOf="@+id/arrowFromSARToIOBus"
             app:layout_constraintStart_toEndOf="@+id/arrowFromSIRToIOBus" />
@@ -494,7 +495,7 @@
             android:layout_marginLeft="0dp"
             android:layout_marginStart="0dp"
             android:layout_marginTop="4dp"
-            android:text="@string/registerSIR"
+            android:text="@string/registerSirShort"
             app:layout_constraintStart_toStartOf="@+id/registerSIR"
             app:layout_constraintTop_toBottomOf="@+id/viewMemory" />
 
@@ -513,7 +514,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/registerSAR"
+            android:text="@string/registerSarShort"
             app:layout_constraintBottom_toTopOf="@+id/registerSAR"
             app:layout_constraintStart_toStartOf="@+id/registerSAR"
             app:layout_constraintTop_toBottomOf="@+id/registerSIR" />

@@ -8,11 +8,11 @@ import com.example.mimasim.R
 /**
  * Created by Martin on 08.09.2017.
  */
-class ControlModul(name: String, description : String, var context: Context) : Element(name, description) {
+class ControlModul(name: String, short: String, description: String, var context: Context) : Element(name, short, description) {
 
-    val IR = Register(context.resources.getString(R.string.registerIRname), context.resources.getString(R.string.registerIRDescription))
-    val IAR = Register(context.resources.getString(R.string.registerIARname), context.resources.getString(R.string.registerIARDescription))
-    val Counter = Register(context.resources.getString(R.string.registerCounter), context.resources.getString(R.string.registerCounterDescription))
+    val IR = Register(context.resources.getString(R.string.registerIrName),context.resources.getString(R.string.registerIrShort), context.resources.getString(R.string.registerIrDescription))
+    val IAR = Register(context.resources.getString(R.string.registerIarName),context.resources.getString(R.string.registerIarShort), context.resources.getString(R.string.registerIarDescription))
+    val Counter = Register(context.resources.getString(R.string.registerCounterName),context.resources.getString(R.string.registerCounterShort), context.resources.getString(R.string.registerCounterDescription))
     val OpCodes = context.resources.getStringArray(R.array.OPCodeArray)
 
     fun decodeInstruction() : Instruction {

@@ -20,7 +20,7 @@ import com.example.mimasim.Simulator.Register
 
 class InformationFragment : Fragment() {
 
-    var _currentlyLoadedElement = Element("", "")
+    var _currentlyLoadedElement = Element("", "", "")
     var _hasContent = false
 
     var informationCallback : InformationCallback? = null
@@ -46,7 +46,7 @@ class InformationFragment : Fragment() {
         val contentView = view?.findViewById<EditText>(R.id.informationElementContent)
 
         //Start Element is the Thing in Information on first Load
-        _currentlyLoadedElement = Element(resources.getString(R.string.startElement),resources.getString(R.string.startDescription))
+        _currentlyLoadedElement = Element(resources.getString(R.string.startElement), "",resources.getString(R.string.startDescription))
         contentView?.visibility = View.GONE
 
         val abortButton = view?.findViewById<Button>(R.id.informationAbort)
@@ -79,35 +79,37 @@ class InformationFragment : Fragment() {
         val contentView = view?.findViewById<EditText>(R.id.informationElementContent)
 
         when (currentlyLoadedElement.name){
-            resources.getString(R.string.ALU),
-            resources.getString(R.string.IOBus),
-            resources.getString(R.string.IOControl),
-            resources.getString(R.string.centerBus),
-            resources.getString(R.string.MimaModul),
-            resources.getString(R.string.calculatorModul),
-            resources.getString(R.string.controlModul),
-            resources.getString(R.string.memoryModul),
-            resources.getString(R.string.registerCounter),
-            resources.getString(R.string.Memory) -> {
-                contentView?.visibility = View.GONE
-                view?.findViewById<Button>(R.id.informationSave)?.setOnClickListener{
-                    informationCallback?.abortInformations()
-                }
-            }
-            else -> {
-                //TODO should be a Register when you get here.
+            resources.getString(R.string.registerIrName),
+            resources.getString(R.string.registerSarName),
+            resources.getString(R.string.registerSirName),
+            resources.getString(R.string.registerIarName),
+            resources.getString(R.string.registerOneName),
+            resources.getString(R.string.registerXName),
+            resources.getString(R.string.registerYName),
+            resources.getString(R.string.registerZName),
+            resources.getString(R.string.registerAccName),
+            resources.getString(R.string.registerCounterName)
+            -> {
+                //should be a Register when you get here.
                 contentView?.visibility = View.VISIBLE
                 contentView?.setText( String.format(Integer.toHexString((currentlyLoadedElement as Register).Content)) , TextView.BufferType.EDITABLE)
                 _hasContent = true
 
                 view?.findViewById<Button>(R.id.informationSave)?.setOnClickListener{
                     val inputString = contentView?.text.toString()
-
                     //TODO this should go into an callback and then get passed to the modul. though this works too it is not as modular
                     (currentlyLoadedElement as Register).setContent( inputString )
                     informationCallback?.updateMima()
                     contentView?.visibility = View.VISIBLE
                 }
+
+            }
+            else -> {
+                contentView?.visibility = View.GONE
+                view?.findViewById<Button>(R.id.informationSave)?.setOnClickListener{
+                    informationCallback?.abortInformations()
+                }
+
             }
         }
     }
