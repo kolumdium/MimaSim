@@ -1,20 +1,20 @@
 package com.example.mimasim
 
 import android.Manifest
-import android.app.AlertDialog
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Fragment
-import android.content.DialogInterface
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.support.constraint.ConstraintLayout
+import android.preference.PreferenceManager
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -35,7 +35,6 @@ class MainActivity :
         InformationFragment.InformationCallback,
         InformationPreviewFragment.InformationPreviewCallback,
         InstructionPreviewFragment.InstructionPreviewCallback,
-        OptionsFragment.OptionsCallback,
         Filemanager.FilemanagerCallback{
 
     var mimaFragment = MimaFragment()
@@ -43,6 +42,7 @@ class MainActivity :
     var instructionFragment = InstructionFragment()
     var informationPreviewFragment = InformationPreviewFragment()
     var instructionPreviewFragment = InstructionPreviewFragment()
+    var optionFragment = OptionsFragment()
     var mimaModul : MimaModul? = null
 
     var leftView : View? = null
@@ -57,12 +57,20 @@ class MainActivity :
     var speed : Long = 0
     var isRunning : Boolean = false
 
-    var optionState = OptionsState()
-
     var filemanger : Filemanager? = null
 
     //Can be any Integer. Is used for Requesting read and write permission at runtime
     private val PERMISSIONS_MULTIPLE_REQUEST = 1
+
+    private val PREF_KEY_ZEROS = "pref_zeroes"
+    private val PREF_KEY_VIEWS = "pref_switchViews"
+    private val PREF_KEY_SPEED = "pref_invertSpeed"
+    private val PREF_KEY_DELAY = "pref_maxDelay"
+
+    var prefFillZeros = true
+    var prefInvertSpeed = true
+    var prefSwitchViews = false
+    var prefMaxDelay = 1000
 
     var timerHandler : Handler? = null
     var timerRunnable = object : Runnable{
@@ -84,7 +92,21 @@ class MainActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        permissions()
+        readPref()
         init()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        readPref()
+        mimaFragment.prefMaxDelay = prefMaxDelay
+        mimaFragment.prefFillZeros = prefFillZeros
+    }
+
+    override fun onStart() {
+        super.onStart()
+        setListener()
     }
 
     override fun onBackPressed() {
@@ -94,23 +116,15 @@ class MainActivity :
             MainActivity.Extended.NORMAL -> {}
             MainActivity.Extended.RIGHT, MainActivity.Extended.LEFT -> extendNormal()
             MainActivity.Extended.RIGHTFULL -> {extendRight()}
-            MainActivity.Extended.OPTIONS -> {}
+            MainActivity.Extended.OPTIONS -> {
+                closeOptions()
+                extendNormal()
+            }
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        setListener()
-    }
-
-    fun init(){
-        permissions()
+    private fun init(){
         filemanger = Filemanager(this)
-        val optionsBundle = Bundle()
-        optionsBundle.putBoolean("fillZeroes", optionState.fillZeroes)
-        optionsBundle.putInt("maxDelay", optionState.maxDelay)
-        mimaFragment.arguments = optionsBundle
-
         setViews()
         timerHandler = Handler()
         /*Get an instance of the simulator*/
@@ -118,36 +132,8 @@ class MainActivity :
         setFragmnents()
     }
 
-    fun permissions(){
-        val hasPermission =
-                ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) +
-                ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE)      == PackageManager.PERMISSION_GRANTED
-        if (!hasPermission) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), PERMISSIONS_MULTIPLE_REQUEST);
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            PERMISSIONS_MULTIPLE_REQUEST ->{
-                if (grantResults.size > 0   && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                                            && grantResults[1] == PackageManager.PERMISSION_GRANTED)  {
-                    //We can now save and load Programs
-                    //TODO maybe add a request again if user denied but wants to save or load
-                } else {
-                    Toast.makeText(parent, "The app was not allowed to read or wirte to your storage. Hence, it cannot function properly. Please consider granting it this permission", Toast.LENGTH_LONG).show()
-                }
-            }
-        }
-
-    }
-
-    fun setViews(){
-
-        if (optionState.invertViews){
+    private fun setViews(){
+        if (prefSwitchViews){
             rightFragment = instructionFragment
             leftFragment = informationFragment
             leftPreview = informationPreviewFragment
@@ -158,7 +144,6 @@ class MainActivity :
             rightFragment = informationFragment
             rightPreview = informationPreviewFragment
             leftPreview = instructionPreviewFragment
-
         }
     }
 
@@ -174,37 +159,16 @@ class MainActivity :
         transaction.add(R.id.centerView, mimaFragment, "FragmentTagMima")
         transaction.add(R.id.rightView, rightPreview, "FragmentTagInformationPreview")
         transaction.add(R.id.rightView, rightFragment, "FragmentTagInformation")
+        transaction.add(R.id.centerView, optionFragment, "OptionsFragmentTag")
+
         transaction.hide(rightFragment)
         transaction.hide(leftFragment)
+        transaction.hide(optionFragment)
         transaction.commit()
     }
 
-    fun delFragments(){
-        val transaction = fragmentManager.beginTransaction()
-        transaction.remove(mimaFragment)
-        transaction.remove(instructionFragment)
-        transaction.remove(informationFragment)
-        transaction.remove(instructionPreviewFragment)
-        transaction.remove(informationPreviewFragment)
-        transaction.commit()
-    }
-
-    fun reInitFragment(){
-        mimaFragment = MimaFragment()
-
-        val optionsBundle = Bundle()
-        optionsBundle.putBoolean("fillZeroes", optionState.fillZeroes)
-        optionsBundle.putInt("maxDelay", optionState.maxDelay)
-        mimaFragment.arguments = optionsBundle
-
-        instructionFragment = InstructionFragment()
-        instructionPreviewFragment = InstructionPreviewFragment()
-        informationFragment = InformationFragment()
-        informationPreviewFragment = InformationPreviewFragment()
-    }
-
-
-    fun setListener(){
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setListener(){
         /*
         * Swipe Listener to extend/close the right and left View
         * */
@@ -218,6 +182,45 @@ class MainActivity :
             }
         })
     }
+
+    private fun permissions(){
+        val hasPermission =
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) +
+                        ContextCompat.checkSelfPermission(this,
+                                Manifest.permission.READ_EXTERNAL_STORAGE)      == PackageManager.PERMISSION_GRANTED
+        if (!hasPermission) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), PERMISSIONS_MULTIPLE_REQUEST);
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            PERMISSIONS_MULTIPLE_REQUEST ->{
+                if (grantResults.size > 0   && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED)  {
+                    //We can now save and load Programs
+                    //TODO maybe add a request again if user denied but wants to save or load
+                } else {
+                    Toast.makeText(parent, "The app was not allowed to read or wirte to your storage. Hence, it cannot function properly. Please consider granting it this permission", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+
+    }
+
+    private fun readPref(){
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
+        prefFillZeros = sharedPref.getBoolean( PREF_KEY_ZEROS, true)
+        prefInvertSpeed = sharedPref.getBoolean( PREF_KEY_SPEED, true)
+        prefSwitchViews = sharedPref.getBoolean( PREF_KEY_VIEWS, false)
+        prefMaxDelay = sharedPref.getInt(PREF_KEY_DELAY, 0);
+    }
+
+    /*
+    * Visual Managment
+    * */
 
     fun swipeRight(){
         when(this.extended) {
@@ -243,7 +246,7 @@ class MainActivity :
         }
     }
 
-    fun extendNormal(){
+    private fun extendNormal(){
         resize(1f, 10f ,1f)
         val transaction = fragmentManager.beginTransaction()
 
@@ -257,7 +260,7 @@ class MainActivity :
         extended = Extended.NORMAL
     }
 
-    fun extendRight() {
+    private fun extendRight() {
         resize(0f, 10f ,5f)
 
         val transaction = fragmentManager.beginTransaction()
@@ -272,7 +275,7 @@ class MainActivity :
         instructionFragment.makeSmallLayout()
     }
 
-    fun extendLeft(){
+    private fun extendLeft(){
         resize(5f, 10f ,0f)
 
         val transaction = fragmentManager.beginTransaction()
@@ -313,7 +316,7 @@ class MainActivity :
         stopMima()
     }
 
-    fun resize(leftSize : Float, centerSize : Float, rightSize : Float){
+    private fun resize(leftSize : Float, centerSize : Float, rightSize : Float){
         val lparamsR= rightView?.layoutParams as LinearLayout.LayoutParams
         lparamsR.weight = rightSize
         rightView?.layoutParams = lparamsR
@@ -327,7 +330,7 @@ class MainActivity :
         leftView?.layoutParams = lparamsL
     }
 
-    fun openInformation(){
+    private fun openInformation(){
         /* Opens the Information Menu when triggered*/
         if (informationFragment == rightFragment) {
             if (extended == Extended.NORMAL)
@@ -338,7 +341,7 @@ class MainActivity :
         }
     }
 
-    fun openInstruction(){
+    private fun openInstruction(){
         if (instructionFragment == leftFragment) {
             if (extended == Extended.NORMAL)
                 extendLeft()
@@ -348,46 +351,78 @@ class MainActivity :
         }
     }
 
-    fun openOptions(){
+    private fun openOptions(){
         stopMima()
 
-        val optionsFragment = OptionsFragment()
-        val optionsBundle = Bundle()
-        optionsBundle.putBoolean("fillZeroes", optionState.fillZeroes)
-        optionsBundle.putBoolean("invertViews", optionState.invertViews)
-        optionsBundle.putBoolean("invertSpeed", optionState.invertSpeed)
-        optionsBundle.putInt("maxDelay", optionState.maxDelay)
-        optionsFragment.arguments = optionsBundle
-
         val transaction = fragmentManager.beginTransaction()
-        transaction.add(R.id.centerView, optionsFragment, "OptionsFragmentTag")
         transaction.hide(mimaFragment)
+        transaction.show(optionFragment)
         transaction.commit()
 
-        extendFullscreen(optionsFragment)
+        extendFullscreen(optionFragment)
     }
 
-    fun closeOptions(){
+    private fun closeOptions(){
+        readPref()
+        mimaFragment.prefMaxDelay = prefMaxDelay
+        mimaFragment.prefFillZeros = prefFillZeros
+
         val transaction = fragmentManager.beginTransaction()
         transaction.show(mimaFragment)
-        transaction.remove(fragmentManager.findFragmentByTag("OptionsFragmentTag"))
+        transaction.hide(optionFragment)
         transaction.commit()
+
+        replaceFragments()
     }
 
-    fun stopMima(){
+    private fun replaceFragments(){
+        setViews()
+        reAttach(rightFragment, rightView as ViewGroup)
+        reAttach(rightPreview, rightView as ViewGroup)
+        reAttach(leftFragment, leftView as ViewGroup)
+        reAttach(leftPreview, leftView as ViewGroup)
+    }
+
+    private fun reAttach(fragment: Fragment?, newparent : ViewGroup){
+        val vv = fragment?.view
+        val parent : ViewGroup = vv?.parent as ViewGroup
+        parent.removeView(vv)
+        newparent.addView(vv)
+    }
+
+    private fun hideKeyboard(activity: Activity) {
+        val imm = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        val view = findViewById<EditText>(R.id.importView)
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    private fun showKeyboard(activity: Activity){
+        val view = findViewById<EditText>(R.id.importView)
+        val imm = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(view, 0);
+    }
+
+    /*
+    * MimaControl
+    * */
+
+    private fun stopMima(){
         isRunning = false
         mimaModul?.speedChanged(1000)
         timerHandler?.removeCallbacks(timerRunnable)
         mimaFragment.mimaStoped()
     }
 
-    fun startMima(){
+    private fun startMima(){
         isRunning = true
         timerHandler?.postDelayed(timerRunnable, 0)
     }
 
+    /*
+    * Save and Load
+    * */
+
     override fun saveToFile() {
-        //TODO Actually check if loading or saving was succesfull
         permissions()
         filemanger?.saveFileDialog(instructionFragment.instructionManager.getStringForSaving())
     }
@@ -414,6 +449,7 @@ class MainActivity :
     override fun clearMima() {
         mimaModul?.reset()
         mimaFragment.updateRegisters()
+        mimaFragment.redraw()
     }
 
     override fun closeInstructions() {
@@ -445,47 +481,6 @@ class MainActivity :
     }
 
     /*
-    * OptionsCallback
-    * */
-
-    override fun saveOptionsCallback(optionState: OptionsState) {
-        val dialogBuilder =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
-                } else {
-                    AlertDialog.Builder(this)
-                }
-        dialogBuilder.setTitle(resources.getString(R.string.optionSaveWarningTitle))
-        dialogBuilder.setMessage(resources.getString(R.string.optionSaveWarningMessage))
-        dialogBuilder.setPositiveButton(android.R.string.yes, object: DialogInterface.OnClickListener {
-            override fun onClick(dialog:DialogInterface, which:Int) {
-                saveOptions(optionState)
-            }
-        })
-        dialogBuilder.setNegativeButton(android.R.string.no) { dialog, _ -> dialog.cancel() }
-        dialogBuilder.setIcon(android.R.drawable.ic_dialog_alert)
-        dialogBuilder.show()
-    }
-
-    fun saveOptions(optionState: OptionsState){
-        this.optionState = optionState
-        delFragments()
-        reInitFragment()
-        setViews()
-        setFragmnents()
-        closeOptions()
-        mimaModul = MimaModul(resources.getString(R.string.mimaModulName), resources.getString(R.string.mimaModulShort) , resources.getString(R.string.mimaModulDescription), this, mimaFragment, instructionFragment)
-        extendNormal()
-    }
-
-    override fun abortOptions(){
-        closeOptions()
-        extendNormal()
-    }
-
-
-
-    /*
     * MimaFragmentCallbacks
     * */
 
@@ -498,16 +493,17 @@ class MainActivity :
 
     override fun readExternal() {
         stopMima()
-        val importView = findViewById<EditText>(R.id.ImportView)
+        val importView = findViewById<EditText>(R.id.importView)
         importView.visibility = View.VISIBLE
         importView.isClickable
-
+        showKeyboard(this)
     }
 
     override fun readExternalDone(text: Char) {
         val asciiConvert = Integer.decode("0x" + Integer.toHexString(text.toInt()))
         mimaModul?.readExternalDone(asciiConvert)
         mimaFragment.updateRegisters()
+        hideKeyboard(this)
     }
 
     override fun makeToast(text: String) {
@@ -543,9 +539,9 @@ class MainActivity :
 
     override fun speedChanged(speed: Long) {
         /*speed from 0 to maxdelay*/
-        if (optionState.invertSpeed){
+        if (prefInvertSpeed){
             if (speed >= 0.toLong())
-                this.speed = optionState.maxDelay - speed
+                this.speed = prefMaxDelay - speed
             else
                 this.speed = 0.toLong()
         } else {

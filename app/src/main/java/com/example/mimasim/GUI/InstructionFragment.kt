@@ -145,8 +145,8 @@ class InstructionFragment : Fragment(), InstructionAdapter.InstructionAdapterCal
 
     override fun instructionDone() {
         instructionManager.currentlyLoadedInstruction++
-        val textView = view.findViewById<TextView>(R.id.instructionTextView)
-        textView.text = instructionManager.getAsCharSequence()
+        val textView = view?.findViewById<TextView>(R.id.instructionTextView)
+        textView?.text = instructionManager.getAsCharSequence()
     }
 
     override fun mimaReset() {
@@ -178,5 +178,9 @@ class InstructionFragment : Fragment(), InstructionAdapter.InstructionAdapterCal
         } catch (e : ClassCastException){
             throw ClassCastException(activity.toString() + " must implement InstructionCallback")
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 }

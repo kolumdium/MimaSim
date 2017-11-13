@@ -28,6 +28,7 @@ class Filemanager(var context: Context) {
     val instructions = ArrayList<Instruction>()
     val extension = ".txt"
 
+    var loadedInstr = 0
     var filemanagerCallback: FilemanagerCallback? = null
 
     interface FilemanagerCallback{
@@ -65,6 +66,7 @@ class Filemanager(var context: Context) {
     }
 
     private fun load(filename : String){
+        this.instructions.clear()
         val fullname = mydir.path + "/" + filename
         try {
             val inputStream : InputStream = File(fullname).inputStream()
@@ -75,21 +77,26 @@ class Filemanager(var context: Context) {
                 val tmpInstruction = Instruction()
                 val tmpline = line.split(" ")
 
-                val tmpOpcode = translateOpCodeString(tmpline[0])
-                if (tmpOpcode.isOpcodeString) {
-                    //If the OpCodeString could be translated we know it is valid and can be added as well as the translated opcode
-                    tmpInstruction.opCodeString = line[0].toString()
-                    tmpInstruction.opCode = tmpOpcode.opCode
-                } else {
-                    //Do something if the first thingy is not Opcode
+                if (tmpline.isNotEmpty()) {
+                    val tmpOpcode = translateOpCodeString(tmpline[0])
+                    if (tmpOpcode.isOpcodeString) {
+                        //If the OpCodeString could be translated we know it is valid and can be added as well as the translated opcode
+                        tmpInstruction.opCodeString = tmpline[0]
+                        tmpInstruction.opCode = tmpOpcode.opCode
+                    } else {
+                        //Do something if the first thingy is not Opcode
+                    }
                 }
 
-                val tmpHexString = translateHexString(tmpline[1])
-                if (tmpHexString.isValidHexString) {
-                    tmpInstruction.address = Integer.decode(tmpHexString.hexString)
+                if (tmpline.size > 1){
+                    val tmpHexString = translateHexString(tmpline[1])
+                    if (tmpHexString.isValidHexString) {
+                        tmpInstruction.address = Integer.decode(tmpHexString.hexString)
+                    }
+                    //If read was succesfull we add the read instruction. If not we add nothing
+                    instructions.add(tmpInstruction)
                 }
-                //If read was succesfull we add the read instruction. If not we add a base Instruction...
-                instructions.add(tmpInstruction)
+
             }
         }  catch (e : FileNotFoundException) {
             Log.e("Loading From File", "File not found: " + e.toString());
@@ -114,15 +121,19 @@ class Filemanager(var context: Context) {
         val hexStringresult = HexStringResult(false, "0x0")
         var editHexString = hexstring
 
-        if (editHexString.length > 9) {
-            Log.d("Loading From File", "Error reading an Address. It is to Long. Address will be Cut on the right.")
-            editHexString = editHexString.subSequence(0, 8).toString()
-        }
+        //Check if the first two symbols are the hexprefix if so remove them
         if (editHexString.length > 3){
             if (editHexString[0] == '0' && editHexString[1] == 'x'){
-                editHexString.subSequence(2, editHexString.length)
+                editHexString = editHexString.subSequence(2, editHexString.length).toString()
             }
         }
+
+        //Check if it is to long if so read the first digits
+        if (editHexString.length > 7){
+            Log.d("Loading From File", "Error reading an Address. It is to Long. Address will be Cut on the right.")
+            editHexString = editHexString.subSequence(0, 7).toString()
+        }
+
         //Check if Hexstring only contains hexsymbols
         val allowedHexsymbols = context.resources.getString(R.string.allowedHexSymbols)
         for (char in editHexString)
@@ -130,8 +141,9 @@ class Filemanager(var context: Context) {
                 //Does contain non Hexsymbols
                 return HexStringResult(false, "0x0")
             }
+
         //all checks done should be a valid string
-        return HexStringResult(true, "0x" + hexstring)
+        return HexStringResult(true, "0x" + editHexString)
     }
 
     fun saveFileDialog(content : String){
@@ -145,13 +157,13 @@ class Filemanager(var context: Context) {
         val inflater = (context as Activity).layoutInflater
 
         val view = inflater.inflate(R.layout.save_file_dialog, null)
-        val filenamebox = view.findViewById<TextView>(R.id.filenameBox)
+        val filenameBox = view.findViewById<TextView>(R.id.filenameBox)
 
         dialogBuilder.setTitle(context.resources.getString(R.string.dialogSaveFileTitle))
         dialogBuilder.setMessage(context.resources.getString(R.string.dialgSaveFileMessage))
         dialogBuilder.setPositiveButton(android.R.string.yes, object: DialogInterface.OnClickListener {
             override fun onClick(dialog: DialogInterface, which:Int) {
-                save(filenamebox.text.toString(), content)
+                save(filenameBox.text.toString(), content)
             }
         })
         dialogBuilder.setNegativeButton(android.R.string.no) { dialog, _ -> dialog.cancel() }
@@ -171,7 +183,7 @@ class Filemanager(var context: Context) {
 
         dialogBuilder.setTitle(context.resources.getString(R.string.dialogLoadFileTitle))
         getFilenames()
-        val arrayAdapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, filenames)
+        val arrayAdapter = ArrayAdapter<String>(context, R.layout.open_file_dialog_item, filenames)
         dialogBuilder.setAdapter(arrayAdapter, object : DialogInterface.OnClickListener{
            override fun onClick(dialog : DialogInterface , which: Int){
                 filename = arrayAdapter.getItem(which)

@@ -29,10 +29,12 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
 
     var currentlyLoadedElement = Element(" ", "" , "Long Click an Element to see the Informations for it")
     var mimaFragmentCallback: MimaFragmentCallback? = null
-    var optionsState = OptionsState()
 
     private val clickableElementsMap = mutableMapOf<Int, Element>()
     private val registerMap = mutableMapOf<Int, Register>()
+
+    var prefFillZeros = true
+    var prefMaxDelay = 1000
 
     interface MimaFragmentCallback {
         fun sendElement(currentlyLoadedElement : Element)
@@ -62,7 +64,6 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         val main = activity as MainActivity
 
-        getBundle()
         getRegister(main)
         getClickableElements(main)
         setBackgrounds()
@@ -72,12 +73,6 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
         updateRegisters()
         drawAlu()
         prepareIO()
-    }
-
-    private fun getBundle(){
-        val bundle = this.arguments
-        optionsState.fillZeroes = bundle.getBoolean("fillZeroes", true)
-        optionsState.maxDelay = bundle.getInt("maxDelay", 1000)
     }
 
     private fun getRegister(mainActivity: MainActivity){
@@ -157,7 +152,7 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
     private  fun initSeekBar(){
         val seekBar = view?.findViewById<SeekBar>(R.id.viewSpeed)
 
-        seekBar?.max = optionsState.maxDelay
+        seekBar?.max = prefMaxDelay
         seekBar?.progress = seekBar?.max!!.div(2)
         mimaFragmentCallback?.speedChanged( seekBar.progress.toLong())
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -191,7 +186,7 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
                 else -> {
                     val someTextView = view?.findViewById<TextView>(key)
                     var fillZeros = ""
-                    if (optionsState.fillZeroes)
+                    if (prefFillZeros)
                         for ( i in 0.. (7 - Integer.toHexString(value.Content).length)){
                             fillZeros += "0"
                         }
@@ -228,6 +223,13 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
         this.view.findViewById<View>(R.id.viewALU).setBackgroundResource(R.drawable.alu)
     }
 
+    fun redraw(){
+        drawArrows()
+        updateRegisters()
+        drawAlu()
+        prepareIO()
+    }
+
     private fun drawArrows(){
         drawLeftToRightArrows()
         drawRightToLeftArrows()
@@ -239,7 +241,7 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
 
     private fun prepareIO(){
         hideInput()
-        val importView = view.findViewById<EditText>(R.id.ImportView)
+        val importView = view.findViewById<EditText>(R.id.importView)
         importView.setText("")
 
         importView.addTextChangedListener(object : TextWatcher{
@@ -269,7 +271,7 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
     }
 
     fun hideInput(){
-        val importView = view.findViewById<EditText>(R.id.ImportView)
+        val importView = view.findViewById<EditText>(R.id.importView)
         importView.isClickable = false
         importView.visibility = View.INVISIBLE
 

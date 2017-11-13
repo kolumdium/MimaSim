@@ -68,8 +68,8 @@ class MemoryModul(name: String, short: String, description : String, context: Co
     }
 
     private fun external(){
-        if (SIR.Content in ioBus.externallyUsedAddresses) {
-            val read = ioBus.externallyUsedAddresses.get(SIR.Content)
+        if (SAR.Content in ioBus.externallyUsedAddresses) {
+            val read = ioBus.externallyUsedAddresses.get(SAR.Content)
             if (read!!) {
                 externalIOTrigger?.readExternal()
             } else {
@@ -79,5 +79,4 @@ class MemoryModul(name: String, short: String, description : String, context: Co
          externalIOTrigger?.noDeviceFound()
         }
     }
-
 }

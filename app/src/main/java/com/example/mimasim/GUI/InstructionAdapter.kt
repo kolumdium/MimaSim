@@ -5,10 +5,7 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.Spinner
+import android.widget.*
 import com.example.mimasim.Instruction
 import com.example.mimasim.R
 
@@ -18,13 +15,12 @@ import com.example.mimasim.R
 class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>, var saveInstructionCallback : InstructionAdapterCallback) : ArrayAdapter<Instruction> (context, R.layout.instruction_list_item, instructions) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-
-        val OPCodeArray = context.resources.getTextArray(R.array.OPCodeArray)
-
         val holder : ListItemHolder
         var row = convertView
 
         val tmpInstruction = this.getItem(position)
+        //This is terribly slow TODO check if can make faster
+
         /*
         * View Holder Pattern for smoother Scrolling
         * */
@@ -32,6 +28,8 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
             /*
             * If View wasn't yet inflated, inflate it and save it's contents
             * */
+
+
             val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             row = inflater.inflate(R.layout.instruction_list_item, parent, false)
 
@@ -39,6 +37,15 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
             holder.spinner = row?.findViewById(R.id.instructionItemSpinner)
             holder.editText = row.findViewById(R.id.instructionItemText)
             holder.elementStatus = row.findViewById(R.id.elementStatus)
+            holder.elementHint = row.findViewById(R.id.elementHint)
+
+            /*
+            * Set Spinner Adapter
+            * */
+            val adapter : ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(context, R.array.OPCodeArray , android.R.layout.simple_spinner_dropdown_item)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            holder.spinner?.adapter = adapter
+
             row.setTag(holder)
         }
         else {
@@ -48,51 +55,55 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
             holder = row?.tag as ListItemHolder
         }
 
-        /*
-        * Set Spinner Adapter
-        * */
-        val adapter : ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(context, R.array.OPCodeArray , android.R.layout.simple_spinner_dropdown_item)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        holder.spinner?.adapter = adapter
         holder.spinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 /* When an item is selected get OPCode and OPCodeString and write it to the instruction
                 * */
+                val OPCodeArray = context.resources.getTextArray(R.array.OPCodeArray)
+
                 tmpInstruction.opCode = p2
                 tmpInstruction.opCodeString = OPCodeArray[p2].toString()
                 holder.spinner?.setSelection(p2)
                 saveInstructionCallback.saveInstruction(position, tmpInstruction)
             }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                //
-            }
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
         }
 
         holder.elementStatus?.setOnClickListener{
             saveInstructionCallback.lastSelectedItem(position)
         }
-
-
-        //This is terribly slow TODO check if can make faster
-        if (getItem(position).isActive){
+        holder.elementHint?.setOnClickListener{
+            saveInstructionCallback.lastSelectedItem(position)
+        }
+        if (tmpInstruction.isActive){
             holder.elementStatus?.setBackgroundColor(ContextCompat.getColor(context, R.color.green))
         } else {
             holder.elementStatus?.setBackgroundColor(ContextCompat.getColor(context, R.color.primary50))
         }
 
-        holder.spinner?.setSelection(tmpInstruction.opCode)
-
-        holder.editText?.setOnFocusChangeListener{ _: View, _: Boolean ->
-            if (holder.editText?.text.isNullOrEmpty() || holder.editText?.text.isNullOrBlank()) {
-                holder.editText?.setText("0")
-            }
-            tmpInstruction.address = Integer.decode("0x" + holder.editText?.text)
-            saveInstructionCallback.saveInstruction(position, tmpInstruction)
-        }
-
         holder.editText?.setText( Integer.toHexString(tmpInstruction.address) )
         holder.spinner?.setSelection( tmpInstruction.opCode)
+
+
+        var hintString = ""
+        when (tmpInstruction.opCodeString){
+            "LDC" -> {
+                hintString = "const:"
+                holder.editText?.visibility = View.VISIBLE
+            }
+            "RRN" -> {
+                hintString = "var:"
+                holder.editText?.visibility = View.VISIBLE
+            }
+            "HLT", "NOT", "RAR" -> {
+                hintString = ""
+                holder.editText?.visibility = View.INVISIBLE
+            }
+            else -> {
+                hintString = "addr:"
+                holder.editText?.visibility = View.VISIBLE}
+        }
+        holder.elementHint?.text = hintString
 
         return row as View
     }
@@ -106,5 +117,6 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
         var spinner : Spinner? = null
         var editText : EditText? = null
         var elementStatus : View? = null
+        var elementHint : TextView? = null
     }
 }

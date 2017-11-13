@@ -20,8 +20,8 @@ import com.example.mimasim.Simulator.Register
 
 class InformationFragment : Fragment() {
 
-    var _currentlyLoadedElement = Element("", "", "")
-    var _hasContent = false
+    var currentlyLoadedElement = Element("", "", "")
+    var hasContent = false
 
     var informationCallback : InformationCallback? = null
 
@@ -46,21 +46,22 @@ class InformationFragment : Fragment() {
         val contentView = view?.findViewById<EditText>(R.id.informationElementContent)
 
         //Start Element is the Thing in Information on first Load
-        _currentlyLoadedElement = Element(resources.getString(R.string.startElement), "",resources.getString(R.string.startDescription))
-        contentView?.visibility = View.GONE
+        currentlyLoadedElement = Element(resources.getString(R.string.startElement), "",resources.getString(R.string.startDescription))
+        if (hasContent)
+            contentView?.visibility = View.VISIBLE
+        else
+            contentView?.visibility = View.GONE
 
         val abortButton = view?.findViewById<Button>(R.id.informationAbort)
         abortButton?.setOnClickListener{
             /*  When Abort Button was Clicked Restore the View to it's original State*/
-
-            contentView?.visibility = View.VISIBLE
-            if (_hasContent)
-                contentView?.setText((_currentlyLoadedElement as Register).Content.toString(), TextView.BufferType.EDITABLE)
+            if (hasContent)
+                contentView?.setText((currentlyLoadedElement as Register).Content.toString(), TextView.BufferType.EDITABLE)
             else
                 contentView?.text?.clear()
+
             informationCallback?.abortInformations()
         }
-
         view?.findViewById<Button>(R.id.openOptionsButton)?.setOnClickListener{
             informationCallback?.openOptionsClicked()
         }
@@ -68,7 +69,7 @@ class InformationFragment : Fragment() {
     }
 
     fun updateView(currentlyLoadedElement: Element){
-        _currentlyLoadedElement = currentlyLoadedElement
+        this.currentlyLoadedElement = currentlyLoadedElement
 
         val nameView = view?.findViewById<TextView>(R.id.informationElementName)
         nameView?.text = currentlyLoadedElement.name
@@ -93,23 +94,21 @@ class InformationFragment : Fragment() {
                 //should be a Register when you get here.
                 contentView?.visibility = View.VISIBLE
                 contentView?.setText( String.format(Integer.toHexString((currentlyLoadedElement as Register).Content)) , TextView.BufferType.EDITABLE)
-                _hasContent = true
+                hasContent = true
 
                 view?.findViewById<Button>(R.id.informationSave)?.setOnClickListener{
                     val inputString = contentView?.text.toString()
                     //TODO this should go into an callback and then get passed to the modul. though this works too it is not as modular
                     (currentlyLoadedElement as Register).setContent( inputString )
                     informationCallback?.updateMima()
-                    contentView?.visibility = View.VISIBLE
                 }
-
             }
             else -> {
+                hasContent = false
                 contentView?.visibility = View.GONE
                 view?.findViewById<Button>(R.id.informationSave)?.setOnClickListener{
                     informationCallback?.abortInformations()
                 }
-
             }
         }
     }

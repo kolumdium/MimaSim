@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:key="pref_zeroes"
+        android:title="@string/optionFillZeroTitle"
+        android:summary="@string/optionFillZeroSummary"
+        android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="pref_invertSpeed"
+        android:title="@string/optionInvertSpeedTitle"
+        android:summary="@string/optionInvertSpeedSummary"
+        android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="pref_switchViews"
+        android:title="@string/optionSwitchViewsTitle"
+        android:summary="@string/optionSwitchViewsSummary"
+        android:defaultValue="false" />
+    <com.example.mimasim.GUI.IntEditTextPreference
+        android:key="pref_maxDelay"
+        android:title="@string/optionMaxDelayTitle"
+        android:summary="@string/optionMaxDelaySummary"
+        android:numeric="integer"
+        android:inputType="number"
+        android:maxLength="6"
+        />
+</PreferenceScreen>

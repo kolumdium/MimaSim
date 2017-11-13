@@ -60,13 +60,17 @@
     <string name="mimaModulName">Mima</string>
     <string name="mimaModulShort">Mima</string>
 
-    <string name="optionFillZero">Register immer auf selben Länge</string>
-    <string name="optionInvertSpeed">SpeedSlider Invertieren</string>
-    <string name="optionMaxDelay">Maximale Zeit zwischen Operationen</string>
+    <string name="optionFillZeroTitle">Einheitliche Länge für Register</string>
+    <string name="optionFillZeroSummary">Register werden mit Nullen gefüllt so das sie auf einer Länge sind.</string>
+    <string name="optionInvertSpeedTitle">SpeedSlider Invertieren</string>
+    <string name="optionInvertSpeedSummary">Dreht die Richtung des Sliders.</string>
+    <string name="optionMaxDelayTitle">Maximale Verzögerung</string>
+    <string name="optionMaxDelaySummary">Maximale Zeit zwischen Operationen.</string>
     <string name="options">Einstellungen</string>
-    <string name="optionSaveWarningMessage">Achtung! Die Mima wird zurück gesetzt und alle Fragmente neu geladen um die Optionen anzuwenden. Nicht gespeicherte Instruktionen gehen Verloren. Sind sie sicher das sie diese Aktion durchführen wollen?</string>
-    <string name="optionSaveWarningTitle">Einstellungen Speichern</string>
-    <string name="optionSwitchViews">Seite der Informationen/Instruktionen tauschen</string>
+    <string name="optionSaveWarningMessage">Achtung! Nicht gespeicherte Instruktionen gehen Verloren. Sind sie sicher das sie diese Aktion durchführen wollen?</string>
+    <string name="optionSaveWarningTitle">Verlust von Daten!</string>
+    <string name="optionSwitchViewsTitle">Fragmente tauschen</string>
+    <string name="optionSwitchViewsSummary">Die Seite der Informationen/Instruktionen tauschen.</string>
 
     <string name="placehodler">Placeholder</string>
     <string name="previewInformation">Informationen:</string>

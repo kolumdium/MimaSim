@@ -21,7 +21,8 @@
             app:layout_constraintBottom_toTopOf="@+id/ViewIOBus"
         app:layout_constraintEnd_toStartOf="@+id/centerBus"
         app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="RtlHardcoded">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -33,7 +34,7 @@
                 android:id="@+id/calculatorModulLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/calculatorModulShort"
+                android:text="@string/calculatorModulName"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,7 +52,8 @@
                 android:layout_height="wrap_content"
                 android:text="0x00000001"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/registerONELabel" />
+                app:layout_constraintTop_toBottomOf="@+id/registerONELabel"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/registerACCLabel"
@@ -68,7 +70,8 @@
                 android:layout_height="wrap_content"
                 android:text="0x00000000"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerACCLabel" />
+            app:layout_constraintTop_toBottomOf="@+id/registerACCLabel"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/registerXLabel"
@@ -85,7 +88,8 @@
                 android:layout_height="wrap_content"
                 android:text="0x00000000"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/registerXLabel" />
+                app:layout_constraintTop_toBottomOf="@+id/registerXLabel"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/registerY"
@@ -96,7 +100,8 @@
                 android:layout_marginTop="0dp"
                 android:text="0x00000000"
                 app:layout_constraintStart_toEndOf="@+id/arrowFromXToAlu"
-                app:layout_constraintTop_toBottomOf="@+id/registerYLabel" />
+                app:layout_constraintTop_toBottomOf="@+id/registerYLabel"
+                tools:ignore="HardcodedText,RtlHardcoded" />
 
             <TextView
                 android:id="@+id/registerYLabel"
@@ -115,7 +120,8 @@
                 android:layout_marginTop="32dp"
                 android:text="0x00000000"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/viewALU" />
+                app:layout_constraintTop_toBottomOf="@+id/viewALU"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/registerZLabel"
@@ -130,7 +136,8 @@
                 app:layout_constraintBottom_toTopOf="@+id/registerZ"
                 app:layout_constraintEnd_toStartOf="@+id/arrowFromAluToZ"
                 app:layout_constraintStart_toStartOf="@+id/registerZ"
-                tools:layout_editor_absoluteX="20dp" />
+                tools:layout_editor_absoluteX="20dp"
+                tools:ignore="RtlHardcoded" />
 
             <TextView
                 android:id="@+id/aluText"
@@ -140,7 +147,8 @@
                 android:textAlignment="center"
                 app:layout_constraintBottom_toTopOf="@+id/arrowFromAluToZ"
                 app:layout_constraintEnd_toEndOf="@+id/viewALU"
-                app:layout_constraintStart_toStartOf="@+id/viewALU" />
+                app:layout_constraintStart_toStartOf="@+id/viewALU"
+                tools:ignore="HardcodedText" />
 
             <View
             android:id="@+id/arrowFromONEToBus"
@@ -187,7 +195,8 @@
                 android:layout_marginTop="24dp"
                 android:background="@drawable/alu"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/registerY" />
+                app:layout_constraintTop_toBottomOf="@+id/registerY"
+                tools:ignore="RtlHardcoded" />
 
             <View
                 android:id="@+id/arrowFromYToAlu"
@@ -260,13 +269,14 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/centerBus"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RtlHardcoded">
 
         <TextView
             android:id="@+id/controlModulLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/controlModulShort"
+            android:text="@string/controlModulName"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -277,7 +287,8 @@
             android:layout_marginTop="0dp"
             android:text="0000"
             app:layout_constraintStart_toStartOf="@+id/registerCounterLabel"
-            app:layout_constraintTop_toBottomOf="@+id/registerCounterLabel" />
+            app:layout_constraintTop_toBottomOf="@+id/registerCounterLabel"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/registerCounterLabel"
@@ -294,7 +305,8 @@
             android:layout_height="wrap_content"
             android:text="0x00000000"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerIRLabel" />
+            app:layout_constraintTop_toBottomOf="@+id/registerIRLabel"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/registerIRLabel"
@@ -322,7 +334,8 @@
             android:text="0x00000000"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerIARLabel" />
+            app:layout_constraintTop_toBottomOf="@+id/registerIARLabel"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/registerIARLabel"
@@ -356,7 +369,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/centerBus"
         app:layout_constraintTop_toBottomOf="@+id/controlModul"
-        tools:layout_editor_absoluteX="188dp">
+        tools:layout_editor_absoluteX="188dp"
+        tools:ignore="RtlHardcoded">
 
         <View
             android:id="@+id/arrowFromSIRToCenterBus"
@@ -426,7 +440,8 @@
             app:layout_constraintBottom_toTopOf="@+id/IOControler"
             app:layout_constraintEnd_toEndOf="@+id/registerSAR"
             app:layout_constraintStart_toStartOf="@+id/IOControler"
-            app:layout_constraintTop_toBottomOf="@+id/registerSAR" />
+            app:layout_constraintTop_toBottomOf="@+id/registerSAR"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/memoryModulLabel"
@@ -434,7 +449,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
-            android:text="@string/memoryModulShort"
+            android:text="@string/memoryModulName"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -447,7 +462,8 @@
             android:text="READ DONE"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/viewMemoryLabel" />
+            app:layout_constraintTop_toBottomOf="@+id/viewMemoryLabel"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/viewMemoryLabel"
@@ -464,7 +480,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:text="@string/ioControlShort"
+            android:text="@string/ioControlName"
             app:layout_constraintBottom_toTopOf="@+id/IOState"
             app:layout_constraintEnd_toStartOf="@+id/arrowFromSARToIOBus"
             app:layout_constraintStart_toEndOf="@+id/arrowFromSIRToIOBus" />
@@ -486,7 +502,8 @@
             android:layout_marginStart="16dp"
             android:text="0x00000000"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerSIRLabel" />
+            app:layout_constraintTop_toBottomOf="@+id/registerSIRLabel"
+            tools:ignore="HardcodedText,RtlHardcoded" />
 
         <TextView
             android:id="@+id/registerSIRLabel"
@@ -497,7 +514,8 @@
             android:layout_marginTop="4dp"
             android:text="@string/registerSirShort"
             app:layout_constraintStart_toStartOf="@+id/registerSIR"
-            app:layout_constraintTop_toBottomOf="@+id/viewMemory" />
+            app:layout_constraintTop_toBottomOf="@+id/viewMemory"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/registerSAR"
@@ -507,7 +525,8 @@
             android:text="0x00000000"
             app:layout_constraintBottom_toTopOf="@+id/IOControler"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerSARLabel" />
+            app:layout_constraintTop_toBottomOf="@+id/registerSARLabel"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/registerSARLabel"
@@ -621,10 +640,11 @@
         android:layout_height="wrap_content"
         android:text="empty"
         app:layout_constraintStart_toStartOf="@+id/ExportViewLabel"
-        app:layout_constraintTop_toBottomOf="@+id/ExportViewLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/ExportViewLabel"
+        tools:ignore="HardcodedText" />
 
     <EditText
-        android:id="@+id/ImportView"
+        android:id="@+id/importView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -634,6 +654,7 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/ImportViewLabel"
-        app:layout_constraintTop_toBottomOf="@+id/ImportViewLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/ImportViewLabel"
+        tools:ignore="HardcodedText" />
 
 </android.support.constraint.ConstraintLayout>
