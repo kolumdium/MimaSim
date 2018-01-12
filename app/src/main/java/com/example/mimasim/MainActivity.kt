@@ -92,6 +92,7 @@ class MainActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, true)
         permissions()
         readPref()
         init()
@@ -215,7 +216,7 @@ class MainActivity :
         prefFillZeros = sharedPref.getBoolean( PREF_KEY_ZEROS, true)
         prefInvertSpeed = sharedPref.getBoolean( PREF_KEY_SPEED, true)
         prefSwitchViews = sharedPref.getBoolean( PREF_KEY_VIEWS, false)
-        prefMaxDelay = sharedPref.getInt(PREF_KEY_DELAY, 0);
+        prefMaxDelay = sharedPref.getInt(PREF_KEY_DELAY, 1000);
     }
 
     /*

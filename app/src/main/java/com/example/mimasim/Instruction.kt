@@ -9,7 +9,7 @@ class Instruction (opCode : Int = 0x0, var opCodeString: String = " ", address :
     var address : Int = address
     set(value) {
         while (value > 0xFFFFFFF) {
-            value.shr(1)
+            value.ushr(1)
         }
         field = value
     } 

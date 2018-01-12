@@ -15,11 +15,11 @@ class IntEditTextPreference : EditTextPreference {
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
-    override fun getPersistedString(defaultReturnValue: String): String {
+    override fun getPersistedString(defaultReturnValue: String?): String? {
         return getPersistedInt(-1).toString()
     }
 
-    override fun persistString(value: String): Boolean {
-        return persistInt(Integer.valueOf(value)!!)
+    override fun persistString(value: String?): Boolean {
+        return persistInt(Integer.valueOf(value))
     }
 }

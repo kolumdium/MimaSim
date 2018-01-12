@@ -8,7 +8,7 @@ class Register(name: String, short : String,  description : String, content : In
     var Content : Int = content
         set(value) {
             while (value > 0xFFFFFFFF) {
-                value.shr(1)
+                value.ushr(1)
             }
             field = value
         }

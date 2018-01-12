@@ -332,12 +332,13 @@ class MimaModul(name: String, short: String, description : String, var context: 
                     uiTrigger?.arrowsSarIO()
                 }
                 else {
-                    controlModul.Counter.Content++
+
                     uiTrigger?.centerBus()
                     uiTrigger?.arrowsSarMem()
                     uiTrigger?.arrowIr(false)
                     uiTrigger?.mem("READ")
                 }
+                controlModul.Counter.Content++
             }
             6 -> {
                 controlModul.Counter.Content++
@@ -515,9 +516,12 @@ class MimaModul(name: String, short: String, description : String, var context: 
                     uiTrigger?.centerBus()
                     uiTrigger?.arrowIr(false)
                     uiTrigger?.arrowIar(true)
-                    controlModul.Counter.Content++
                     instructionTrigger?.jumpTo(currentInstruction.address)
                 }
+                controlModul.Counter.Content++
+            }
+            11 -> {
+                controlModul.Counter.Content = 0
             }
             else -> controlModul.Counter.Content++
         }

@@ -28,7 +28,7 @@ class ControlModul(name: String, short: String, description: String, var context
 
     fun getOpCode() : Int{
         val content = IR.Content
-        var shiftedContent = content.shr(28)
+        var shiftedContent = content.ushr(28)
 
         for (index in OpCodes.indices)
             if ((index == shiftedContent))

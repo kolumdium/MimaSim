@@ -24,6 +24,6 @@ class Alu(name: String, short: String, description : String, private val X : Reg
         else Z.Content =  0
     }
     fun shift(){
-        Z.Content =  X.Content.shr(Y.Content)
+        Z.Content =  X.Content.ushr(Y.Content)
     }
 }

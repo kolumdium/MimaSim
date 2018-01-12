@@ -9,10 +9,14 @@ class Memory(name: String, short: String, description : String) : Element(name, 
     fun getInstruction(address : Int) : Int{
         var returnValue = 0
 
+        //If key is in map return value else make new Instruction with all 0
         for ((key,value) in Content){
-           if (key == address)
+           if (key == address) {
                returnValue = value
-       }
+               return returnValue
+           }
+
+        }
         Content.put(address, returnValue)
         return returnValue
     }
