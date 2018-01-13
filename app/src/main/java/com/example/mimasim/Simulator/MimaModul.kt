@@ -5,6 +5,7 @@ import android.util.Log
 import com.example.mimasim.GUI.InstructionFragment
 import com.example.mimasim.GUI.MimaFragment
 import com.example.mimasim.Instruction
+import com.example.mimasim.MainActivity
 import com.example.mimasim.R
 
 /**
@@ -18,11 +19,12 @@ class MimaModul(name: String, short: String, description : String, var context: 
     val controlModul = ControlModul(context.resources.getString(R.string.controlModulName), context.resources.getString(R.string.controlModulShort), context.resources.getString(R.string.controlModulDescription), context)
     val memoryModul = MemoryModul(context.resources.getString(R.string.memoryModulName),context.resources.getString(R.string.memoryModulShort), context.resources.getString(R.string.memoryModulDescription), context, mimaFragment)
 
-    val allRegisters = ArrayList<Register>()
+    private val allRegisters = ArrayList<Register>()
     val centerBus = CenterBus(context.resources.getString(R.string.centerBusName),context.resources.getString(R.string.centerBusDescription), context.resources.getString(R.string.centerBusDescription), allRegisters, context)
 
-    var uiTrigger: UITrigger? = null
-    var instructionTrigger: InstructionTrigger? = null
+    private var uiTrigger: UITrigger? = null
+    private var instructionTrigger: InstructionTrigger? = null
+    private var haltMimaTrigger: HaltMimaTrigger? = null
 
 
     interface UITrigger{
@@ -57,6 +59,11 @@ class MimaModul(name: String, short: String, description : String, var context: 
         fun jumpTo(address : Int)
     }
 
+    // This is not listed in BA only added a couple days before deadline was to lazy to redo all the UMl stuff
+    interface HaltMimaTrigger{
+        fun stop()
+    }
+
     init {
         allRegisters.add(calculatorModul.ACC)
         allRegisters.add(calculatorModul.X)
@@ -78,6 +85,11 @@ class MimaModul(name: String, short: String, description : String, var context: 
             instructionTrigger = instructionFragment
         } catch (e : ClassCastException){
            Log.d("ClassCastException","Didn't implement instructionTrigger")
+        }
+        try {
+            haltMimaTrigger = context as HaltMimaTrigger
+        } catch (e : ClassCastException){
+            Log.d("ClassCastException","Didn't implement instructionTrigger")
         }
     }
 
@@ -119,7 +131,8 @@ class MimaModul(name: String, short: String, description : String, var context: 
 
         when (controlModul.Counter.Content){
             0 -> {
-                centerBus.transfer(controlModul.IAR, memoryModul.SAR, calculatorModul.X)
+                centerBus.transfer(controlModul.IAR, memoryModul.SAR)
+                centerBus.transfer(controlModul.IAR, calculatorModul.X)
 
                 if (memoryModul.IOControl.isExternal(memoryModul.SAR.Content)){
                     uiTrigger?.ioRead()
@@ -579,7 +592,7 @@ class MimaModul(name: String, short: String, description : String, var context: 
     }
 
     fun HLT() {
-        //TODO call back to halt mima
+        haltMimaTrigger?.stop()
     }
 
     fun NOT() {

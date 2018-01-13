@@ -19,11 +19,6 @@ class CenterBus(name: String, short: String, description : String, var allRegist
         outpuRegister.Content = inputregister.Content
     }
 
-    fun transfer(inputregister: Register, outpuRegister1: Register, outpuRegister2: Register){
-        outpuRegister1.Content = inputregister.Content
-        outpuRegister2.Content = inputregister.Content
-    }
-
     private fun maskInput(content : Int): Int{
         val x = content.shl(4)
         return x.ushr(4)

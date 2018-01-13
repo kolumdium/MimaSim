@@ -19,7 +19,7 @@ class ControlModul(name: String, short: String, description: String, var context
         val instr = Instruction()
         val opCode = getOpCode()
         instr.opCode = opCode
-        instr.opCodeString = OpCodes[opCode]
+        instr.opCodeString = OpCodes.elementAtOrElse(opCode, {"ADD"})
         val tmpCode = instr.opCode.shl(28)
         instr.address = IR.Content xor tmpCode
 
@@ -28,29 +28,11 @@ class ControlModul(name: String, short: String, description: String, var context
 
     fun getOpCode() : Int{
         val content = IR.Content
-        var shiftedContent = content.ushr(28)
+        val shiftedContent = content.ushr(28)
 
-        for (index in OpCodes.indices)
-            if ((index == shiftedContent))
-                return index
-
-               /* The Mima does only use 14 Instruktions so we dont actually need to implement the extended version right?
-              for (index in OpCodes.indices)
-            when(content){
-                in 0..10 -> {
-                    if ((index xor content) == 0)
-                        return index
-                }
-                in 11..14 -> {
-                    Log.d("OPCODE Interpreting: ","Didn't find matching OpCode please check ControlModul or input Instruction")
-                    return 0
-                }
-                15->{
-                    content = IR.Content
-                    content.shr(24)
-                }
-            }
-               }*/
+        if (shiftedContent in 0..OpCodes.size){
+            return OpCodes.indexOf(OpCodes[shiftedContent])
+        }
 
         Log.d("OPCODE Interpreting: ","Didn't find matching OpCode please check ControlModul or input Instruction")
         return 0

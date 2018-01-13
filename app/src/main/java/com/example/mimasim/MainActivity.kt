@@ -35,8 +35,8 @@ class MainActivity :
         InformationFragment.InformationCallback,
         InformationPreviewFragment.InformationPreviewCallback,
         InstructionPreviewFragment.InstructionPreviewCallback,
-        Filemanager.FilemanagerCallback{
-
+        Filemanager.FilemanagerCallback,
+        MimaModul.HaltMimaTrigger {
     var mimaFragment = MimaFragment()
     var informationFragment = InformationFragment()
     var instructionFragment = InstructionFragment()
@@ -561,5 +561,12 @@ class MainActivity :
 
     override fun instructionPreviewClicked() {
         openInstruction()
+    }
+
+    /*
+    * HaltMima from MimaModul (HLT Instruktion)
+    * */
+    override fun stop() {
+        stopMima()
     }
 }

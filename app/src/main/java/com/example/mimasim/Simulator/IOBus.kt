@@ -13,11 +13,13 @@ class IOBus(name: String, short: String, description : String, var SIR : Registe
         externallyUsedAddresses.put(0xC000002, false)
     }
 
+    //get stuff from IO Bus
     fun fromExternal(externalInput: Int){
         SIR.Content = externalInput
     }
 
-    fun toExternal() {
-
+    //Function to get acces from IO/Bus
+    public fun toExternal() : Int {
+        return SIR.Content
     }
 }

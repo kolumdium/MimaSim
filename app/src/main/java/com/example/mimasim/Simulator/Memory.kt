@@ -7,22 +7,11 @@ class Memory(name: String, short: String, description : String) : Element(name, 
     var Content = mutableMapOf<Int, Int>()
 
     fun getInstruction(address : Int) : Int{
-        var returnValue = 0
-
-        //If key is in map return value else make new Instruction with all 0
-        for ((key,value) in Content){
-           if (key == address) {
-               returnValue = value
-               return returnValue
-           }
-
-        }
-        Content.put(address, returnValue)
-        return returnValue
+        return Content.getOrPut(address, {0})
     }
 
     fun saveToMemory(address: Int, value:Int){
-        if (address in Content.keys)
+        if (Content.containsKey(address))
             Content.set(address, value)
         else
             Content.put(address, value)
