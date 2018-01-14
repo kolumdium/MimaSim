@@ -116,7 +116,7 @@ class MimaModul(name: String, short: String, description : String, var context: 
     fun readExternalDone(externalInput : Int){
         memoryModul.ioBus.fromExternal(externalInput)
         uiTrigger?.ioReadDone()
-        controlModul.Counter.Content++
+        //controlModul.Counter.Content++
     }
 
     fun step(){

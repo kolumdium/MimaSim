@@ -22,7 +22,7 @@ class MemoryModul(name: String, short: String, description : String, context: Co
 
     interface ExternalIOTrigger{
         fun readExternal()
-        fun writeExternal()
+        fun writeExternal(identifier : String)
         fun noDeviceFound()
     }
 
@@ -73,7 +73,13 @@ class MemoryModul(name: String, short: String, description : String, context: Co
             if (read!!) {
                 externalIOTrigger?.readExternal()
             } else {
-                externalIOTrigger?.writeExternal()
+                var identifier = "Char"
+                when(SAR.Content){
+                    0xC000002 ->{identifier = "Char"}
+                    0xC000003 ->{identifier = "Integer"}
+                    else ->{identifier = "Char"}
+                }
+                externalIOTrigger?.writeExternal(identifier)
             }
         } else {
          externalIOTrigger?.noDeviceFound()

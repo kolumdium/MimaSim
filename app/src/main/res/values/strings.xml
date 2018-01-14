@@ -19,6 +19,7 @@
     <string name="clearInstructions">Instruktionen leeren</string>
     <string name="clearMima">Mima leeren</string>
     <string name="close">Schließen</string>
+    <string name="closeAndSave">Speichern</string>
 
     <string name="controlModulDescription">Das Steuerwerk ist für die Ausführung der Instruktion verantwortlich. Es sendet die entsprechenden Steuersignale an die Register und die ALU.</string>
     <string name="controlModulName">Steuerwerk</string>
@@ -41,8 +42,8 @@
     <string name="ioControlName">I/O-Control</string>
     <string name="ioControlShort">IO-C</string>
 
-    <string name="ioExport">Ausgabe</string>
-    <string name="ioImport">Eingabe</string>
+    <string name="ioExport">Ausgabe\nC000002</string>
+    <string name="ioImport">Eingabe\nC000001</string>
     <string name="ioRead">Reading External</string>
     <string name="ioWrite">Writing External</string>
 

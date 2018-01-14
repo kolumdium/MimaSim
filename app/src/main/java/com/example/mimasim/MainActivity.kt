@@ -485,11 +485,20 @@ class MainActivity :
     * MimaFragmentCallbacks
     * */
 
-    override fun writeExternal() {
-        val exportView = findViewById<TextView>(R.id.ExportView)
-        var exportString = exportView.text.toString()
-        exportString += mimaModul?.memoryModul?.SIR?.Content?.toChar()
-        exportView.setText(exportString)
+    override fun writeExternal(identifier : String) {
+        if (identifier == "Char") {
+            //Outputs one Char
+            val exportView = findViewById<TextView>(R.id.ExportView)
+            var exportString = exportView.text.toString()
+            exportString += mimaModul?.memoryModul?.SIR?.Content?.toChar()
+            exportView.setText(exportString)
+        } else if (identifier == "Integer") {
+            //outputs one Integer
+            val exportView = findViewById<TextView>(R.id.ExportView)
+            var exportString = exportView.text.toString()
+            exportString += (Integer.decode( "0x" +mimaModul?.memoryModul?.SIR?.Content)).toString()
+            exportView.setText(exportString)
+        }
     }
 
     override fun readExternal() {

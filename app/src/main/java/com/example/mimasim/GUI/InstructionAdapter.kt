@@ -19,8 +19,6 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
         var row = convertView
 
         val tmpInstruction = this.getItem(position)
-        //This is terribly slow TODO check if can make faster
-
         /*
         * View Holder Pattern for smoother Scrolling
         * */
@@ -28,8 +26,6 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
             /*
             * If View wasn't yet inflated, inflate it and save it's contents
             * */
-
-
             val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             row = inflater.inflate(R.layout.instruction_list_item, parent, false)
 
@@ -38,7 +34,6 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
             holder.editText = row.findViewById(R.id.instructionItemText)
             holder.elementStatus = row.findViewById(R.id.elementStatus)
             holder.elementHint = row.findViewById(R.id.elementHint)
-
             /*
             * Set Spinner Adapter
             * */
@@ -57,14 +52,17 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
 
         holder.spinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                /* When an item is selected get OPCode and OPCodeString and write it to the instruction
+                /*
+                * When an item is selected get OPCode and OPCodeString and write it to the instruction
                 * */
                 val OPCodeArray = context.resources.getTextArray(R.array.OPCodeArray)
 
                 tmpInstruction.opCode = p2
                 tmpInstruction.opCodeString = OPCodeArray[p2].toString()
                 holder.spinner?.setSelection(p2)
-                saveInstructionCallback.saveInstruction(position, tmpInstruction)
+                //TODO This makes scrolling slow but if not there the element doesn get updated on selection...
+                this@InstructionAdapter.notifyDataSetChanged()
+                //saveInstructionCallback.saveInstruction(position, tmpInstruction)
             }
             override fun onNothingSelected(p0: AdapterView<*>?) {}
         }
@@ -81,9 +79,10 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
             holder.elementStatus?.setBackgroundColor(ContextCompat.getColor(context, R.color.primary50))
         }
 
+        holder.editText?.onFocusChangeListener = View.OnFocusChangeListener { p0, p1 -> tmpInstruction.address = convert(holder.editText?.text.toString()) }
+
         holder.editText?.setText( Integer.toHexString(tmpInstruction.address) )
         holder.spinner?.setSelection( tmpInstruction.opCode)
-
 
         var hintString = ""
         when (tmpInstruction.opCodeString){
@@ -108,8 +107,37 @@ class InstructionAdapter(context: Context, instructions : ArrayList<Instruction>
         return row as View
     }
 
+    fun convert(hexString : String) : Int{
+        var returnvalue = 0
+        var contentString = hexString
+        if (hexString.isEmpty()){
+            contentString = "0"
+        }
+        //if Bigger then max length set to max value
+        if (hexString.length > 8) {
+            contentString = "0xffffffff"
+        }
+
+        if(hexString.length == 8) {
+            //if first hexcode bigger then 7
+            if (hexString[0].toInt() > 7){
+                contentString = "0x" + hexString.subSequence(1, 8).toString()
+                returnvalue = Integer.decode(contentString)
+                val firstHex = hexString[0].toString()
+                val firstHexAsInt = Integer.decode("0x" + firstHex)
+                returnvalue = returnvalue xor firstHexAsInt.shl(28)
+            }
+            else
+                returnvalue = Integer.decode("0x" + contentString)
+        }
+        else
+            returnvalue = Integer.decode("0x" + contentString)
+
+        return returnvalue
+    }
+
     interface InstructionAdapterCallback {
-        fun saveInstruction(position: Int, instruction: Instruction)
+//        fun saveInstruction(position: Int, instruction: Instruction)
         fun lastSelectedItem(position : Int)
     }
 

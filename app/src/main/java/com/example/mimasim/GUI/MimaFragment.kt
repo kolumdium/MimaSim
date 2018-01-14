@@ -45,7 +45,7 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
         fun readExternal()
         fun readExternalDone(text: Char)
         fun makeToast(text: String)
-        fun writeExternal()
+        fun writeExternal(identifier : String)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -292,8 +292,8 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
         hideButtons()
     }
 
-    override fun writeExternal() {
-        mimaFragmentCallback?.writeExternal()
+    override fun writeExternal(identifier : String) {
+        mimaFragmentCallback?.writeExternal(identifier)
     }
 
     override fun noDeviceFound() {

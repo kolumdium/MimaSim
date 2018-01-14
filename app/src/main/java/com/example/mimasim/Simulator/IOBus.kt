@@ -9,8 +9,11 @@ class IOBus(name: String, short: String, description : String, var SIR : Registe
 
     init {
         // Adress, read
+        //input
         externallyUsedAddresses.put(0xC000001, true)
+        //output
         externallyUsedAddresses.put(0xC000002, false)
+        externallyUsedAddresses.put(0xC000003, false)
     }
 
     //get stuff from IO Bus

@@ -61,6 +61,7 @@ class InstructionFragment : Fragment(), InstructionAdapter.InstructionAdapterCal
 
         view?.findViewById<Button>(R.id.instructionSaveButton)?.setOnClickListener{
             //  pass to Memory now
+            //Read all Instructions again
             instructionCallback?.saveInstructions(instructionManager.instructions)
         }
 
@@ -160,10 +161,11 @@ class InstructionFragment : Fragment(), InstructionAdapter.InstructionAdapterCal
         mInstructionAdapter?.notifyDataSetChanged()
     }
 
-    override fun saveInstruction(position: Int, instruction: Instruction) {
-        if (instructionManager.instructions.size > position)
-            instructionManager.instructions.set(position, instruction)
-    }
+//    override fun saveInstruction(position: Int, instruction: Instruction) {
+//        if (instructionManager.instructions.size > position)
+//            instructionManager.instructions.set(position, instruction)
+//        mInstructionAdapter?.notifyDataSetChanged()
+//    }
 
     override fun lastSelectedItem(position: Int) {
         this.lastSelectedItem = position
