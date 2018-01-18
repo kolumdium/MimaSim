@@ -75,28 +75,36 @@ class Filemanager(var context: Context) {
 
             for (line in lineList){
                 val tmpInstruction = Instruction()
-                val tmpline = line.split(" ")
+                val tmpLine = line.split(" ")
 
-                if (tmpline.isNotEmpty()) {
-                    val tmpOpcode = translateOpCodeString(tmpline[0])
+                if (tmpLine.isNotEmpty()) {
+                    //check if it is a comment
+                    if (tmpLine[0].contains('#')) {
+                        //its a comment we can ignore it.
+                        continue
+                    }
+                    val tmpOpcode = translateOpCodeString(tmpLine[0])
+
                     if (tmpOpcode.isOpcodeString) {
                         //If the OpCodeString could be translated we know it is valid and can be added as well as the translated opcode
-                        tmpInstruction.opCodeString = tmpline[0]
+                        tmpInstruction.opCodeString = tmpLine[0]
                         tmpInstruction.opCode = tmpOpcode.opCode
                     } else {
-                        //Do something if the first thingy is not Opcode
+                        //Could do something if the first thingy is not Opcode Though we can leave it empty and it shall be 0
                     }
+                } else {
+                    continue
                 }
 
-                if (tmpline.size > 1){
-                    val tmpHexString = translateHexString(tmpline[1])
+                //If there is more then just one Split
+                if (tmpLine.size > 1){
+                    val tmpHexString = translateHexString(tmpLine[1])
                     if (tmpHexString.isValidHexString) {
                         tmpInstruction.address = Integer.decode(tmpHexString.hexString)
                     }
                     //If read was succesfull we add the read instruction. If not we add nothing
                     instructions.add(tmpInstruction)
                 }
-
             }
         }  catch (e : FileNotFoundException) {
             Log.e("Loading From File", "File not found: " + e.toString());
