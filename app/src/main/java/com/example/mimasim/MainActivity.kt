@@ -56,6 +56,8 @@ class MainActivity :
 
     var speed : Long = 0
     var isRunning : Boolean = false
+    //this is for running after user input
+    var wasRunning : Boolean = false
 
     var filemanger : Filemanager? = null
 
@@ -514,6 +516,8 @@ class MainActivity :
         mimaModul?.readExternalDone(asciiConvert)
         mimaFragment.updateRegisters()
         hideKeyboard(this)
+        if (wasRunning)
+            startMima()
     }
 
     override fun makeToast(text: String) {
@@ -534,11 +538,13 @@ class MainActivity :
 
     /* StepControl */
     override fun startButtonPressed() {
+        wasRunning = true
         mimaModul?.speedChanged(speed)
         startMima()
     }
 
     override fun stopButtonPressed() {
+        wasRunning = false
         stopMima()
     }
 
