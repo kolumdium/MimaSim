@@ -110,6 +110,13 @@ class MainActivity :
     override fun onStart() {
         super.onStart()
         setListener()
+        //load the last programm
+        filemanger?.load("latestProgram.txt")
+    }
+
+    override fun onPause() {
+        filemanger?.save("latestProgram", instructionFragment.instructionManager.getStringForSaving())
+        super.onPause()
     }
 
     override fun onBackPressed() {
@@ -204,7 +211,6 @@ class MainActivity :
                 if (grantResults.size > 0   && grantResults[0] == PackageManager.PERMISSION_GRANTED
                         && grantResults[1] == PackageManager.PERMISSION_GRANTED)  {
                     //We can now save and load Programs
-                    //TODO maybe add a request again if user denied but wants to save or load
                 } else {
                     Toast.makeText(parent, "The app was not allowed to read or wirte to your storage. Hence, it cannot function properly. Please consider granting it this permission", Toast.LENGTH_LONG).show()
                 }
@@ -250,9 +256,8 @@ class MainActivity :
     }
 
     private fun extendNormal(){
-        resize(1f, 10f ,1f)
-        val transaction = fragmentManager.beginTransaction()
 
+        val transaction = fragmentManager.beginTransaction()
         transaction.hide(informationFragment)
         transaction.hide(instructionFragment)
         transaction.show(instructionPreviewFragment)
@@ -260,34 +265,45 @@ class MainActivity :
         transaction.show(mimaFragment)
         transaction.commit()
 
+        //resize after Transaction makes smoother transition
+        resize(1f, 10f ,1f)
+
+        //For some Reason this prevents those UI Bugs
+        if (extended != Extended.LEFT && extended != Extended.RIGHT){
+            val transactionSmooth = fragmentManager.beginTransaction()
+            transactionSmooth.detach(mimaFragment)
+            transactionSmooth.attach(mimaFragment)
+            transactionSmooth.commit()
+        }
+
         extended = Extended.NORMAL
     }
 
     private fun extendRight() {
-        resize(0f, 10f ,5f)
 
         val transaction = fragmentManager.beginTransaction()
         transaction.show(rightFragment)
         transaction.show(mimaFragment)
         transaction.show(leftPreview)
-
         transaction.hide(rightPreview)
         transaction.commit()
+        //resize after Transaction makes smoother transition
+        resize(0f, 10f ,5f)
         extended = Extended.RIGHT
 
         instructionFragment.makeSmallLayout()
     }
 
     private fun extendLeft(){
-        resize(5f, 10f ,0f)
 
         val transaction = fragmentManager.beginTransaction()
         transaction.show(leftFragment)
         transaction.show(mimaFragment)
         transaction.show(rightPreview)
-
         transaction.hide(leftPreview)
         transaction.commit()
+        //resize after Transaction makes smoother transition
+        resize(5f, 10f ,0f)
         extended = Extended.LEFT
 
         instructionFragment.makeSmallLayout()
@@ -296,6 +312,7 @@ class MainActivity :
     fun extendFullscreen(fragment: Fragment){
         val transaction = fragmentManager.beginTransaction()
         transaction.hide(mimaFragment)
+        transaction.commit()
 
         when (fragment) {
             rightFragment -> {
@@ -313,8 +330,6 @@ class MainActivity :
         }
 
         instructionFragment.makeBigLayout()
-
-        transaction.commit()
 
         stopMima()
     }
@@ -436,8 +451,8 @@ class MainActivity :
     }
 
     override fun doneLoading(){
-        instructionFragment.instructionManager.load(filemanger!!.instructions)
-        instructionFragment.mInstructionAdapter?.notifyDataSetChanged()
+        instructionFragment?.instructionManager.load(filemanger!!.instructions)
+        instructionFragment?.mInstructionAdapter?.notifyDataSetChanged()
     }
 
     /*
@@ -452,7 +467,7 @@ class MainActivity :
     override fun clearMima() {
         mimaModul?.reset()
         mimaFragment.updateRegisters()
-        mimaFragment.redraw()
+        mimaFragment.reDraw()
     }
 
     override fun closeInstructions() {

@@ -36,14 +36,14 @@ class InstructionFragment : Fragment(), InstructionAdapter.InstructionAdapterCal
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        instructionManager.loadDefaultInstructions()
-        instructionCallback?.saveInstructions(instructionManager.instructions)
+        //This is for Debugging. Can be used to load stuff into the Mima on start. We now load the lastProgramm though.
+        //instructionManager.loadDefaultInstructions()
+        //instructionCallback?.saveInstructions(instructionManager.instructions)
         return inflater.inflate(R.layout.instruction_big, container , false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         view?.setBackgroundColor( resources.getColor(R.color.lighterGrey))
-
 
         view?.setOnLongClickListener{
             instructionCallback?.extendInstructions()

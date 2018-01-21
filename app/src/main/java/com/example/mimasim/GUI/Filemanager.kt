@@ -52,7 +52,7 @@ class Filemanager(var context: Context) {
         }
     }
 
-    private fun save(filename : String, content: String){
+    fun save(filename : String, content: String){
         val fullname = mydir.path + "/" + filename + extension
         val file = File(fullname)
         if (file.exists())
@@ -65,7 +65,7 @@ class Filemanager(var context: Context) {
         }
     }
 
-    private fun load(filename : String){
+    fun load(filename : String){
         this.instructions.clear()
         val fullname = mydir.path + "/" + filename
         try {

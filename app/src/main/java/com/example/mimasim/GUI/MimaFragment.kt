@@ -192,10 +192,10 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
                         }
                     someTextView?.text = String.format(fillZeros + Integer.toHexString(value.Content))
                     someTextView?.bringToFront()
-                    view.findViewById<View>(R.id.aluText).bringToFront()
                }
             }
         }
+        view.findViewById<View>(R.id.aluText).bringToFront()
     }
 
     fun hideButtons(){
@@ -223,11 +223,17 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
         this.view.findViewById<View>(R.id.viewALU).setBackgroundResource(R.drawable.alu)
     }
 
-    fun redraw(){
-        drawArrows()
-        updateRegisters()
-        drawAlu()
+    fun reDraw(){
+        softReDraw()
         prepareIO()
+    }
+    
+    fun softReDraw(){
+        if (view != null){
+            drawArrows()
+            updateRegisters()
+            drawAlu()
+        }
     }
 
     private fun drawArrows(){
