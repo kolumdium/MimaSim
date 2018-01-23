@@ -437,16 +437,10 @@ class MimaModul(name: String, short: String, description : String, var context: 
             }
             9->{
                 controlModul.Counter.Content++
-
                 uiTrigger?.mem("")
             }
             11 -> {
-                centerBus.transfer(calculatorModul.Z, calculatorModul.ACC)
                 controlModul.Counter.Content = 0
-
-                uiTrigger?.centerBus()
-                uiTrigger?.arrowZ()
-                uiTrigger?.arrowAcc(true)
             }
             else -> {
                 controlModul.Counter.Content++

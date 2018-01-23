@@ -512,9 +512,7 @@ class MainActivity :
         } else if (identifier == "Integer") {
             //outputs one Integer
             val exportView = findViewById<TextView>(R.id.ExportView)
-            var exportString = exportView.text.toString()
-            exportString += (Integer.decode( "0x" +mimaModul?.memoryModul?.SIR?.Content)).toString()
-            exportView.setText(exportString)
+            exportView.text = mimaModul?.memoryModul?.SIR?.Content.toString()
         }
     }
 
