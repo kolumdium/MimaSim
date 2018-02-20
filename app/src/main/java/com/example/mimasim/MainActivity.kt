@@ -453,6 +453,7 @@ class MainActivity :
     override fun doneLoading(){
         instructionFragment?.instructionManager.load(filemanger!!.instructions)
         instructionFragment?.mInstructionAdapter?.notifyDataSetChanged()
+        mimaModul?.memoryModul?.saveToMemory(filemanger!!.instructions)
     }
 
     /*
@@ -595,6 +596,6 @@ class MainActivity :
     * HaltMima from MimaModul (HLT Instruktion)
     * */
     override fun stop() {
-        stopMima()
+        stopButtonPressed()
     }
 }

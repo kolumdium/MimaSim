@@ -285,10 +285,10 @@ class MimaFragment : Fragment(), MimaModul.UITrigger , MemoryModul.ExternalIOTri
 
     fun mimaStoped(){
         val startButton = view?.findViewById<FloatingActionButton>(R.id.stepControlStartButton)
-        startButton?.isClickable
+        startButton?.isClickable = true
         startButton?.visibility = View.VISIBLE
-        val stepButton = view?.findViewById<FloatingActionButton>(R.id.stepControlStartButton)
-        stepButton?.isClickable
+        val stepButton = view?.findViewById<FloatingActionButton>(R.id.stepControlStepButton)
+        stepButton?.isClickable = true
         stepButton?.visibility = View.VISIBLE
     }
 

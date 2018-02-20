@@ -337,15 +337,12 @@ class MimaModul(name: String, short: String, description : String, var context: 
 
         when (controlModul.Counter.Content){
             5 -> {
-
                 centerBus.transfer(controlModul.IR, memoryModul.SAR)
-
                 if (memoryModul.IOControl.isExternal(memoryModul.SAR.Content)){
                     uiTrigger?.ioRead()
                     uiTrigger?.arrowsSarIO()
                 }
                 else {
-
                     uiTrigger?.centerBus()
                     uiTrigger?.arrowsSarMem()
                     uiTrigger?.arrowIr(false)
@@ -355,10 +352,8 @@ class MimaModul(name: String, short: String, description : String, var context: 
             }
             6 -> {
                 controlModul.Counter.Content++
-
                 if (!memoryModul.IOControl.isExternal(memoryModul.SAR.Content))
                     uiTrigger?.mem("READING...")
-
             }
             7 -> {
                 controlModul.Counter.Content++
@@ -428,7 +423,6 @@ class MimaModul(name: String, short: String, description : String, var context: 
                     uiTrigger?.ioWrite()
                     uiTrigger?.arrowsSarIO()
                 }
-
             }
             7-> {
                 controlModul.Counter.Content++
@@ -586,6 +580,7 @@ class MimaModul(name: String, short: String, description : String, var context: 
     }
 
     fun HLT() {
+        controlModul.Counter.Content = 0
         haltMimaTrigger?.stop()
     }
 
@@ -629,6 +624,9 @@ class MimaModul(name: String, short: String, description : String, var context: 
                 uiTrigger?.arrowZ()
                 uiTrigger?.arrowAcc(true)
             }
+            else -> {
+                controlModul.Counter.Content++
+            }
         }
     }
 
@@ -654,7 +652,6 @@ class MimaModul(name: String, short: String, description : String, var context: 
                 uiTrigger?.arrowAcc(false)
                 uiTrigger?.arrowX()
             }
-
             9 -> {
                 centerBus.transfer(calculatorModul.ONE, calculatorModul.Y)
                 calculatorModul.Alu.shift()
@@ -683,7 +680,5 @@ class MimaModul(name: String, short: String, description : String, var context: 
                 controlModul.Counter.Content++
             }
         }
-
     }
-
 }

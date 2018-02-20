@@ -17,13 +17,13 @@ class Alu(name: String, short: String, description : String, private val X : Reg
         Z.Content =  X.Content xor Y.Content
     }
     fun negate() {
-        Z.Content =   X.Content.inv()
+        Z.Content = X.Content.inv()
     }
     fun eql(){
         if (X.Content == Y.Content) Z.Content =  -1
         else Z.Content =  0
     }
     fun shift(){
-        Z.Content =  X.Content.ushr(Y.Content)
+        Z.Content =  X.Content.shl(Y.Content)
     }
 }

@@ -126,7 +126,7 @@ class Filemanager(var context: Context) {
 
     private fun translateHexString(hexstring: String) : HexStringResult{
         //Check Adresslength Should be "0x" + 7 Digits
-        val hexStringresult = HexStringResult(false, "0x0")
+        //val hexStringresult = HexStringResult(false, "0x0")
         var editHexString = hexstring
 
         //Check if the first two symbols are the hexprefix if so remove them

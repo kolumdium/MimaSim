@@ -23,7 +23,6 @@ class InstructionFragment : Fragment(), InstructionAdapter.InstructionAdapterCal
     var instructionManager = InstructionManager()
     var lastSelectedItem : Int = 0
 
-
     var mInstructionAdapter : InstructionAdapter? = null
 
     interface InstructionCallback {
